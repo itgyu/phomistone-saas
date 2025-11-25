@@ -1,0 +1,20 @@
+[
+  {
+    "material_id": "marble_sahara_light_grey_04",
+    "name": "Phomistone Sahara Light Grey",
+    "series": "Nature Stone",
+    "positive_prompt": "light beige marble with grey lightning-bolt veining pattern, natural stone texture, premium architectural cladding, photorealistic finish, 8K quality"
+  },
+  {
+    "material_id": "marble_veil_dark_grey_05",
+    "name": "Phomistone Veil Dark Grey",
+    "series": "Nature Stone",
+    "positive_prompt": "dark charcoal grey marble with cloudy veil pattern, sophisticated misty swirls, luxurious smooth finish, modern architectural elegance, 8K quality"
+  },
+  {
+    "material_id": "travertine_classic_01",
+    "name": "Phomistone Travertine Classic",
+    "series": "Nature Stone",
+    "positive_prompt": "classic travertine stone with natural porous texture, warm beige tones, Mediterranean style, authentic stone surface, architectural quality, 8K resolution"
+  }
+]

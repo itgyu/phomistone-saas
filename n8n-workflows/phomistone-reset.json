@@ -1,0 +1,109 @@
+{
+  "name": "Phomistone SaaS - NanoBanana Pro (Reset)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "style-building",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "phomistone-reset"
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:3001/prompt",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"material_id\": $json.body.material_id } }}",
+        "options": {}
+      },
+      "id": "get-material",
+      "name": "Get Material from MCP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const mcp = items[0].json;\nconst webhookData = $('Webhook').item.json.body;\nlet cleanImage = webhookData.image_base64;\n\n// Base64 헤더 제거\nif (cleanImage.includes(',')) {\n  cleanImage = cleanImage.split(',')[1];\n}\n\nconst payload = {\n  \"contents\": [{\n    \"parts\": [\n      {\n        \"text\": `Architectural Inpainting Task.\\nChange the exterior wall to: ${mcp.name} (${mcp.positive_prompt}).\\nKeep windows and structure exactly as is.\\nGenerate a photorealistic image.`\n      },\n      {\n        \"inline_data\": {\n          \"mime_type\": \"image/jpeg\",\n          \"data\": cleanImage\n        }\n      }\n    ]\n  }],\n  \"safetySettings\": [\n    { \"category\": \"HARM_CATEGORY_HARASSMENT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_HATE_SPEECH\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_DANGEROUS_CONTENT\", \"threshold\": \"BLOCK_NONE\" }\n  ],\n  \"generationConfig\": {\n    \"temperature\": 0.4,\n    \"topK\": 32,\n    \"topP\": 1,\n    \"maxOutputTokens\": 4096\n  }\n};\n\nreturn [{\n  json: {\n    payload,\n    materialName: mcp.name\n  }\n}];"
+      },
+      "id": "prepare-payload",
+      "name": "Prepare NanoBanana Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=AIzaSyBLK7Oas8ShOHWnyT5WpL5cRyTMoLwunCg",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.payload }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "nanobanana",
+      "name": "NanoBanana Pro API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = items[0].json;\nconst materialName = $('Prepare NanoBanana Payload').item.json.materialName;\n\n// NanoBanana Pro 응답 파싱\nif (response.candidates && response.candidates[0]) {\n  const parts = response.candidates[0].content.parts;\n  \n  // inline_data에서 이미지 추출\n  for (const part of parts) {\n    if (part.inline_data && part.inline_data.data) {\n      return [{\n        json: {\n          success: true,\n          image_base64: part.inline_data.data,\n          material: materialName\n        }\n      }];\n    }\n  }\n}\n\n// 에러 처리\nreturn [{\n  json: {\n    success: false,\n    error: 'No image generated',\n    response: response\n  }\n}];"
+      },
+      "id": "extract-image",
+      "name": "Extract Image",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Get Material from MCP", "type": "main", "index": 0 }]]
+    },
+    "Get Material from MCP": {
+      "main": [[{ "node": "Prepare NanoBanana Payload", "type": "main", "index": 0 }]]
+    },
+    "Prepare NanoBanana Payload": {
+      "main": [[{ "node": "NanoBanana Pro API", "type": "main", "index": 0 }]]
+    },
+    "NanoBanana Pro API": {
+      "main": [[{ "node": "Extract Image", "type": "main", "index": 0 }]]
+    },
+    "Extract Image": {
+      "main": [[{ "node": "Respond to Webhook", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": ["phomistone", "nanobanana", "reset"],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-25T00:00:00.000Z",
+  "versionId": "1"
+}
