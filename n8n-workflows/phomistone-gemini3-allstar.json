@@ -1,0 +1,156 @@
+{
+  "name": "Phomistone SaaS - Gemini 3 Pro All-Star Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "style-building",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 400],
+      "webhookId": "phomistone-allstar"
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:3001/prompt",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"material_id\": $json.body.material_id } }}",
+        "options": {}
+      },
+      "id": "mcp-server",
+      "name": "MCP Server",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [450, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=AIzaSyBLK7Oas8ShOHWnyT5WpL5cRyTMoLwunCg",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"contents\": [{\n    \"parts\": [\n      {\n        \"text\": \"You are The Analyst - a microscopic vision expert. Analyze this building image with EXTREME precision.\\n\\nProvide:\\n1. Building geometry and structure (exact shapes, angles, proportions)\\n2. Window positions, sizes, and grid patterns (precise measurements)\\n3. Lighting conditions and shadow directions\\n4. Camera perspective and viewing angle\\n5. Architectural style and material zones\\n\\nOutput: Pure structural description in technical detail. NO material colors or textures.\"\n      },\n      {\n        \"inline_data\": {\n          \"mime_type\": \"image/jpeg\",\n          \"data\": $('Webhook').item.json.body.image_base64.replace(/^data:image\\/\\w+;base64,/, \"\")\n        }\n      }\n    ]\n  }],\n  \"safetySettings\": [\n    { \"category\": \"HARM_CATEGORY_HARASSMENT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_HATE_SPEECH\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_DANGEROUS_CONTENT\", \"threshold\": \"BLOCK_NONE\" }\n  ],\n  \"generationConfig\": {\n    \"temperature\": 0.2,\n    \"maxOutputTokens\": 2048\n  }\n} }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "analyst",
+      "name": "The Analyst (Gemini 3 Pro Vision)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=AIzaSyBLK7Oas8ShOHWnyT5WpL5cRyTMoLwunCg",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"contents\": [{\n    \"parts\": [{\n      \"text\": `You are The Prompter - a master of AI image generation prompts.\\n\\nStructural Analysis:\\n${$('The Analyst (Gemini 3 Pro Vision)').item.json.candidates[0].content.parts[0].text}\\n\\nMaterial to Apply:\\nName: ${$('MCP Server').item.json.name}\\nDescription: ${$('MCP Server').item.json.positive_prompt}\\n\\nTask: Write the PERFECT prompt for applying this material to the building while preserving EXACT structure.\\n\\nOutput format:\\n[Positive Prompt]\\narchitectural photography, ${$('MCP Server').item.json.positive_prompt}, [structural details from analysis], photorealistic, 8K, professional lighting\\n\\n[Negative Prompt]\\nstructural changes, deformed architecture, distorted windows, wrong perspective, ${$('MCP Server').item.json.negative_prompt || 'low quality, blurry'}`\n    }]\n  }],\n  \"safetySettings\": [\n    { \"category\": \"HARM_CATEGORY_HARASSMENT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_HATE_SPEECH\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_DANGEROUS_CONTENT\", \"threshold\": \"BLOCK_NONE\" }\n  ],\n  \"generationConfig\": {\n    \"temperature\": 0.4,\n    \"maxOutputTokens\": 1024\n  }\n} }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "prompter",
+      "name": "The Prompter (Gemini 3 Pro Reasoning)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0:generateContent?key=AIzaSyBLK7Oas8ShOHWnyT5WpL5cRyTMoLwunCg",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"contents\": [{\n    \"parts\": [{\n      \"text\": `Generate a HIGH-RESOLUTION material texture reference image.\\n\\nMaterial: ${$('MCP Server').item.json.name}\\n\\nStyle: ${$('MCP Server').item.json.positive_prompt}\\n\\nRequirements:\\n- Close-up architectural material texture\\n- High detail, 8K quality\\n- Natural lighting\\n- Suitable for building facade application\\n- Photorealistic rendering`\n    }]\n  }],\n  \"safetySettings\": [\n    { \"category\": \"HARM_CATEGORY_HARASSMENT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_HATE_SPEECH\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_DANGEROUS_CONTENT\", \"threshold\": \"BLOCK_NONE\" }\n  ],\n  \"generationConfig\": {\n    \"temperature\": 0.5\n  }\n} }}",
+        "options": {
+          "timeout": 90000
+        }
+      },
+      "id": "painter",
+      "name": "The Painter (Imagen 4)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=AIzaSyBLK7Oas8ShOHWnyT5WpL5cRyTMoLwunCg",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"contents\": [{\n    \"parts\": [\n      {\n        \"text\": `FINAL ARCHITECTURAL SYNTHESIS TASK\\n\\n=== THE MASTER'S INSTRUCTIONS ===\\n\\nYou are The Master - the ultimate image synthesis AI.\\n\\nYour Mission:\\n1. Use IMAGE 1 (below) as STRUCTURAL REFERENCE - preserve EXACT geometry, windows, perspective\\n2. Use IMAGE 2 (below) as STYLE REFERENCE - apply this material texture to walls\\n3. Follow PROMPT INSTRUCTIONS (below) for perfect execution\\n\\nPROMPT INSTRUCTIONS:\\n${$('The Prompter (Gemini 3 Pro Reasoning)').item.json.candidates[0].content.parts[0].text}\\n\\nCRITICAL RULES:\\n- DO NOT change building structure, windows, or perspective from IMAGE 1\\n- ONLY apply material style from IMAGE 2 to wall surfaces\\n- Maintain photorealistic quality\\n- Preserve lighting and shadows\\n- Output: High-fidelity architectural visualization\\n\\nIMAGE 1 (Structure Base):\"\n      },\n      {\n        \"inline_data\": {\n          \"mime_type\": \"image/jpeg\",\n          \"data\": $('Webhook').item.json.body.image_base64.replace(/^data:image\\/\\w+;base64,/, \"\")\n        }\n      },\n      {\n        \"text\": \"IMAGE 2 (Material Style):\"\n      },\n      {\n        \"inline_data\": {\n          \"mime_type\": \"image/jpeg\",\n          \"data\": $('The Painter (Imagen 4)').item.json.candidates[0].content.parts[0].inline_data.data\n        }\n      },\n      {\n        \"text\": \"\\n\\nNOW GENERATE THE FINAL SYNTHESIS IMAGE.\"\n      }\n    ]\n  }],\n  \"safetySettings\": [\n    { \"category\": \"HARM_CATEGORY_HARASSMENT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_HATE_SPEECH\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", \"threshold\": \"BLOCK_NONE\" },\n    { \"category\": \"HARM_CATEGORY_DANGEROUS_CONTENT\", \"threshold\": \"BLOCK_NONE\" }\n  ],\n  \"generationConfig\": {\n    \"temperature\": 0.3,\n    \"maxOutputTokens\": 4096\n  }\n} }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "master",
+      "name": "The Master (NanoBanana Pro)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1250, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract final image from The Master\nconst response = items[0].json;\n\nif (response.candidates && response.candidates[0]) {\n  const parts = response.candidates[0].content.parts;\n  \n  // Find inline_data in parts\n  for (const part of parts) {\n    if (part.inline_data && part.inline_data.data) {\n      return [{\n        json: {\n          success: true,\n          image_base64: part.inline_data.data,\n          material: $('MCP Server').item.json.name,\n          pipeline: \"Gemini 3 Pro All-Star (Analyst → Prompter → Painter → Master)\"\n        }\n      }];\n    }\n  }\n}\n\n// Error handling\nreturn [{\n  json: {\n    success: false,\n    error: \"The Master failed to generate image\",\n    response: response\n  }\n}];"
+      },
+      "id": "extract",
+      "name": "Extract Final Image",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1450, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1650, 400]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "MCP Server", "type": "main", "index": 0 }]]
+    },
+    "MCP Server": {
+      "main": [[{ "node": "The Analyst (Gemini 3 Pro Vision)", "type": "main", "index": 0 }]]
+    },
+    "The Analyst (Gemini 3 Pro Vision)": {
+      "main": [[{ "node": "The Prompter (Gemini 3 Pro Reasoning)", "type": "main", "index": 0 }]]
+    },
+    "The Prompter (Gemini 3 Pro Reasoning)": {
+      "main": [[{ "node": "The Painter (Imagen 4)", "type": "main", "index": 0 }]]
+    },
+    "The Painter (Imagen 4)": {
+      "main": [[{ "node": "The Master (NanoBanana Pro)", "type": "main", "index": 0 }]]
+    },
+    "The Master (NanoBanana Pro)": {
+      "main": [[{ "node": "Extract Final Image", "type": "main", "index": 0 }]]
+    },
+    "Extract Final Image": {
+      "main": [[{ "node": "Respond to Webhook", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": ["phomistone", "gemini-3-pro", "all-star", "premium"],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-25T00:00:00.000Z",
+  "versionId": "2"
+}
