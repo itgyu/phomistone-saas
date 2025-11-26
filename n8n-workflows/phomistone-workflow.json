@@ -1,0 +1,278 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "style-building",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "169c73b6-b175-40eb-9e3e-6060fa5f6586",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1072,
+        336
+      ],
+      "webhookId": "2d65bf7d-1462-4929-90c8-bc0c5f985f21"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3001/prompt",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "material_id",
+              "value": "={{ $json.body.material_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0edb9708-ff7b-422f-968c-6c0ffba70a61",
+      "name": "Get Material from MCP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -864,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 이미지 데이터 준비 (헤더 제거)\nconst webhookData = $('Webhook').item.json.body;\nconst cleanImage = webhookData.image_base64.replace(/^data:image\\/\\w+;base64,/, \"\");\n\n// Binary 데이터로 변환 (File API 업로드용)\n// n8n 내부 처리를 위해 JSON으로 넘깁니다.\nreturn [{\n  json: {\n    cleanImage: cleanImage\n  }\n}];"
+      },
+      "id": "ce213b0f-80b0-4897-931a-b2ed44743fa7",
+      "name": "Prep for Brain",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=AIzaSyB4s2yVL8vw4oy22nmkyYg7uQqZKvbjcwA",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n{\n  \"contents\": [{\n    \"parts\": [\n      { \"text\": \"ROLE: Architectural Analyst.\\nTASK: Analyze building geometry, windows, lighting. Output description only.\" },\n      { \"inline_data\": { \"mime_type\": \"image/jpeg\", \"data\": $json.cleanImage } }\n    ]\n  }],\n  \"generationConfig\": { \"temperature\": 0.2 }\n}\n}}",
+        "options": {}
+      },
+      "id": "905f92f3-69ab-4801-b3c6-04ee89333739",
+      "name": "1. The Brain (Analysis)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -464,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 프롬프트 생성 준비\nconst analysis = items[0].json.candidates[0].content.parts[0].text;\nconst mcp = $('Get Material from MCP').item.json;\n\nreturn [{\n  json: {\n    analysis,\n    mcp\n  }\n}];"
+      },
+      "id": "664c2f63-6783-4d3d-a7d8-7e9436f84a34",
+      "name": "Prep for Prompter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -272,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=AIzaSyB4s2yVL8vw4oy22nmkyYg7uQqZKvbjcwA",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.prompterPayload }}",
+        "options": {}
+      },
+      "id": "5256c0d8-2c3c-42cd-b777-a0832259bb70",
+      "name": "2. The Prompter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -64,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/upload/v1beta/files?uploadType=media&key=AIzaSyB4s2yVL8vw4oy22nmkyYg7uQqZKvbjcwA",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "id": "b0357b9b-627f-477f-b4db-22e754dbd033",
+      "name": "3. Google File Uploader",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        144,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Master에게 보낼 최종 데이터 (File URI 사용)\nconst fileUri = items[0].json.file.uri;\nconst prompt = $('2. The Prompter').item.json.candidates[0].content.parts[0].text;\nconst mcp_name = $('Get Material from MCP').item.json.name;\n\nconst payload = {\n  contents: [{\n    parts: [\n      { text: `FINAL TASK: Generate Image.\\nPROMPT: ${prompt}\\nINPUT: See attached file.\\nCONSTRAINT: Keep structure exactly.\\nOUTPUT: IMAGE ONLY.` },\n      { file_data: { mime_type: \"image/jpeg\", file_uri: fileUri } }\n    ]\n  }],\n  safetySettings: [\n    { category: \"HARM_CATEGORY_HARASSMENT\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_HATE_SPEECH\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_DANGEROUS_CONTENT\", threshold: \"BLOCK_NONE\" }\n  ],\n  generationConfig: { temperature: 0.4 }\n};\n\nreturn [{ json: { payload, materialName: mcp_name } }];"
+      },
+      "id": "6d8791c4-0e2c-46b5-a77d-486675d7bee9",
+      "name": "Prep for Master",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=AIzaSyB4s2yVL8vw4oy22nmkyYg7uQqZKvbjcwA",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.masterPayload }}",
+        "options": {
+          "timeout": 600000
+        }
+      },
+      "id": "4081010a-4b51-42cc-b80b-2bd1af367a59",
+      "name": "4. The Master (NanoBanana Pro)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        544,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ \n(() => {\n  try {\n    const candidate = $json.candidates?.[0];\n    const part = candidate?.content?.parts?.[0];\n    \n    if (part?.inline_data?.data) {\n      return JSON.stringify({\n        success: true,\n        result_image_url: \"data:image/jpeg;base64,\" + part.inline_data.data,\n        material_name: $('Prep for Master').item.json.materialName\n      });\n    } else {\n      return JSON.stringify({\n        success: false,\n        error: \"Master Refused: \" + (part?.text || \"Unknown error\"),\n        full_response: $json\n      });\n    }\n  } catch (e) {\n    return JSON.stringify({ success: false, error: e.message });\n  }\n})()\n}}",
+        "options": {}
+      },
+      "id": "9359f813-7e31-454c-bd57-683d63ee591f",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        736,
+        336
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Material from MCP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Material from MCP": {
+      "main": [
+        [
+          {
+            "node": "Prep for Brain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep for Brain": {
+      "main": [
+        [
+          {
+            "node": "1. The Brain (Analysis)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. The Brain (Analysis)": {
+      "main": [
+        [
+          {
+            "node": "Prep for Prompter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep for Prompter": {
+      "main": [
+        [
+          {
+            "node": "2. The Prompter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. The Prompter": {
+      "main": [
+        [
+          {
+            "node": "3. Google File Uploader",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Google File Uploader": {
+      "main": [
+        [
+          {
+            "node": "Prep for Master",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep for Master": {
+      "main": [
+        [
+          {
+            "node": "4. The Master (NanoBanana Pro)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. The Master (NanoBanana Pro)": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "b04ac59c30d41f03314877ea2a3b53ed844f400b51d326fa9c5741016af5a943"
+  }
+}
