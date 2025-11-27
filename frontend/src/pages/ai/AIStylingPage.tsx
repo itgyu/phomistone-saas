@@ -148,10 +148,10 @@ export default function AIStylingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-50">
       {/* ===== 헤더 ===== */}
-      <div className="bg-black border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+      <div className="bg-black border-b border-gray-800 flex-shrink-0">
+        <div className="max-w-[1920px] mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Sparkles className="w-5 h-5 text-[#C59C6C]" />
@@ -170,266 +170,286 @@ export default function AIStylingPage() {
         </div>
       </div>
 
-      {/* ===== 메인 컨텐츠 ===== */}
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      {/* ===== 메인 컨텐츠 (2단 레이아웃) ===== */}
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full max-w-[1920px] mx-auto px-6 py-6">
+          <div className="h-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
 
-        {/* 3단계 프로그레스 바 */}
-        <div className="flex items-center justify-center gap-2 mb-6">
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-            uploadedImage ? 'bg-[#C59C6C]/10 text-[#C59C6C]' : 'bg-gray-100 text-gray-400'
-          }`}>
-            <span className="step-badge">1</span>
-            <span className="text-caption font-medium">업로드</span>
-          </div>
-          <div className="w-8 h-0.5 bg-gray-200" />
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-            selectedMaterial ? 'bg-[#C59C6C]/10 text-[#C59C6C]' : 'bg-gray-100 text-gray-400'
-          }`}>
-            <span className="step-badge">2</span>
-            <span className="text-caption font-medium">자재선택</span>
-          </div>
-          <div className="w-8 h-0.5 bg-gray-200" />
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-            resultImage ? 'bg-[#C59C6C]/10 text-[#C59C6C]' : 'bg-gray-100 text-gray-400'
-          }`}>
-            <span className="step-badge">3</span>
-            <span className="text-caption font-medium">결과</span>
-          </div>
-        </div>
-
-        {/* Step 1: 이미지 업로드 */}
-        <div className="card-base p-6 mb-6">
-          <div className="section-header">
-            <span className="step-badge">1</span>
-            <div>
-              <h2 className="text-title">이미지 업로드</h2>
-              <p className="text-caption">건물 사진을 업로드하세요</p>
-            </div>
-          </div>
-
-          {!uploadedImage ? (
-            <label className="block cursor-pointer">
-              <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 hover:border-[#C59C6C] hover:bg-gradient-to-br hover:from-gray-50 hover:to-[#C59C6C]/5 transition-all group text-center">
-                <Upload className="w-12 h-12 text-gray-400 group-hover:text-[#C59C6C] transition-colors mx-auto mb-4" />
-                <p className="text-body font-medium text-gray-700 mb-2">클릭하여 이미지 선택</p>
-                <p className="text-caption">JPG, PNG 파일 (최대 20MB)</p>
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-            </label>
-          ) : (
-            <div className="relative rounded-xl overflow-hidden border border-gray-200">
-              <img
-                src={uploadedImage}
-                alt="Uploaded"
-                className="w-full h-64 object-contain bg-gray-50"
-              />
-              <button
-                onClick={handleReset}
-                className="absolute top-3 right-3 bg-black/70 hover:bg-black text-white px-3 py-1.5 rounded-lg text-caption font-medium transition-all"
-              >
-                변경
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Step 2: 자재 선택 */}
-        {uploadedImage && (
-          <div className="card-base p-6 mb-6">
-            <div className="section-header">
-              <span className="step-badge">2</span>
-              <div className="flex-1">
-                <h2 className="text-title">자재 선택</h2>
-                <p className="text-caption">포미스톤 자재를 선택하세요 • {materials.length}개</p>
-              </div>
-              <p className="text-caption text-gray-400">← 좌우 스크롤 →</p>
-            </div>
-
-            {/* 가로 스크롤 자재 리스트 */}
-            <div className="relative -mx-6 px-6">
-              <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-gold">
-                {materials.map((material) => (
-                  <button
-                    key={material.material_id}
-                    onClick={() => setSelectedMaterial(material.material_id)}
-                    className={`relative flex-shrink-0 w-40 h-40 rounded-xl overflow-hidden border-2 transition-all ${
-                      selectedMaterial === material.material_id
-                        ? 'border-[#C59C6C] ring-4 ring-[#C59C6C]/20 scale-95'
-                        : 'border-gray-200 hover:border-[#C59C6C]/50 hover:scale-105'
-                    }`}
-                  >
-                    {/* 자재 이미지 */}
-                    <img
-                      src={material.image_path}
-                      alt={material.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.currentTarget as HTMLImageElement;
-                        target.style.display = 'none';
-                        if (target.nextElementSibling) {
-                          (target.nextElementSibling as HTMLElement).classList.remove('hidden');
-                        }
-                      }}
-                    />
-
-                    {/* 폴백 색상 */}
-                    <div
-                      className="hidden w-full h-full"
-                      style={{ backgroundColor: material.color }}
-                    />
-
-                    {/* 선택 체크마크 */}
-                    {selectedMaterial === material.material_id && (
-                      <div className="absolute top-2 right-2 w-6 h-6 bg-[#C59C6C] rounded-full flex items-center justify-center shadow-lg">
-                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                    )}
-
-                    {/* 호버 효과 - 자세히 보기 */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity">
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setPreviewMaterial(material.material_id);
-                          }}
-                          className="bg-white/90 backdrop-blur-sm text-gray-900 text-caption font-semibold px-3 py-1.5 rounded-lg hover:bg-white transition-colors flex items-center gap-1"
-                        >
-                          <ZoomIn className="w-3 h-3" />
-                          자세히
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* 자재 정보 */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-2">
-                      <p className="text-caption font-bold text-white truncate">{material.name}</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: AI 스타일링 시작 버튼 */}
-        {uploadedImage && selectedMaterial && !resultImage && (
-          <div className="card-base p-6">
-            <button
-              onClick={handleGenerate}
-              disabled={loading}
-              className={`w-full py-4 rounded-xl font-bold text-white transition-all ${
-                loading
-                  ? 'bg-gray-300 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-[#C59C6C] to-[#A67C52] hover:shadow-lg hover:shadow-[#C59C6C]/30 hover:scale-[1.02] active:scale-[0.98]'
-              }`}
-            >
-              {loading ? (
-                <div className="flex items-center justify-center gap-2">
-                  <RefreshCw className="w-5 h-5 animate-spin" />
-                  <span className="text-button">AI 스타일링 중...</span>
+            {/* ===== 좌측: 이미지 뷰어 ===== */}
+            <div className="flex items-center justify-center bg-white rounded-2xl border border-gray-200 overflow-hidden">
+              {!uploadedImage ? (
+                /* 초기 상태: 업로드 안내 */
+                <div className="text-center p-12">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-6">
+                    <Upload className="w-10 h-10 text-gray-400" />
+                  </div>
+                  <h3 className="text-title mb-2">이미지를 업로드하세요</h3>
+                  <p className="text-caption">
+                    우측 패널에서 건물 사진을 선택하면<br />
+                    이곳에 미리보기가 표시됩니다
+                  </p>
+                </div>
+              ) : !resultImage ? (
+                /* 업로드 후: Before 이미지 */
+                <div className="w-full h-full flex items-center justify-center p-8">
+                  <img
+                    src={uploadedImage}
+                    alt="Uploaded"
+                    className="max-w-full max-h-full object-contain"
+                  />
                 </div>
               ) : (
-                <div className="flex items-center justify-center gap-2">
-                  <Sparkles className="w-5 h-5" />
-                  <span className="text-button">AI 스타일링 시작</span>
+                /* 결과 생성 후: Before/After 슬라이더 */
+                <div className="w-full h-full relative">
+                  <ReactCompareSlider
+                    itemOne={
+                      <ReactCompareSliderImage
+                        src={uploadedImage}
+                        alt="Before"
+                        style={{ objectFit: 'contain' }}
+                      />
+                    }
+                    itemTwo={
+                      <ReactCompareSliderImage
+                        src={resultImage}
+                        alt="After"
+                        style={{ objectFit: 'contain' }}
+                      />
+                    }
+                    style={{ height: '100%' }}
+                  />
+                  <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-caption font-semibold backdrop-blur-sm">
+                    Before
+                  </div>
+                  <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-caption font-semibold backdrop-blur-sm">
+                    After
+                  </div>
                 </div>
               )}
-            </button>
-          </div>
-        )}
-
-        {/* Step 3: 결과 표시 */}
-        {resultImage && (
-          <div className="card-base p-6">
-            <div className="section-header mb-6">
-              <span className="step-badge">3</span>
-              <div className="flex-1">
-                <h2 className="text-title">스타일링 결과</h2>
-                <p className="text-caption">포미스톤이 적용된 모습</p>
-              </div>
             </div>
 
-            {/* Before / After 비교 슬라이더 */}
-            <div className="rounded-xl overflow-hidden border border-gray-200 mb-6 relative" style={{ height: '500px' }}>
-              <ReactCompareSlider
-                itemOne={
-                  <ReactCompareSliderImage
-                    src={uploadedImage}
-                    alt="Before"
-                    style={{ objectFit: 'contain' }}
-                  />
-                }
-                itemTwo={
-                  <ReactCompareSliderImage
-                    src={resultImage}
-                    alt="After"
-                    style={{ objectFit: 'contain' }}
-                  />
-                }
-                style={{ height: '100%' }}
-              />
-              <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-caption font-semibold backdrop-blur-sm">
-                Before
-              </div>
-              <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-caption font-semibold backdrop-blur-sm">
-                After
-              </div>
-            </div>
+            {/* ===== 우측: 컨트롤 패널 (400px 고정) ===== */}
+            <div className="flex flex-col gap-4 h-full overflow-hidden">
 
-            {/* 적용된 자재 정보 */}
-            <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 mb-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <Palette className="w-6 h-6 text-[#C59C6C] flex-shrink-0 mt-1" />
-                <div className="flex-1">
-                  <p className="text-caption mb-1">적용된 자재</p>
-                  <p className="text-title">
-                    {materials.find(m => m.material_id === selectedMaterial)?.name}
-                  </p>
-                  <p className="text-body mt-1">
-                    {materials.find(m => m.material_id === selectedMaterial)?.series}
-                  </p>
+              {/* Step 1: 이미지 업로드 */}
+              <div className="card-base p-5 flex-shrink-0">
+                <div className="section-header mb-4">
+                  <span className="step-badge">1</span>
+                  <div>
+                    <h2 className="text-title">이미지 업로드</h2>
+                    <p className="text-caption">건물 사진 선택</p>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* 액션 버튼 */}
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  const link = document.createElement('a');
-                  link.href = resultImage;
-                  link.download = 'phomistone-result.jpg';
-                  link.click();
-                }}
-                className="flex-1 py-3 bg-gradient-to-r from-[#C59C6C] to-[#A67C52] hover:shadow-lg text-white rounded-xl text-button transition-all flex items-center justify-center gap-2"
-              >
-                <Download className="w-4 h-4" />
-                다운로드
-              </button>
-              <button
-                onClick={() => setShowSaveModal(true)}
-                className="flex-1 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl text-button transition-all flex items-center justify-center gap-2"
-              >
-                <Save className="w-4 h-4" />
-                견적 저장
-              </button>
-              <button
-                onClick={handleReset}
-                className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-button transition-all"
-              >
-                새로 시작
-              </button>
+                {!uploadedImage ? (
+                  <label className="block cursor-pointer">
+                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-[#C59C6C] hover:bg-[#C59C6C]/5 transition-all text-center">
+                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+                      <p className="text-body font-medium text-gray-700 mb-1">이미지 선택</p>
+                      <p className="text-caption">JPG, PNG (최대 20MB)</p>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+                ) : (
+                  <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-xl">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-body font-semibold text-green-700">업로드 완료</p>
+                      <p className="text-caption text-green-600">이미지가 준비되었습니다</p>
+                    </div>
+                    <button
+                      onClick={handleReset}
+                      className="px-3 py-1.5 bg-white border border-green-300 text-green-700 rounded-lg text-caption font-medium hover:bg-green-50 transition-all flex-shrink-0"
+                    >
+                      변경
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Step 2: 자재 선택 (세로 스크롤) */}
+              {uploadedImage && !resultImage && (
+                <div className="card-base flex flex-col flex-1 min-h-0 overflow-hidden">
+                  <div className="p-5 flex-shrink-0 border-b border-gray-200">
+                    <div className="section-header mb-2">
+                      <span className="step-badge">2</span>
+                      <div className="flex-1">
+                        <h2 className="text-title">자재 선택</h2>
+                        <p className="text-caption">포미스톤 자재 • {materials.length}개</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 세로 스크롤 자재 리스트 */}
+                  <div className="flex-1 overflow-y-auto scrollbar-gold p-4">
+                    <div className="space-y-3">
+                      {materials.map((material) => (
+                        <button
+                          key={material.material_id}
+                          onClick={() => setSelectedMaterial(material.material_id)}
+                          className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
+                            selectedMaterial === material.material_id
+                              ? 'border-[#C59C6C] bg-[#C59C6C]/5 ring-2 ring-[#C59C6C]/20'
+                              : 'border-gray-200 hover:border-[#C59C6C]/50 hover:bg-gray-50'
+                          }`}
+                        >
+                          {/* 썸네일 */}
+                          <div className="relative w-[112px] h-[112px] flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                            <img
+                              src={material.image_path}
+                              alt={material.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.currentTarget as HTMLImageElement;
+                                target.style.display = 'none';
+                                if (target.nextElementSibling) {
+                                  (target.nextElementSibling as HTMLElement).classList.remove('hidden');
+                                }
+                              }}
+                            />
+                            {/* 폴백 색상 */}
+                            <div
+                              className="hidden w-full h-full"
+                              style={{ backgroundColor: material.color }}
+                            />
+
+                            {/* 선택 체크마크 */}
+                            {selectedMaterial === material.material_id && (
+                              <div className="absolute top-2 right-2 w-6 h-6 bg-[#C59C6C] rounded-full flex items-center justify-center shadow-lg">
+                                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* 텍스트 정보 */}
+                          <div className="flex-1 text-left min-w-0">
+                            <p className="text-body font-bold text-gray-900 mb-1 truncate">
+                              {material.name}
+                            </p>
+                            <p className="text-caption text-gray-500 mb-2 line-clamp-2">
+                              {material.series}
+                            </p>
+                            {material.price_per_sqm && (
+                              <p className="text-caption font-semibold text-[#C59C6C]">
+                                ₩{material.price_per_sqm.toLocaleString()}/㎡
+                              </p>
+                            )}
+                          </div>
+
+                          {/* 자세히 보기 버튼 */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPreviewMaterial(material.material_id);
+                            }}
+                            className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-[#C59C6C] hover:text-white text-gray-600 transition-colors"
+                          >
+                            <ZoomIn className="w-4 h-4" />
+                          </button>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: AI 스타일링 시작 버튼 */}
+              {uploadedImage && selectedMaterial && !resultImage && (
+                <div className="flex-shrink-0">
+                  <button
+                    onClick={handleGenerate}
+                    disabled={loading}
+                    className={`w-full py-4 rounded-xl font-bold text-white transition-all ${
+                      loading
+                        ? 'bg-gray-300 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-[#C59C6C] to-[#A67C52] hover:shadow-lg hover:shadow-[#C59C6C]/30 hover:scale-[1.02] active:scale-[0.98]'
+                    }`}
+                  >
+                    {loading ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <span className="text-button">AI 스타일링 중...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2">
+                        <Sparkles className="w-5 h-5" />
+                        <span className="text-button">AI 스타일링 시작</span>
+                      </div>
+                    )}
+                  </button>
+                </div>
+              )}
+
+              {/* Step 3: 결과 표시 (액션 버튼들) */}
+              {resultImage && (
+                <div className="flex flex-col gap-4 flex-1 overflow-y-auto scrollbar-gold">
+                  {/* 적용된 자재 정보 */}
+                  <div className="card-base p-5 flex-shrink-0">
+                    <div className="section-header mb-4">
+                      <span className="step-badge">3</span>
+                      <div>
+                        <h2 className="text-title">스타일링 완료</h2>
+                        <p className="text-caption">결과를 확인하세요</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border border-gray-200">
+                      <div className="flex items-start gap-3">
+                        <Palette className="w-5 h-5 text-[#C59C6C] flex-shrink-0 mt-1" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-caption mb-1">적용된 자재</p>
+                          <p className="text-title truncate">
+                            {materials.find(m => m.material_id === selectedMaterial)?.name}
+                          </p>
+                          <p className="text-body mt-1 text-gray-600 line-clamp-2">
+                            {materials.find(m => m.material_id === selectedMaterial)?.series}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 액션 버튼 */}
+                  <div className="flex-shrink-0 space-y-3">
+                    <button
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = resultImage;
+                        link.download = 'phomistone-result.jpg';
+                        link.click();
+                      }}
+                      className="w-full py-3 bg-gradient-to-r from-[#C59C6C] to-[#A67C52] hover:shadow-lg text-white rounded-xl text-button transition-all flex items-center justify-center gap-2"
+                    >
+                      <Download className="w-4 h-4" />
+                      이미지 다운로드
+                    </button>
+                    <button
+                      onClick={() => setShowSaveModal(true)}
+                      className="w-full py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl text-button transition-all flex items-center justify-center gap-2"
+                    >
+                      <Save className="w-4 h-4" />
+                      견적으로 저장
+                    </button>
+                    <button
+                      onClick={handleReset}
+                      className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-button transition-all"
+                    >
+                      새로 시작
+                    </button>
+                  </div>
+                </div>
+              )}
+
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* ===== 로딩 오버레이 ===== */}
