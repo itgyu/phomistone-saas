@@ -298,16 +298,16 @@ export default function AIStylingPage() {
                   {materials.map((material) => (
                     <div
                       key={material.material_id}
-                      className={`group relative transition-all duration-300 rounded-lg ${
+                      className={`group relative transition-all duration-300 ${
                         selectedMaterial === material.material_id
-                          ? 'ring-2 ring-phomi-gold'
-                          : 'hover:ring-2 hover:ring-phomi-gold/50'
+                          ? 'ring-2 ring-phomi-gold rounded-lg'
+                          : 'hover:ring-2 hover:ring-phomi-gold/50 rounded-lg'
                       }`}
                     >
                       {/* 메인 버튼 */}
                       <button
                         onClick={() => setSelectedMaterial(material.material_id)}
-                        className="w-full aspect-square rounded-lg overflow-hidden relative"
+                        className="w-full aspect-square rounded-lg overflow-hidden relative block"
                       >
                         <img
                           src={material.image_path}
@@ -334,25 +334,23 @@ export default function AIStylingPage() {
                           </div>
                         )}
 
-                        {/* 호버 시 확대 아이콘 */}
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                          <ZoomIn className="w-6 h-6 text-white" />
+                        {/* 호버 시 오버레이 (중앙에 돋보기 + 하단에 버튼) */}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center">
+                          <ZoomIn className="w-8 h-8 text-white mb-2" />
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPreviewMaterial(material.material_id);
+                            }}
+                            className="bg-white text-phomi-black text-xs font-bold px-4 py-2 rounded-lg hover:bg-phomi-gold hover:text-white transition-colors"
+                          >
+                            자세히 보기
+                          </button>
                         </div>
                       </button>
 
-                      {/* 미리보기 버튼 */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setPreviewMaterial(material.material_id);
-                        }}
-                        className="absolute bottom-2 left-2 right-2 bg-white/90 backdrop-blur-sm text-phomi-black text-xs font-semibold py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white"
-                      >
-                        자세히 보기
-                      </button>
-
-                      {/* 자재명 */}
-                      <p className="text-[10px] text-center mt-1 text-phomi-gray-700 font-medium truncate px-1">
+                      {/* 자재명 - 이미지 외부에 배치 */}
+                      <p className="text-[10px] text-center mt-2 text-phomi-gray-700 font-medium truncate px-1">
                         {material.name}
                       </p>
                     </div>
