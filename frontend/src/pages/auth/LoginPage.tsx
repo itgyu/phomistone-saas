@@ -83,7 +83,7 @@ export default function LoginPage() {
       </div>
 
       {/* 우측: 로그인 폼 (50%) */}
-      <div className="flex-1 bg-phomi-gray-50 overflow-y-auto flex justify-center">
+      <div className="flex-1 bg-phomi-gray-50 overflow-y-scroll flex justify-center">
         <div className="w-full max-w-[448px] py-12 px-8">
           {/* 모바일 로고 */}
           <div className="lg:hidden text-center mb-8">

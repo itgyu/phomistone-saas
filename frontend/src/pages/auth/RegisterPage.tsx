@@ -128,7 +128,7 @@ export default function RegisterPage() {
       </div>
 
       {/* 우측: 회원가입 폼 (50%) */}
-      <div className="flex-1 bg-phomi-gray-50 overflow-y-auto flex justify-center">
+      <div className="flex-1 bg-phomi-gray-50 overflow-y-scroll flex justify-center">
         <div className="w-full max-w-[448px] py-12 px-8">
           <div className="lg:hidden text-center mb-8">
             <h1 className="text-4xl font-black text-phomi-black mb-1">
