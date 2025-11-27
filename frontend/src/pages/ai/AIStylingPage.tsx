@@ -268,10 +268,10 @@ export default function AIStylingPage() {
             </div>
 
             {/* Step 2: 자재 선택 - flex-1으로 남은 공간 사용 */}
-            <div className={`flex-1 flex flex-col border-t border-phomi-gray-100 ${!originalImage && 'opacity-50 pointer-events-none'}`}>
+            <div className={`flex-1 flex flex-col border-t border-phomi-gray-100 min-h-0 ${!originalImage && 'opacity-50 pointer-events-none'}`}>
 
               {/* ⭐ 상단 헤더 - 고정 */}
-              <div className="px-6 py-4 border-b border-phomi-gray-100 bg-white">
+              <div className="px-6 py-4 border-b border-phomi-gray-100 bg-white flex-shrink-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
@@ -288,7 +288,7 @@ export default function AIStylingPage() {
               </div>
 
               {/* ⭐ 중간 자재 그리드 - 스크롤 가능 */}
-              <div className="flex-1 overflow-y-auto p-4 scrollbar-thin">
+              <div className="flex-1 overflow-y-auto p-4 scrollbar-thin min-h-0">
                 <div className="grid grid-cols-2 gap-3">
                   {materials.map((material) => (
                     <div
@@ -350,7 +350,7 @@ export default function AIStylingPage() {
               </div>
 
               {/* ⭐ 하단 버튼 영역 - 고정 */}
-              <div className="px-4 py-4 border-t border-phomi-gray-100 bg-phomi-gray-50">
+              <div className="px-4 py-4 border-t border-phomi-gray-100 bg-phomi-gray-50 flex-shrink-0">
                 {selectedMaterial && (
                   <div className="mb-3 p-3 bg-white rounded-lg shadow-sm">
                     <div className="flex items-start gap-2">
