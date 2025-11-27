@@ -168,7 +168,7 @@ export default function DashboardPage() {
             <div className="w-12 h-12 border-4 border-phomi-gold/30 border-t-phomi-gold rounded-full animate-spin"></div>
           </div>
         ) : projects.length === 0 ? (
-          /* Empty State */}
+          /* Empty State */
           <div className="bg-white rounded-2xl border-2 border-dashed border-gray-300 p-16 text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-phomi-gold/10 rounded-full mb-6">
               <ImageIcon className="w-10 h-10 text-phomi-gold" />
