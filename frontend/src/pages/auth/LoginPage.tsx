@@ -83,9 +83,8 @@ export default function LoginPage() {
       </div>
 
       {/* 우측: 로그인 폼 (50%) */}
-      <div className="flex-1 bg-phomi-gray-50 overflow-y-auto">
-        <div className="min-h-full flex items-center justify-center py-12 px-8">
-          <div className="w-full max-w-[448px]">
+      <div className="flex-1 bg-phomi-gray-50 overflow-y-auto flex justify-center">
+        <div className="w-full max-w-[448px] py-12 px-8">
           {/* 모바일 로고 */}
           <div className="lg:hidden text-center mb-8">
             <h1 className="text-4xl font-black text-phomi-black mb-1">
@@ -209,7 +208,6 @@ export default function LoginPage() {
           <p className="text-center text-phomi-gray-400 text-xs mt-8">
             © 2024 Phomistone. All rights reserved.
           </p>
-          </div>
         </div>
       </div>
     </div>
