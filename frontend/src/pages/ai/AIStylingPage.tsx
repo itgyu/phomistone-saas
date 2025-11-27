@@ -256,8 +256,8 @@ export default function AIStylingPage() {
                   </label>
                 ) : (
                   <div className="space-y-2">
-                    <div className="relative rounded-lg overflow-hidden">
-                      <img src={originalImage} alt="Original" className="w-full h-32 object-cover" />
+                    <div className="relative rounded-lg overflow-hidden bg-phomi-gray-50">
+                      <img src={originalImage} alt="Original" className="w-full aspect-video object-contain" />
                       <div className="absolute top-2 right-2">
                         <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">
                           <CheckCircle2 className="w-3 h-3" />
@@ -417,8 +417,8 @@ export default function AIStylingPage() {
           </div>
 
           {/* ⭐ 우측: 큰 뷰어 (스크롤 가능) */}
-          <div className="flex-1 min-h-[600px]">
-            <div className="bg-white rounded-2xl border border-phomi-gray-100 p-6 h-full relative">
+          <div className="flex-1">
+            <div className="bg-white rounded-2xl border border-phomi-gray-100 p-6 relative">
 
               {loading ? (
                 /* 로딩 상태 - 전체 화면 중앙 */
