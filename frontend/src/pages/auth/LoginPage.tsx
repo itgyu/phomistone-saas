@@ -84,7 +84,7 @@ export default function LoginPage() {
 
       {/* 우측: 로그인 폼 (50%) */}
       <div className="flex-1 flex items-center justify-center p-8 bg-phomi-gray-50 overflow-y-auto">
-        <div className="w-full max-w-md my-auto">
+        <div className="w-full max-w-[448px] my-auto">
           {/* 모바일 로고 */}
           <div className="lg:hidden text-center mb-8">
             <h1 className="text-4xl font-black text-phomi-black mb-1">
@@ -94,7 +94,7 @@ export default function LoginPage() {
           </div>
 
           {/* 로그인 카드 */}
-          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-phomi-gray-100">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-phomi-gray-100 w-full">
             {/* 헤더 */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-phomi-gold/10 rounded-full mb-4 group hover:scale-110 transition-transform duration-300">
