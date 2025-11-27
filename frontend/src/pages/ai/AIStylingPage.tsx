@@ -215,41 +215,37 @@ export default function AIStylingPage() {
           {/* ⭐ 좌측: 확대된 컨트롤 패널 (고정 너비 420px) */}
           <div className="w-[420px] flex-shrink-0 bg-white rounded-2xl border border-phomi-gray-100 p-6 flex flex-col h-[calc(100vh-140px)] overflow-hidden">
 
-            {/* Step 1: 이미지 업로드 */}
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+            {/* Step 1: 이미지 업로드 - 컴팩트 */}
+            <div className="mb-4 flex-shrink-0">
+              <div className="flex items-center gap-2 mb-2">
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
                   step >= 1 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
                 }`}>
-                  {step > 1 ? <CheckCircle2 className="w-4 h-4" /> : '1'}
+                  {step > 1 ? <CheckCircle2 className="w-3 h-3" /> : '1'}
                 </div>
-                <h3 className="text-sm font-bold text-phomi-black">현장 사진</h3>
+                <h3 className="text-xs font-bold text-phomi-black">현장 사진</h3>
               </div>
 
               {!originalImage ? (
                 <label className="block cursor-pointer group">
-                  <div className="border-2 border-dashed border-phomi-gray-200 rounded-xl p-8 text-center hover:border-phomi-gold hover:bg-phomi-gold/5 transition-all">
-                    <Upload className="w-10 h-10 mx-auto mb-3 text-phomi-gray-400 group-hover:text-phomi-gold transition-colors" />
-                    <p className="text-sm font-semibold text-phomi-black mb-1">
-                      클릭하여 사진 업로드
-                    </p>
-                    <p className="text-xs text-phomi-gray-500">
-                      JPG, PNG (최대 20MB)
+                  <div className="border-2 border-dashed border-phomi-gray-200 rounded-xl p-6 text-center hover:border-phomi-gold hover:bg-phomi-gold/5 transition-all">
+                    <Upload className="w-8 h-8 mx-auto mb-2 text-phomi-gray-400 group-hover:text-phomi-gold transition-colors" />
+                    <p className="text-xs font-semibold text-phomi-black">
+                      클릭하여 업로드
                     </p>
                   </div>
                   <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                 </label>
               ) : (
                 <div className="space-y-2">
-                  {/* ⭐ object-contain으로 전체 이미지 표시 */}
-                  <div className="relative rounded-xl overflow-hidden bg-phomi-gray-50" style={{ height: '200px' }}>
+                  <div className="relative rounded-xl overflow-hidden bg-phomi-gray-50" style={{ height: '120px' }}>
                     <img
                       src={originalImage}
                       alt="Original"
                       className="w-full h-full object-contain"
                     />
                     <div className="absolute top-2 right-2">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">
+                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500 text-white text-[10px] font-semibold rounded-full">
                         <CheckCircle2 className="w-3 h-3" />
                       </span>
                     </div>
@@ -257,7 +253,7 @@ export default function AIStylingPage() {
                   <label className="block">
                     <button
                       type="button"
-                      className="w-full py-2 text-xs text-phomi-gray-600 hover:text-phomi-black hover:bg-phomi-gray-100 rounded-lg transition-all"
+                      className="w-full py-1.5 text-[10px] text-phomi-gray-600 hover:text-phomi-black hover:bg-phomi-gray-100 rounded-lg transition-all"
                     >
                       다른 이미지 선택
                     </button>
@@ -267,33 +263,33 @@ export default function AIStylingPage() {
               )}
             </div>
 
-            {/* Step 2: 자재 선택 - 가로 스크롤 */}
-            <div className={`bg-white rounded-2xl border border-phomi-gray-100 p-5 ${!originalImage && 'opacity-50 pointer-events-none'}`}>
+            {/* Step 2: 자재 선택 - 가로 스크롤 (flex-1으로 남은 공간 사용) */}
+            <div className={`bg-white rounded-2xl border border-phomi-gray-100 flex-1 flex flex-col min-h-0 ${!originalImage && 'opacity-50 pointer-events-none'}`}>
 
-              {/* 상단 헤더 */}
-              <div className="flex items-center justify-between mb-4">
+              {/* 상단 헤더 - 고정 */}
+              <div className="flex items-center justify-between p-4 border-b border-phomi-gray-100 flex-shrink-0">
                 <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
                     step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
                   }`}>
-                    {step > 2 ? <CheckCircle2 className="w-4 h-4" /> : '2'}
+                    {step > 2 ? <CheckCircle2 className="w-3 h-3" /> : '2'}
                   </div>
                   <div>
-                    <h2 className="font-bold text-phomi-black">자재 선택</h2>
-                    <p className="text-xs text-phomi-gray-500">{materials.length}개 자재</p>
+                    <h2 className="text-sm font-bold text-phomi-black">자재 선택</h2>
+                    <p className="text-[10px] text-phomi-gray-500">{materials.length}개</p>
                   </div>
                 </div>
-                <p className="text-xs text-phomi-gray-400 hidden sm:block">← 좌우로 스크롤하세요 →</p>
+                <p className="text-[10px] text-phomi-gray-400 hidden sm:block">← 스크롤 →</p>
               </div>
 
-              {/* ⭐ 가로 스크롤 자재 리스트 */}
-              <div className="relative mb-4">
-                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-phomi-gold scrollbar-track-phomi-gray-100">
+              {/* ⭐ 가로 스크롤 자재 리스트 - flex-1으로 확장 */}
+              <div className="flex-1 overflow-x-auto overflow-y-hidden p-4 min-h-0">
+                <div className="flex gap-3 h-full items-center">
                   {materials.map((material) => (
                     <button
                       key={material.material_id}
                       onClick={() => setSelectedMaterial(material.material_id)}
-                      className={`relative flex-shrink-0 w-48 h-48 rounded-xl overflow-hidden border-2 transition-all group ${
+                      className={`relative flex-shrink-0 w-36 h-36 rounded-xl overflow-hidden border-2 transition-all group ${
                         selectedMaterial === material.material_id
                           ? 'border-phomi-gold ring-4 ring-phomi-gold/20 scale-95'
                           : 'border-phomi-gray-200 hover:border-phomi-gold/50 hover:scale-105'
@@ -321,8 +317,8 @@ export default function AIStylingPage() {
 
                       {/* 선택 체크마크 */}
                       {selectedMaterial === material.material_id && (
-                        <div className="absolute top-3 right-3 w-8 h-8 bg-phomi-gold rounded-full flex items-center justify-center shadow-lg">
-                          <CheckCircle2 className="w-5 h-5 text-white" />
+                        <div className="absolute top-2 right-2 w-6 h-6 bg-phomi-gold rounded-full flex items-center justify-center shadow-lg">
+                          <CheckCircle2 className="w-4 h-4 text-white" />
                         </div>
                       )}
 
@@ -334,7 +330,7 @@ export default function AIStylingPage() {
                               e.stopPropagation();
                               setPreviewMaterial(material.material_id);
                             }}
-                            className="bg-white/90 backdrop-blur-sm text-phomi-black text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-white transition-colors flex items-center gap-1"
+                            className="bg-white/90 backdrop-blur-sm text-phomi-black text-[10px] font-semibold px-2 py-1 rounded-lg hover:bg-white transition-colors flex items-center gap-1"
                           >
                             <ZoomIn className="w-3 h-3" />
                             자세히
@@ -343,26 +339,26 @@ export default function AIStylingPage() {
                       </div>
 
                       {/* 자재 정보 */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-3">
-                        <p className="text-sm font-bold text-white mb-0.5 truncate">{material.name}</p>
-                        <p className="text-xs text-gray-300">{material.series}</p>
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-2">
+                        <p className="text-[11px] font-bold text-white truncate">{material.name}</p>
+                        <p className="text-[9px] text-gray-300">{material.series}</p>
                       </div>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* 하단 버튼 */}
-              <div className="pt-4 border-t border-phomi-gray-100">
+              {/* 하단 버튼 - 고정 */}
+              <div className="p-4 border-t border-phomi-gray-100 bg-phomi-gray-50 flex-shrink-0">
                 {selectedMaterial && (
-                  <div className="mb-3 p-3 bg-phomi-gray-50 rounded-lg">
+                  <div className="mb-2 p-2 bg-white rounded-lg">
                     <div className="flex items-start gap-2">
-                      <Palette className="w-4 h-4 text-phomi-gold flex-shrink-0 mt-0.5" />
+                      <Palette className="w-3 h-3 text-phomi-gold flex-shrink-0 mt-0.5" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-phomi-black truncate">
+                        <p className="text-[10px] font-bold text-phomi-black truncate">
                           {materials.find(m => m.material_id === selectedMaterial)?.name}
                         </p>
-                        <p className="text-[10px] text-phomi-gray-500">
+                        <p className="text-[9px] text-phomi-gray-500">
                           {materials.find(m => m.material_id === selectedMaterial)?.series}
                         </p>
                       </div>
@@ -373,17 +369,17 @@ export default function AIStylingPage() {
                 <button
                   onClick={handleGenerate}
                   disabled={!selectedMaterial || loading}
-                  className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-4 rounded-xl hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-3 rounded-xl hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {loading ? (
                     <>
-                      <RefreshCw className="w-5 h-5 animate-spin" />
-                      AI 생성 중...
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <span className="text-sm">AI 생성 중...</span>
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-5 h-5" />
-                      AI 스타일링 시작
+                      <Sparkles className="w-4 h-4" />
+                      <span className="text-sm">AI 스타일링 시작</span>
                     </>
                   )}
                 </button>
