@@ -47,6 +47,17 @@
   }
 }
 
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 /* 추가 애니메이션 */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }

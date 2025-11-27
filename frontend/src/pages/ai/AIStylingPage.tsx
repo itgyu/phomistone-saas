@@ -11,7 +11,7 @@ import {
 } from 'react-compare-slider';
 import { projectService } from '@/services/ProjectService';
 
-// 자재 데이터 (MCP 서버에서 가져오거나 하드코딩)
+// 자재 데이터
 const materials = [
   {
     material_id: 'marble_sahara_light_grey_04',
@@ -73,7 +73,6 @@ export default function AIStylingPage() {
     setStatusMessage('AI가 공간을 분석하고 있습니다...');
 
     try {
-      // Base64 헤더 제거
       const cleanImage = originalImage.split(',')[1];
 
       console.log('🚀 Sending request to n8n...');
@@ -106,11 +105,9 @@ export default function AIStylingPage() {
       console.log('✅ data.result_image_url exists:', !!data.result_image_url);
       console.log('✅ data.result_image exists:', !!data.result_image);
 
-      // ⭐ 응답 구조 확인
       if (data.success) {
         console.log('🎉 Success is true!');
 
-        // 🚨 n8n이 보내주는 변수명을 양쪽 다 체크 (result_image_url 또는 result_image)
         const imgData = data.result_image_url || data.result_image;
         console.log('✅ Using image data:', imgData ? 'Found' : 'Not found');
         console.log('✅ Image data length:', imgData?.length);
@@ -118,10 +115,8 @@ export default function AIStylingPage() {
         if (imgData) {
           console.log('🖼️ Result image found!');
 
-          // 이미 data URL 형식인지 체크 (http:// 또는 data:로 시작하면 그대로 사용)
           let imageToSet = imgData;
           if (!imgData.startsWith('http') && !imgData.startsWith('data:')) {
-            // Base64 문자열이면 헤더 추가
             imageToSet = `data:image/jpeg;base64,${imgData}`;
             console.log('✅ Added base64 header to image');
           } else {
@@ -167,7 +162,7 @@ export default function AIStylingPage() {
       clientName,
       status: 'Draft',
       materialName: material?.name || '',
-      estimatedCost: 4500000, // 임시값
+      estimatedCost: 4500000,
       beforeImage: originalImage,
       afterImage: resultImage
     });
@@ -238,59 +233,34 @@ export default function AIStylingPage() {
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* 좌측: 컨트롤 패널 */}
-          <div className="w-full lg:w-96 space-y-6">
-            {/* Step 1: 이미지 업로드 */}
-            <div className={`bg-white rounded-2xl border-2 p-6 transition-all duration-300 ${
-              step === 1 ? 'border-phomi-gold shadow-xl' : 'border-phomi-gray-100'
-            }`}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
-                  step >= 1 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
-                }`}>
-                  {step > 1 ? <CheckCircle2 className="w-5 h-5" /> : '1'}
-                </div>
-                <h2 className="text-lg font-bold text-phomi-black">
-                  현장 사진 업로드
-                </h2>
-              </div>
 
-              {!originalImage ? (
-                <label className="block cursor-pointer group">
-                  <div className="relative border-2 border-dashed border-phomi-gray-200 rounded-xl p-8 text-center hover:border-phomi-gold hover:bg-phomi-gold/5 transition-all duration-300">
-                    <Upload className="w-12 h-12 mx-auto mb-3 text-phomi-gray-400 group-hover:text-phomi-gold transition-colors duration-300" />
-                    <p className="text-sm font-semibold text-phomi-black mb-1">
-                      클릭하여 사진 업로드
-                    </p>
-                    <p className="text-xs text-phomi-gray-500">
-                      JPG, PNG (최대 20MB)
-                    </p>
+          {/* ⭐ 좌측: Sticky 컨트롤 패널 */}
+          <div className="w-full lg:w-80 space-y-4">
+            <div className="lg:sticky lg:top-24 space-y-4">
+
+              {/* Step 1: 이미지 업로드 - 컴팩트 */}
+              <div className={`bg-white rounded-xl border-2 p-4 transition-all duration-300 ${
+                step === 1 ? 'border-phomi-gold shadow-lg' : 'border-phomi-gray-100'
+              }`}>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                    step >= 1 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
+                  }`}>
+                    {step > 1 ? <CheckCircle2 className="w-4 h-4" /> : '1'}
                   </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                </label>
-              ) : (
-                <div className="space-y-3">
-                  <div className="relative rounded-xl overflow-hidden">
-                    <img src={originalImage} alt="Original" className="w-full" />
-                    <div className="absolute top-2 right-2">
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">
-                        <CheckCircle2 className="w-3 h-3" />
-                        업로드 완료
-                      </span>
+                  <h3 className="text-sm font-bold text-phomi-black">
+                    현장 사진
+                  </h3>
+                </div>
+
+                {!originalImage ? (
+                  <label className="block cursor-pointer group">
+                    <div className="border-2 border-dashed border-phomi-gray-200 rounded-lg p-6 text-center hover:border-phomi-gold hover:bg-phomi-gold/5 transition-all">
+                      <Upload className="w-8 h-8 mx-auto mb-2 text-phomi-gray-400 group-hover:text-phomi-gold" />
+                      <p className="text-xs font-semibold text-phomi-black">
+                        클릭하여 업로드
+                      </p>
                     </div>
-                  </div>
-                  <label className="block">
-                    <button
-                      type="button"
-                      className="w-full py-2 text-sm text-phomi-gray-600 hover:text-phomi-black hover:bg-phomi-gray-100 rounded-lg transition-all duration-300"
-                    >
-                      다른 이미지 선택
-                    </button>
                     <input
                       type="file"
                       accept="image/*"
@@ -298,127 +268,156 @@ export default function AIStylingPage() {
                       className="hidden"
                     />
                   </label>
-                </div>
-              )}
-            </div>
-
-            {/* Step 2: 자재 선택 */}
-            <div className={`bg-white rounded-2xl border-2 p-6 transition-all duration-300 ${
-              step === 2 ? 'border-phomi-gold shadow-xl' : 'border-phomi-gray-100'
-            } ${!originalImage && 'opacity-50 pointer-events-none'}`}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
-                  step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
-                }`}>
-                  {step > 2 ? <CheckCircle2 className="w-5 h-5" /> : '2'}
-                </div>
-                <h2 className="text-lg font-bold text-phomi-black">
-                  자재 선택
-                </h2>
-              </div>
-
-              <div className="space-y-3">
-                {materials.map((material) => (
-                  <button
-                    key={material.material_id}
-                    onClick={() => setSelectedMaterial(material.material_id)}
-                    className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left group ${
-                      selectedMaterial === material.material_id
-                        ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg'
-                        : 'border-phomi-gray-100 hover:border-phomi-gold/50 hover:bg-phomi-gray-50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-12 h-12 rounded-lg border-2 border-phomi-gray-200 shadow-inner"
-                        style={{ backgroundColor: material.color }}
-                      ></div>
-                      <div className="flex-1">
-                        <p className="font-bold text-phomi-black mb-1">
-                          {material.name}
-                        </p>
-                        <p className="text-xs text-phomi-gray-500 mb-1">
-                          {material.series}
-                        </p>
-                        <p className="text-xs text-phomi-gray-400">
-                          {material.description}
-                        </p>
-                      </div>
-                      {selectedMaterial === material.material_id && (
-                        <CheckCircle2 className="w-6 h-6 text-phomi-gold flex-shrink-0" />
-                      )}
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              <button
-                onClick={handleGenerate}
-                disabled={!selectedMaterial || loading}
-                className="w-full mt-6 bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                {loading ? (
-                  <>
-                    <RefreshCw className="w-5 h-5 animate-spin" />
-                    AI 생성 중...
-                  </>
                 ) : (
-                  <>
-                    <Zap className="w-5 h-5" />
-                    AI 스타일링 시작
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </>
+                  <div className="space-y-2">
+                    <div className="relative rounded-lg overflow-hidden">
+                      <img src={originalImage} alt="Original" className="w-full h-32 object-cover" />
+                      <div className="absolute top-2 right-2">
+                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">
+                          <CheckCircle2 className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </div>
+                    <label className="block">
+                      <button
+                        type="button"
+                        className="w-full py-2 text-xs text-phomi-gray-600 hover:text-phomi-black hover:bg-phomi-gray-100 rounded-lg transition-all"
+                      >
+                        다른 이미지 선택
+                      </button>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
                 )}
-              </button>
-            </div>
-
-            {/* 정보 카드 */}
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-              <div className="flex gap-3">
-                <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold text-blue-900 mb-1">
-                    💡 최적 결과를 위한 팁
-                  </p>
-                  <ul className="text-xs text-blue-700 space-y-1">
-                    <li>• 정면에서 촬영된 사진 권장</li>
-                    <li>• 조명이 밝고 균일한 사진</li>
-                    <li>• 시공 대상 표면이 명확한 사진</li>
-                  </ul>
-                </div>
               </div>
+
+              {/* Step 2: 자재 선택 - 컴팩트 썸네일 */}
+              <div className={`bg-white rounded-xl border-2 p-4 transition-all duration-300 ${
+                step === 2 ? 'border-phomi-gold shadow-lg' : 'border-phomi-gray-100'
+              } ${!originalImage && 'opacity-50 pointer-events-none'}`}>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                    step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
+                  }`}>
+                    {step > 2 ? <CheckCircle2 className="w-4 h-4" /> : '2'}
+                  </div>
+                  <h3 className="text-sm font-bold text-phomi-black">
+                    자재 선택
+                  </h3>
+                </div>
+
+                {/* ⭐ 가로 스크롤 썸네일 */}
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                  {materials.map((material) => (
+                    <button
+                      key={material.material_id}
+                      onClick={() => setSelectedMaterial(material.material_id)}
+                      className={`flex-shrink-0 group transition-all duration-300 ${
+                        selectedMaterial === material.material_id
+                          ? 'ring-2 ring-phomi-gold'
+                          : 'hover:ring-2 hover:ring-phomi-gold/50'
+                      }`}
+                    >
+                      <div className="relative">
+                        <div
+                          className="w-16 h-16 rounded-lg border-2 border-phomi-gray-200"
+                          style={{ backgroundColor: material.color }}
+                        />
+                        {selectedMaterial === material.material_id && (
+                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-phomi-gold rounded-full flex items-center justify-center">
+                            <CheckCircle2 className="w-3 h-3 text-white" />
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-center mt-1 text-phomi-gray-600 font-medium">
+                        {material.name.split(' ')[0]}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+
+                {/* 선택된 자재 정보 */}
+                {selectedMaterial && (
+                  <div className="mt-3 p-2 bg-phomi-gray-50 rounded-lg">
+                    <p className="text-xs font-bold text-phomi-black">
+                      {materials.find(m => m.material_id === selectedMaterial)?.name}
+                    </p>
+                    <p className="text-[10px] text-phomi-gray-500">
+                      {materials.find(m => m.material_id === selectedMaterial)?.description}
+                    </p>
+                  </div>
+                )}
+
+                {/* AI 생성 버튼 */}
+                <button
+                  onClick={handleGenerate}
+                  disabled={!selectedMaterial || loading}
+                  className="w-full mt-3 bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-3 rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                >
+                  {loading ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      생성 중...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="w-4 h-4" />
+                      AI 스타일링
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* 정보 카드 - 컴팩트 */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs">
+                <p className="font-semibold text-blue-900 mb-1">💡 팁</p>
+                <ul className="text-blue-700 space-y-0.5 text-[10px]">
+                  <li>• 정면 촬영 권장</li>
+                  <li>• 밝은 조명</li>
+                  <li>• 명확한 표면</li>
+                </ul>
+              </div>
+
             </div>
           </div>
 
-          {/* 우측: 결과 뷰어 */}
-          <div className="flex-1">
-            <div className="bg-white rounded-2xl border border-phomi-gray-100 p-6 min-h-[600px]">
+          {/* ⭐ 우측: 큰 뷰어 (스크롤 가능) */}
+          <div className="flex-1 min-h-[600px]">
+            <div className="bg-white rounded-2xl border border-phomi-gray-100 p-6 h-full relative">
+
               {loading ? (
-                /* 로딩 상태 */
-                <div className="flex flex-col items-center justify-center h-full">
-                  <div className="relative mb-8">
-                    <div className="w-24 h-24 border-8 border-phomi-gold/20 border-t-phomi-gold rounded-full animate-spin"></div>
-                    <Sparkles className="w-12 h-12 text-phomi-gold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
-                  </div>
-                  <h3 className="text-xl font-bold text-phomi-black mb-2">
-                    AI가 작업 중입니다
-                  </h3>
-                  <p className="text-phomi-gray-500 text-center mb-8">
-                    {statusMessage || 'AI가 공간을 분석하고 시공 중입니다...'}
-                  </p>
-                  <div className="flex gap-2">
-                    {[0, 1, 2].map((i) => (
-                      <div
-                        key={i}
-                        className="w-3 h-3 bg-phomi-gold rounded-full animate-bounce"
-                        style={{ animationDelay: `${i * 0.15}s` }}
-                      ></div>
-                    ))}
+                /* 로딩 상태 - 전체 화면 중앙 */
+                <div className="absolute inset-0 bg-white/95 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
+                  <div className="flex flex-col items-center justify-center p-8">
+                    <div className="relative mb-8">
+                      <div className="w-24 h-24 border-8 border-phomi-gold/20 border-t-phomi-gold rounded-full animate-spin"></div>
+                      <Sparkles className="w-12 h-12 text-phomi-gold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+                    </div>
+                    <h3 className="text-xl font-bold text-phomi-black mb-2">
+                      AI가 작업 중입니다
+                    </h3>
+                    <p className="text-phomi-gray-500 text-center mb-8">
+                      {statusMessage || 'AI가 공간을 분석하고 시공 중입니다...'}
+                    </p>
+                    <div className="flex gap-2">
+                      {[0, 1, 2].map((i) => (
+                        <div
+                          key={i}
+                          className="w-3 h-3 bg-phomi-gold rounded-full animate-bounce"
+                          style={{ animationDelay: `${i * 0.15}s` }}
+                        ></div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ) : resultImage ? (
                 /* 결과 표시 */
-                <div className="space-y-6">
+                <div className="space-y-6 h-full flex flex-col">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-bold text-phomi-black flex items-center gap-2">
                       <Layers className="w-5 h-5 text-phomi-gold" />
@@ -432,14 +431,14 @@ export default function AIStylingPage() {
                           link.download = 'phomistone-result.jpg';
                           link.click();
                         }}
-                        className="flex items-center gap-2 px-4 py-2 bg-phomi-gray-100 text-phomi-black rounded-lg hover:bg-phomi-gray-200 transition-all duration-300 font-semibold"
+                        className="flex items-center gap-2 px-4 py-2 bg-phomi-gray-100 text-phomi-black rounded-lg hover:bg-phomi-gray-200 transition-all duration-300 font-semibold text-sm"
                       >
                         <Download className="w-4 h-4" />
                         다운로드
                       </button>
                       <button
                         onClick={() => setShowSaveModal(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-phomi-gold to-phomi-black text-white rounded-lg hover:shadow-xl transition-all duration-300 font-semibold"
+                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-phomi-gold to-phomi-black text-white rounded-lg hover:shadow-xl transition-all duration-300 font-semibold text-sm"
                       >
                         <Save className="w-4 h-4" />
                         견적 저장
@@ -447,12 +446,12 @@ export default function AIStylingPage() {
                     </div>
                   </div>
 
-                  {/* 비교 슬라이더 */}
-                  <div className="relative rounded-xl overflow-hidden shadow-2xl">
+                  {/* ⭐ 비교 슬라이더 - 더 크게 */}
+                  <div className="flex-1 relative rounded-xl overflow-hidden shadow-2xl min-h-[500px]">
                     <ReactCompareSlider
                       itemOne={<ReactCompareSliderImage src={originalImage} alt="Before" />}
                       itemTwo={<ReactCompareSliderImage src={resultImage} alt="After" />}
-                      style={{ height: '500px' }}
+                      style={{ height: '100%', minHeight: '500px' }}
                     />
                     <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm">
                       Before
@@ -488,13 +487,14 @@ export default function AIStylingPage() {
                     Ready to Design
                   </h3>
                   <p className="text-phomi-gray-500 max-w-md">
-                    현장 사진을 업로드하고 포미스톤 자재를 선택하여<br />
-                    AI 스타일링을 시작하세요
+                    좌측에서 현장 사진을 업로드하고<br />
+                    포미스톤 자재를 선택하여 시작하세요
                   </p>
                 </div>
               )}
             </div>
           </div>
+
         </div>
       </div>
 
