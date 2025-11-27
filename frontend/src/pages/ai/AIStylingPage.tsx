@@ -447,7 +447,7 @@ export default function AIStylingPage() {
                 </div>
               ) : resultImage ? (
                 /* 결과 표시 */
-                <div className="space-y-6 h-full flex flex-col">
+                <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-bold text-phomi-black flex items-center gap-2">
                       <Layers className="w-5 h-5 text-phomi-gold" />
@@ -478,12 +478,20 @@ export default function AIStylingPage() {
 
                   {/* ⭐ 비교 슬라이더 - 이미지 비율에 맞게 동적 조정 */}
                   <div
-                    className="w-full relative rounded-xl overflow-hidden shadow-2xl bg-phomi-gray-100"
+                    className="w-full relative rounded-xl overflow-hidden shadow-2xl bg-phomi-gray-50"
                     style={{ aspectRatio: imageAspectRatio }}
                   >
                     <ReactCompareSlider
-                      itemOne={<ReactCompareSliderImage src={originalImage} alt="Before" style={{ objectFit: 'contain' }} />}
-                      itemTwo={<ReactCompareSliderImage src={resultImage} alt="After" style={{ objectFit: 'contain' }} />}
+                      itemOne={
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <img src={originalImage} alt="Before" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        </div>
+                      }
+                      itemTwo={
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <img src={resultImage} alt="After" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        </div>
+                      }
                       style={{ width: '100%', height: '100%' }}
                     />
                     <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm">
