@@ -103,29 +103,40 @@ export default function AIStylingPage() {
       const data = await response.json();
       console.log('✅ Full response data:', data);
       console.log('✅ data.success:', data.success);
+      console.log('✅ data.result_image_url exists:', !!data.result_image_url);
       console.log('✅ data.result_image exists:', !!data.result_image);
-      console.log('✅ data.result_image length:', data.result_image?.length);
 
       // ⭐ 응답 구조 확인
       if (data.success) {
         console.log('🎉 Success is true!');
 
-        if (data.result_image) {
+        // 🚨 n8n이 보내주는 변수명을 양쪽 다 체크 (result_image_url 또는 result_image)
+        const imgData = data.result_image_url || data.result_image;
+        console.log('✅ Using image data:', imgData ? 'Found' : 'Not found');
+        console.log('✅ Image data length:', imgData?.length);
+
+        if (imgData) {
           console.log('🖼️ Result image found!');
 
-          // 헤더 다시 추가
-          const imageWithHeader = `data:image/jpeg;base64,${data.result_image}`;
-          console.log('✅ Setting result image...');
+          // 이미 data URL 형식인지 체크 (http:// 또는 data:로 시작하면 그대로 사용)
+          let imageToSet = imgData;
+          if (!imgData.startsWith('http') && !imgData.startsWith('data:')) {
+            // Base64 문자열이면 헤더 추가
+            imageToSet = `data:image/jpeg;base64,${imgData}`;
+            console.log('✅ Added base64 header to image');
+          } else {
+            console.log('✅ Using image URL as-is:', imgData.substring(0, 50) + '...');
+          }
 
-          setResultImage(imageWithHeader);
+          setResultImage(imageToSet);
           setStep(3);
           setStatusMessage('');
 
           console.log('✅ Result image set successfully!');
         } else {
-          console.error('❌ result_image is missing in response');
+          console.error('❌ result_image_url and result_image are both missing');
           console.error('Response keys:', Object.keys(data));
-          alert('AI 생성 실패: 결과 이미지가 없습니다');
+          alert('AI 생성 실패: 결과 이미지가 없습니다. 콘솔을 확인해주세요.');
         }
       } else {
         console.error('❌ success is false');
