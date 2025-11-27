@@ -76,28 +76,69 @@ export default function AIStylingPage() {
       // Base64 헤더 제거
       const cleanImage = originalImage.split(',')[1];
 
+      console.log('🚀 Sending request to n8n...');
+      console.log('📦 Payload:', {
+        material_id: selectedMaterial,
+        image_size: cleanImage.length
+      });
+
       const response = await fetch('/webhook/style-building', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           image_base64: cleanImage,
           material_id: selectedMaterial
         })
       });
 
-      const data = await response.json();
+      console.log('📡 Response status:', response.status);
+      console.log('📡 Response ok:', response.ok);
 
-      if (data.success && data.result_image) {
-        setResultImage(`data:image/jpeg;base64,${data.result_image}`);
-        setStep(3);
-        setStatusMessage('');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('✅ Full response data:', data);
+      console.log('✅ data.success:', data.success);
+      console.log('✅ data.result_image exists:', !!data.result_image);
+      console.log('✅ data.result_image length:', data.result_image?.length);
+
+      // ⭐ 응답 구조 확인
+      if (data.success) {
+        console.log('🎉 Success is true!');
+
+        if (data.result_image) {
+          console.log('🖼️ Result image found!');
+
+          // 헤더 다시 추가
+          const imageWithHeader = `data:image/jpeg;base64,${data.result_image}`;
+          console.log('✅ Setting result image...');
+
+          setResultImage(imageWithHeader);
+          setStep(3);
+          setStatusMessage('');
+
+          console.log('✅ Result image set successfully!');
+        } else {
+          console.error('❌ result_image is missing in response');
+          console.error('Response keys:', Object.keys(data));
+          alert('AI 생성 실패: 결과 이미지가 없습니다');
+        }
       } else {
+        console.error('❌ success is false');
+        console.error('Error:', data.error);
         alert('AI 생성 실패: ' + (data.error || '알 수 없는 오류'));
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('AI 생성 중 오류가 발생했습니다.');
+      console.error('❌ Catch block error:', error);
+      console.error('Error type:', error.constructor.name);
+      console.error('Error message:', error.message);
+      alert('AI 생성 중 오류가 발생했습니다: ' + error.message);
     } finally {
+      console.log('🏁 Finally block - setting loading to false');
       setLoading(false);
     }
   };
