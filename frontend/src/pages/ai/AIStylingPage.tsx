@@ -25,6 +25,7 @@ export default function AIStylingPage() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [clientName, setClientName] = useState('');
   const [previewMaterial, setPreviewMaterial] = useState<string | null>(null);
+  const [imageAspectRatio, setImageAspectRatio] = useState<number>(16 / 9); // 기본값
 
   // 이미지 업로드
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +34,14 @@ export default function AIStylingPage() {
 
     const reader = new FileReader();
     reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        // 이미지의 실제 비율 계산
+        const ratio = img.width / img.height;
+        setImageAspectRatio(ratio);
+        console.log('📐 Image dimensions:', img.width, 'x', img.height, '- Aspect ratio:', ratio);
+      };
+      img.src = event.target?.result as string;
       setOriginalImage(event.target?.result as string);
       setStep(2);
     };
@@ -467,12 +476,15 @@ export default function AIStylingPage() {
                     </div>
                   </div>
 
-                  {/* ⭐ 비교 슬라이더 - 더 크게 */}
-                  <div className="flex-1 relative rounded-xl overflow-hidden shadow-2xl min-h-[500px] bg-phomi-gray-100">
+                  {/* ⭐ 비교 슬라이더 - 이미지 비율에 맞게 동적 조정 */}
+                  <div
+                    className="w-full relative rounded-xl overflow-hidden shadow-2xl bg-phomi-gray-100"
+                    style={{ aspectRatio: imageAspectRatio }}
+                  >
                     <ReactCompareSlider
                       itemOne={<ReactCompareSliderImage src={originalImage} alt="Before" style={{ objectFit: 'contain' }} />}
                       itemTwo={<ReactCompareSliderImage src={resultImage} alt="After" style={{ objectFit: 'contain' }} />}
-                      style={{ height: '100%', minHeight: '500px' }}
+                      style={{ width: '100%', height: '100%' }}
                     />
                     <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm">
                       Before
