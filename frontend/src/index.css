@@ -57,9 +57,10 @@
     scrollbar-width: none;
   }
 
-  /* ⭐ 얇은 스크롤바 추가 */
+  /* ⭐ 얇은 스크롤바 추가 (세로) */
   .scrollbar-thin::-webkit-scrollbar {
     width: 6px;
+    height: 8px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-track {
@@ -73,7 +74,16 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: #000000;
+    background: #A67C52;
+  }
+
+  /* 스크롤바 색상 유틸리티 */
+  .scrollbar-thumb-phomi-gold::-webkit-scrollbar-thumb {
+    background: #C59C6C;
+  }
+
+  .scrollbar-track-phomi-gray-100::-webkit-scrollbar-track {
+    background: #f1f1f1;
   }
 }
 

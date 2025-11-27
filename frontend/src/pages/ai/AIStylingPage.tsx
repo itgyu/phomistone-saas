@@ -267,92 +267,95 @@ export default function AIStylingPage() {
               )}
             </div>
 
-            {/* Step 2: 자재 선택 - flex-1으로 남은 공간 사용 */}
-            <div className={`flex-1 flex flex-col border-t border-phomi-gray-100 min-h-0 ${!originalImage && 'opacity-50 pointer-events-none'}`}>
+            {/* Step 2: 자재 선택 - 가로 스크롤 */}
+            <div className={`bg-white rounded-2xl border border-phomi-gray-100 p-5 ${!originalImage && 'opacity-50 pointer-events-none'}`}>
 
-              {/* ⭐ 상단 헤더 - 고정 */}
-              <div className="px-6 py-4 border-b border-phomi-gray-100 bg-white flex-shrink-0">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                      step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
-                    }`}>
-                      {step > 2 ? <CheckCircle2 className="w-4 h-4" /> : '2'}
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-phomi-black">자재 선택</h3>
-                      <p className="text-[10px] text-phomi-gray-500">{materials.length}개 자재</p>
-                    </div>
+              {/* 상단 헤더 */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                    step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
+                  }`}>
+                    {step > 2 ? <CheckCircle2 className="w-4 h-4" /> : '2'}
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-phomi-black">자재 선택</h2>
+                    <p className="text-xs text-phomi-gray-500">{materials.length}개 자재</p>
                   </div>
                 </div>
+                <p className="text-xs text-phomi-gray-400 hidden sm:block">← 좌우로 스크롤하세요 →</p>
               </div>
 
-              {/* ⭐ 중간 자재 그리드 - 스크롤 가능 */}
-              <div className="flex-1 overflow-y-auto p-4 scrollbar-thin min-h-0">
-                <div className="grid grid-cols-2 gap-3">
+              {/* ⭐ 가로 스크롤 자재 리스트 */}
+              <div className="relative mb-4">
+                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-phomi-gold scrollbar-track-phomi-gray-100">
                   {materials.map((material) => (
-                    <div
+                    <button
                       key={material.material_id}
-                      className={`group relative transition-all duration-300 rounded-lg ${
+                      onClick={() => setSelectedMaterial(material.material_id)}
+                      className={`relative flex-shrink-0 w-48 h-48 rounded-xl overflow-hidden border-2 transition-all group ${
                         selectedMaterial === material.material_id
-                          ? 'ring-2 ring-phomi-gold'
-                          : 'hover:ring-2 hover:ring-phomi-gold/50'
+                          ? 'border-phomi-gold ring-4 ring-phomi-gold/20 scale-95'
+                          : 'border-phomi-gray-200 hover:border-phomi-gold/50 hover:scale-105'
                       }`}
                     >
-                      <button
-                        onClick={() => setSelectedMaterial(material.material_id)}
-                        className="w-full aspect-square rounded-lg overflow-hidden relative block"
-                      >
-                        <img
-                          src={material.image_path}
-                          alt={material.name}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                          onError={(e) => {
-                            const target = e.currentTarget as HTMLImageElement;
-                            target.style.display = 'none';
-                            if (target.nextElementSibling) {
-                              (target.nextElementSibling as HTMLElement).classList.remove('hidden');
-                            }
-                          }}
-                        />
-                        {/* 폴백 색상 */}
-                        <div
-                          className="hidden w-full h-full"
-                          style={{ backgroundColor: material.color }}
-                        />
+                      {/* 자재 이미지 */}
+                      <img
+                        src={material.image_path}
+                        alt={material.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          target.style.display = 'none';
+                          if (target.nextElementSibling) {
+                            (target.nextElementSibling as HTMLElement).classList.remove('hidden');
+                          }
+                        }}
+                      />
 
-                        {selectedMaterial === material.material_id && (
-                          <div className="absolute top-2 right-2 w-6 h-6 bg-phomi-gold rounded-full flex items-center justify-center shadow-lg">
-                            <CheckCircle2 className="w-4 h-4 text-white" />
-                          </div>
-                        )}
+                      {/* 폴백 색상 */}
+                      <div
+                        className="hidden w-full h-full"
+                        style={{ backgroundColor: material.color }}
+                      />
 
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100">
-                          <ZoomIn className="w-6 h-6 text-white mb-2" />
+                      {/* 선택 체크마크 */}
+                      {selectedMaterial === material.material_id && (
+                        <div className="absolute top-3 right-3 w-8 h-8 bg-phomi-gold rounded-full flex items-center justify-center shadow-lg">
+                          <CheckCircle2 className="w-5 h-5 text-white" />
+                        </div>
+                      )}
+
+                      {/* 호버 효과 */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               setPreviewMaterial(material.material_id);
                             }}
-                            className="bg-white/90 backdrop-blur-sm text-phomi-black text-xs font-semibold px-3 py-1 rounded transition-colors hover:bg-white"
+                            className="bg-white/90 backdrop-blur-sm text-phomi-black text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-white transition-colors flex items-center gap-1"
                           >
+                            <ZoomIn className="w-3 h-3" />
                             자세히
                           </button>
                         </div>
-                      </button>
+                      </div>
 
-                      <p className="text-[10px] text-center mt-1.5 text-phomi-gray-700 font-medium truncate px-1">
-                        {material.name}
-                      </p>
-                    </div>
+                      {/* 자재 정보 */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-3">
+                        <p className="text-sm font-bold text-white mb-0.5 truncate">{material.name}</p>
+                        <p className="text-xs text-gray-300">{material.series}</p>
+                      </div>
+                    </button>
                   ))}
                 </div>
               </div>
 
-              {/* ⭐ 하단 버튼 영역 - 고정 */}
-              <div className="px-4 py-4 border-t border-phomi-gray-100 bg-phomi-gray-50 flex-shrink-0">
+              {/* 하단 버튼 */}
+              <div className="pt-4 border-t border-phomi-gray-100">
                 {selectedMaterial && (
-                  <div className="mb-3 p-3 bg-white rounded-lg shadow-sm">
+                  <div className="mb-3 p-3 bg-phomi-gray-50 rounded-lg">
                     <div className="flex items-start gap-2">
                       <Palette className="w-4 h-4 text-phomi-gold flex-shrink-0 mt-0.5" />
                       <div className="flex-1 min-w-0">
@@ -370,7 +373,7 @@ export default function AIStylingPage() {
                 <button
                   onClick={handleGenerate}
                   disabled={!selectedMaterial || loading}
-                  className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-4 rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-4 rounded-xl hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {loading ? (
                     <>
@@ -379,9 +382,8 @@ export default function AIStylingPage() {
                     </>
                   ) : (
                     <>
-                      <Zap className="w-5 h-5" />
+                      <Sparkles className="w-5 h-5" />
                       AI 스타일링 시작
-                      <ArrowRight className="w-4 h-4" />
                     </>
                   )}
                 </button>
