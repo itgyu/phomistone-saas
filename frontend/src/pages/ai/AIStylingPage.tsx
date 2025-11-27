@@ -10,31 +10,7 @@ import {
   ReactCompareSliderImage
 } from 'react-compare-slider';
 import { projectService } from '@/services/ProjectService';
-
-// 자재 데이터
-const materials = [
-  {
-    material_id: 'marble_sahara_light_grey_04',
-    name: 'Sahara Light Grey',
-    series: 'Nature Stone',
-    color: '#C0C0C0',
-    description: '라이트닝 베이닝 패턴'
-  },
-  {
-    material_id: 'marble_veil_dark_grey_05',
-    name: 'Veil Dark Grey',
-    series: 'Nature Stone',
-    color: '#4A4A4A',
-    description: '다크 그레이 우아함'
-  },
-  {
-    material_id: 'travertine_rome_ivory',
-    name: 'Travertine Rome',
-    series: 'Travertine',
-    color: '#E3DCCB',
-    description: '아이보리 클래식'
-  }
-];
+import { materials } from '@/data/materials';
 
 export default function AIStylingPage() {
   const navigate = useNavigate();
@@ -317,15 +293,27 @@ export default function AIStylingPage() {
                     <button
                       key={material.material_id}
                       onClick={() => setSelectedMaterial(material.material_id)}
-                      className={`flex-shrink-0 group transition-all duration-300 ${
+                      className={`flex-shrink-0 group transition-all duration-300 rounded-lg ${
                         selectedMaterial === material.material_id
                           ? 'ring-2 ring-phomi-gold'
                           : 'hover:ring-2 hover:ring-phomi-gold/50'
                       }`}
                     >
                       <div className="relative">
+                        <img
+                          src={material.image_path}
+                          alt={material.name}
+                          className="w-16 h-16 rounded-lg border-2 border-phomi-gray-200 object-cover"
+                          onError={(e) => {
+                            // 이미지 로드 실패시 색상 블록으로 fallback
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const fallback = target.nextElementSibling as HTMLElement;
+                            if (fallback) fallback.style.display = 'block';
+                          }}
+                        />
                         <div
-                          className="w-16 h-16 rounded-lg border-2 border-phomi-gray-200"
+                          className="w-16 h-16 rounded-lg border-2 border-phomi-gray-200 hidden"
                           style={{ backgroundColor: material.color }}
                         />
                         {selectedMaterial === material.material_id && (

@@ -1,0 +1,200 @@
+[
+  {
+    "material_id": "castol_white_01",
+    "name": "Phomistone Castol White",
+    "series": "Castol",
+    "positive_prompt": "white marble texture, clean surface, bright lighting, luxury interior, pristine finish, architectural quality, 8K resolution"
+  },
+  {
+    "material_id": "veil_gray_02",
+    "name": "Phomistone Veil Gray",
+    "series": "Veil",
+    "positive_prompt": "gray marble with veil pattern, elegant surface, modern interior, soft veining, sophisticated finish, 8K quality"
+  },
+  {
+    "material_id": "veil_dark_grey_03",
+    "name": "Phomistone Veil Dark Grey",
+    "series": "Veil",
+    "positive_prompt": "dark gray marble, luxury texture, sophisticated interior, elegant veining, deep tones, premium finish, 8K resolution"
+  },
+  {
+    "material_id": "shahara_light_gray_04",
+    "name": "Phomistone Shahara Light Gray",
+    "series": "Shahara",
+    "positive_prompt": "light gray marble, sahara pattern, natural texture, bright interior, desert-inspired veining, architectural elegance, 8K quality"
+  },
+  {
+    "material_id": "cloud_yellow_05",
+    "name": "Phomistone Cloud Yellow",
+    "series": "Cloud",
+    "positive_prompt": "yellow beige marble, cloud pattern, warm tone, elegant interior, soft swirls, natural finish, 8K resolution"
+  },
+  {
+    "material_id": "andes_white_06",
+    "name": "Phomistone Andes White",
+    "series": "Andes",
+    "positive_prompt": "white marble, andes stone texture, clean surface, luxury interior, mountain-inspired patterns, premium quality, 8K"
+  },
+  {
+    "material_id": "nile_dark_grey_07",
+    "name": "Phomistone Nile Dark Grey",
+    "series": "Nile",
+    "positive_prompt": "dark gray marble, nile pattern, deep texture, luxury interior, river-inspired veining, sophisticated finish, 8K quality"
+  },
+  {
+    "material_id": "andes_grey_08",
+    "name": "Phomistone Andes Grey",
+    "series": "Andes",
+    "positive_prompt": "gray marble, andes texture, natural pattern, modern interior, mountain stone finish, architectural quality, 8K resolution"
+  },
+  {
+    "material_id": "sunis_white_09",
+    "name": "Phomistone Sunis White",
+    "series": "Sunis",
+    "positive_prompt": "pure white marble, clean surface, bright texture, luxury interior, pristine finish, minimalist elegance, 8K quality"
+  },
+  {
+    "material_id": "kamu_red_10",
+    "name": "Phomistone Kamu Red",
+    "series": "Kamu",
+    "positive_prompt": "red brown marble, kamu texture, warm tone, unique interior, natural earth colors, premium finish, 8K resolution"
+  },
+  {
+    "material_id": "andes_gray_11",
+    "name": "Phomistone Andes Gray",
+    "series": "Andes",
+    "positive_prompt": "gray marble, andes pattern, natural texture, elegant interior, mountain-inspired design, architectural quality, 8K"
+  },
+  {
+    "material_id": "cloud_white_12",
+    "name": "Phomistone Cloud White",
+    "series": "Cloud",
+    "positive_prompt": "white marble, cloud pattern, soft texture, bright interior, gentle swirls, clean finish, 8K quality"
+  },
+  {
+    "material_id": "plain_white_13",
+    "name": "Phomistone Plain White",
+    "series": "Plain",
+    "positive_prompt": "plain white surface, clean texture, minimalist interior, bright, simple elegance, modern finish, 8K resolution"
+  },
+  {
+    "material_id": "australia_yellow_14",
+    "name": "Phomistone Australia Yellow",
+    "series": "Australia",
+    "positive_prompt": "yellow beige marble, australia stone, warm tone, luxury interior, natural earth colors, premium finish, 8K quality"
+  },
+  {
+    "material_id": "greyish_desert_15",
+    "name": "Phomistone Greyish Desert",
+    "series": "Desert",
+    "positive_prompt": "gray beige marble, desert texture, natural pattern, warm interior, sandy tones, architectural quality, 8K resolution"
+  },
+  {
+    "material_id": "dark_gray_16",
+    "name": "Phomistone Dark Gray",
+    "series": "Classic",
+    "positive_prompt": "dark gray marble, deep texture, luxury interior, sophisticated, charcoal tones, premium finish, 8K quality"
+  },
+  {
+    "material_id": "portoro_17",
+    "name": "Phomistone Portoro",
+    "series": "Portoro",
+    "positive_prompt": "black marble with gold veins, portoro texture, luxury interior, elegant, premium Italian style, architectural excellence, 8K resolution"
+  },
+  {
+    "material_id": "veil_gray_18",
+    "name": "Phomistone Veil Gray",
+    "series": "Veil",
+    "positive_prompt": "gray marble, veil pattern, elegant texture, modern interior, soft cloudy swirls, sophisticated finish, 8K quality"
+  },
+  {
+    "material_id": "nile_light_yellow_19",
+    "name": "Phomistone Nile Light Yellow",
+    "series": "Nile",
+    "positive_prompt": "light yellow marble, nile pattern, warm tone, elegant interior, river-inspired veining, natural finish, 8K resolution"
+  },
+  {
+    "material_id": "castol_white_20",
+    "name": "Phomistone Castol White",
+    "series": "Castol",
+    "positive_prompt": "white marble, castol texture, clean surface, luxury interior, bright finish, architectural quality, 8K"
+  },
+  {
+    "material_id": "veil_white_21",
+    "name": "Phomistone Veil White",
+    "series": "Veil",
+    "positive_prompt": "white marble, veil pattern, soft texture, bright interior, gentle cloudy swirls, elegant finish, 8K quality"
+  },
+  {
+    "material_id": "veil_dark_gray_22",
+    "name": "Phomistone Veil Dark Gray",
+    "series": "Veil",
+    "positive_prompt": "dark gray marble, veil pattern, luxury texture, sophisticated interior, deep tones with soft veining, 8K resolution"
+  },
+  {
+    "material_id": "castol_blue_23",
+    "name": "Phomistone Castol Blue",
+    "series": "Castol",
+    "positive_prompt": "blue gray marble, castol texture, elegant pattern, modern interior, cool tones, sophisticated finish, 8K quality"
+  },
+  {
+    "material_id": "andes_yellow_24",
+    "name": "Phomistone Andes Yellow",
+    "series": "Andes",
+    "positive_prompt": "yellow beige marble, andes texture, warm tone, elegant interior, mountain-inspired patterns, premium finish, 8K resolution"
+  },
+  {
+    "material_id": "blue_grey_25",
+    "name": "Phomistone Blue Grey",
+    "series": "Blue",
+    "positive_prompt": "blue gray marble, cool tone, elegant texture, modern interior, sophisticated veining, contemporary finish, 8K quality"
+  },
+  {
+    "material_id": "andes_gold_26",
+    "name": "Phomistone Andes Gold",
+    "series": "Andes",
+    "positive_prompt": "gold beige marble, andes texture, luxury tone, elegant interior, warm golden hues, premium finish, 8K resolution"
+  },
+  {
+    "material_id": "portoro_27",
+    "name": "Phomistone Portoro",
+    "series": "Portoro",
+    "positive_prompt": "black marble with gold veins, portoro luxury, elegant interior, dramatic contrast, Italian elegance, architectural excellence, 8K quality"
+  },
+  {
+    "material_id": "multi_color_red_28",
+    "name": "Phomistone Multi-Color Red",
+    "series": "Multi-Color",
+    "positive_prompt": "red brown marble, multi color pattern, unique texture, luxury interior, varied earth tones, premium finish, 8K resolution"
+  },
+  {
+    "material_id": "greyish_desert_29",
+    "name": "Phomistone Greyish Desert",
+    "series": "Desert",
+    "positive_prompt": "gray beige marble, desert pattern, natural texture, warm interior, sandy tones with subtle veining, 8K quality"
+  },
+  {
+    "material_id": "andes_white_30",
+    "name": "Phomistone Andes White",
+    "series": "Andes",
+    "positive_prompt": "white marble, andes texture, clean surface, bright interior, mountain stone elegance, architectural quality, 8K resolution"
+  },
+  {
+    "material_id": "andes_yellow_31",
+    "name": "Phomistone Andes Yellow",
+    "series": "Andes",
+    "positive_prompt": "yellow beige marble, andes pattern, warm tone, elegant interior, natural earth colors, premium finish, 8K quality"
+  },
+  {
+    "material_id": "h2_32",
+    "name": "Phomistone H2",
+    "series": "H Series",
+    "positive_prompt": "light gray marble, h2 texture, modern pattern, elegant interior, subtle veining, contemporary finish, 8K resolution"
+  },
+  {
+    "material_id": "h4_33",
+    "name": "Phomistone H4",
+    "series": "H Series",
+    "positive_prompt": "gray marble, h4 texture, elegant pattern, modern interior, sophisticated tones, architectural quality, 8K"
+  }
+]
