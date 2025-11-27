@@ -82,7 +82,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="h-screen flex overflow-hidden">
       {/* 좌측: 브랜드 섹션 (50%) */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-phomi-black via-phomi-gray-900 to-phomi-black relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -128,8 +128,8 @@ export default function RegisterPage() {
       </div>
 
       {/* 우측: 회원가입 폼 (50%) */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-phomi-gray-50">
-        <div className="w-full max-w-md">
+      <div className="flex-1 flex items-center justify-center p-8 bg-phomi-gray-50 overflow-y-auto">
+        <div className="w-full max-w-md my-auto">
           <div className="lg:hidden text-center mb-8">
             <h1 className="text-4xl font-black text-phomi-black mb-1">
               PHOMI<span className="text-phomi-gold">STONE</span>
@@ -137,7 +137,7 @@ export default function RegisterPage() {
             <p className="text-phomi-gray-500 text-sm">AI 스타일링 솔루션</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-phomi-gray-100 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-phomi-gray-100">
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-phomi-gold/10 rounded-full mb-4 group hover:scale-110 transition-transform duration-300">
                 <Sparkles className="w-8 h-8 text-phomi-gold group-hover:rotate-12 transition-transform duration-300" />

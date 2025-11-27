@@ -32,7 +32,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="h-screen flex overflow-hidden">
       {/* 좌측: 브랜드 섹션 (50%) */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-phomi-black via-phomi-gray-900 to-phomi-black relative overflow-hidden">
         {/* 배경 장식 */}
@@ -83,8 +83,8 @@ export default function LoginPage() {
       </div>
 
       {/* 우측: 로그인 폼 (50%) */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-phomi-gray-50">
-        <div className="w-full max-w-md">
+      <div className="flex-1 flex items-center justify-center p-8 bg-phomi-gray-50 overflow-y-auto">
+        <div className="w-full max-w-md my-auto">
           {/* 모바일 로고 */}
           <div className="lg:hidden text-center mb-8">
             <h1 className="text-4xl font-black text-phomi-black mb-1">
