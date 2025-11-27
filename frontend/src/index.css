@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
+
+  body {
+    @apply font-sans text-phomi-gray-900 bg-white antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-phomi-black;
+  }
+}
+
+@layer components {
+  /* Phomi 스타일 버튼 */
+  .btn-primary {
+    @apply px-8 py-4 bg-phomi-gold text-white font-medium tracking-wide
+           hover:bg-phomi-black transition-all duration-300
+           shadow-sm hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-4 border-2 border-phomi-black text-phomi-black font-medium
+           hover:bg-phomi-black hover:text-white transition-all duration-300;
+  }
+
+  /* Phomi 스타일 입력 필드 */
+  .input-field {
+    @apply w-full px-4 py-3 border border-phomi-gray-100
+           focus:border-phomi-gold focus:outline-none
+           transition-colors duration-200;
+  }
+
+  /* Phomi 스타일 카드 */
+  .phomi-card {
+    @apply bg-white border border-phomi-gray-100
+           hover:shadow-lg transition-shadow duration-300;
+  }
+}
+
+/* 추가 애니메이션 */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
