@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Upload, Wand2, Download, Save, RotateCcw, CheckCircle2,
   Sparkles, Image as ImageIcon, ArrowRight, RefreshCw,
-  Layers, Palette, Zap, Info
+  Layers, Palette, Zap, Info, X, ZoomIn
 } from 'lucide-react';
 import {
   ReactCompareSlider,
@@ -24,6 +24,7 @@ export default function AIStylingPage() {
   const [statusMessage, setStatusMessage] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [clientName, setClientName] = useState('');
+  const [previewMaterial, setPreviewMaterial] = useState<string | null>(null);
 
   // 이미지 업로드
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -272,72 +273,106 @@ export default function AIStylingPage() {
                 )}
               </div>
 
-              {/* Step 2: 자재 선택 - 컴팩트 썸네일 */}
+              {/* Step 2: 자재 선택 - 그리드 레이아웃 */}
               <div className={`bg-white rounded-xl border-2 p-4 transition-all duration-300 ${
                 step === 2 ? 'border-phomi-gold shadow-lg' : 'border-phomi-gray-100'
               } ${!originalImage && 'opacity-50 pointer-events-none'}`}>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                    step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
-                  }`}>
-                    {step > 2 ? <CheckCircle2 className="w-4 h-4" /> : '2'}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                      step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
+                    }`}>
+                      {step > 2 ? <CheckCircle2 className="w-4 h-4" /> : '2'}
+                    </div>
+                    <h3 className="text-sm font-bold text-phomi-black">
+                      자재 선택
+                    </h3>
                   </div>
-                  <h3 className="text-sm font-bold text-phomi-black">
-                    자재 선택
-                  </h3>
+                  <span className="text-xs text-phomi-gray-500">
+                    {materials.length}개
+                  </span>
                 </div>
 
-                {/* ⭐ 가로 스크롤 썸네일 */}
-                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                {/* ⭐ 그리드 형태로 변경 (2열) */}
+                <div className="grid grid-cols-2 gap-3 max-h-96 overflow-y-auto pr-2 scrollbar-thin">
                   {materials.map((material) => (
-                    <button
+                    <div
                       key={material.material_id}
-                      onClick={() => setSelectedMaterial(material.material_id)}
-                      className={`flex-shrink-0 group transition-all duration-300 rounded-lg ${
+                      className={`group relative transition-all duration-300 rounded-lg ${
                         selectedMaterial === material.material_id
                           ? 'ring-2 ring-phomi-gold'
                           : 'hover:ring-2 hover:ring-phomi-gold/50'
                       }`}
                     >
-                      <div className="relative">
+                      {/* 메인 버튼 */}
+                      <button
+                        onClick={() => setSelectedMaterial(material.material_id)}
+                        className="w-full aspect-square rounded-lg overflow-hidden relative"
+                      >
                         <img
                           src={material.image_path}
                           alt={material.name}
-                          className="w-16 h-16 rounded-lg border-2 border-phomi-gray-200 object-cover"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                           onError={(e) => {
-                            // 이미지 로드 실패시 색상 블록으로 fallback
-                            const target = e.target as HTMLImageElement;
+                            const target = e.currentTarget as HTMLImageElement;
                             target.style.display = 'none';
-                            const fallback = target.nextElementSibling as HTMLElement;
-                            if (fallback) fallback.style.display = 'block';
+                            if (target.nextElementSibling) {
+                              (target.nextElementSibling as HTMLElement).classList.remove('hidden');
+                            }
                           }}
                         />
+                        {/* 폴백 색상 */}
                         <div
-                          className="w-16 h-16 rounded-lg border-2 border-phomi-gray-200 hidden"
+                          className="hidden w-full h-full"
                           style={{ backgroundColor: material.color }}
                         />
+
+                        {/* 선택 체크마크 */}
                         {selectedMaterial === material.material_id && (
-                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-phomi-gold rounded-full flex items-center justify-center">
-                            <CheckCircle2 className="w-3 h-3 text-white" />
+                          <div className="absolute top-2 right-2 w-6 h-6 bg-phomi-gold rounded-full flex items-center justify-center shadow-lg">
+                            <CheckCircle2 className="w-4 h-4 text-white" />
                           </div>
                         )}
-                      </div>
-                      <p className="text-[10px] text-center mt-1 text-phomi-gray-600 font-medium">
-                        {material.name.split(' ')[0]}
+
+                        {/* 호버 시 확대 아이콘 */}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                          <ZoomIn className="w-6 h-6 text-white" />
+                        </div>
+                      </button>
+
+                      {/* 미리보기 버튼 */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setPreviewMaterial(material.material_id);
+                        }}
+                        className="absolute bottom-2 left-2 right-2 bg-white/90 backdrop-blur-sm text-phomi-black text-xs font-semibold py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white"
+                      >
+                        자세히 보기
+                      </button>
+
+                      {/* 자재명 */}
+                      <p className="text-[10px] text-center mt-1 text-phomi-gray-700 font-medium truncate px-1">
+                        {material.name}
                       </p>
-                    </button>
+                    </div>
                   ))}
                 </div>
 
                 {/* 선택된 자재 정보 */}
                 {selectedMaterial && (
-                  <div className="mt-3 p-2 bg-phomi-gray-50 rounded-lg">
-                    <p className="text-xs font-bold text-phomi-black">
-                      {materials.find(m => m.material_id === selectedMaterial)?.name}
-                    </p>
-                    <p className="text-[10px] text-phomi-gray-500">
-                      {materials.find(m => m.material_id === selectedMaterial)?.description}
-                    </p>
+                  <div className="mt-3 p-3 bg-phomi-gray-50 rounded-lg">
+                    <div className="flex items-start gap-2">
+                      <Palette className="w-4 h-4 text-phomi-gold flex-shrink-0 mt-0.5" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-phomi-black truncate">
+                          {materials.find(m => m.material_id === selectedMaterial)?.name}
+                        </p>
+                        <p className="text-[10px] text-phomi-gray-500">
+                          {materials.find(m => m.material_id === selectedMaterial)?.series}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -355,7 +390,7 @@ export default function AIStylingPage() {
                   ) : (
                     <>
                       <Zap className="w-4 h-4" />
-                      AI 스타일링
+                      AI 스타일링 시작
                     </>
                   )}
                 </button>
@@ -485,6 +520,110 @@ export default function AIStylingPage() {
 
         </div>
       </div>
+
+      {/* ⭐ 자재 미리보기 모달 */}
+      {previewMaterial && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+            {/* 모달 헤더 */}
+            <div className="flex items-center justify-between p-6 border-b border-phomi-gray-100">
+              <div>
+                <h3 className="text-2xl font-bold text-phomi-black mb-1">
+                  {materials.find(m => m.material_id === previewMaterial)?.name}
+                </h3>
+                <p className="text-sm text-phomi-gray-500">
+                  {materials.find(m => m.material_id === previewMaterial)?.series} · {materials.find(m => m.material_id === previewMaterial)?.description}
+                </p>
+              </div>
+              <button
+                onClick={() => setPreviewMaterial(null)}
+                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-phomi-gray-100 transition-colors"
+              >
+                <X className="w-6 h-6 text-phomi-gray-600" />
+              </button>
+            </div>
+
+            {/* 모달 바디 */}
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* 큰 이미지 */}
+                <div className="aspect-square rounded-xl overflow-hidden bg-phomi-gray-100">
+                  <img
+                    src={materials.find(m => m.material_id === previewMaterial)?.image_path}
+                    alt={materials.find(m => m.material_id === previewMaterial)?.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {/* 상세 정보 */}
+                <div className="space-y-6">
+                  {/* 시리즈 */}
+                  <div>
+                    <p className="text-xs text-phomi-gray-500 mb-2">시리즈</p>
+                    <p className="text-lg font-bold text-phomi-black">
+                      {materials.find(m => m.material_id === previewMaterial)?.series}
+                    </p>
+                  </div>
+
+                  {/* 설명 */}
+                  <div>
+                    <p className="text-xs text-phomi-gray-500 mb-2">제품 특징</p>
+                    <p className="text-sm text-phomi-gray-700 leading-relaxed">
+                      {materials.find(m => m.material_id === previewMaterial)?.description}
+                    </p>
+                  </div>
+
+                  {/* 용도 */}
+                  <div>
+                    <p className="text-xs text-phomi-gray-500 mb-2">적용 부위</p>
+                    <div className="flex flex-wrap gap-2">
+                      {(() => {
+                        const category = materials.find(m => m.material_id === previewMaterial)?.category;
+                        const labels: Record<string, string> = {
+                          'interior_wall': '내벽',
+                          'exterior_wall': '외벽',
+                          'floor': '바닥',
+                          'ceiling': '천장'
+                        };
+                        return (
+                          <span className="px-3 py-1 bg-phomi-gold/10 text-phomi-gold text-xs font-semibold rounded-full border border-phomi-gold/20">
+                            {labels[category || ''] || category}
+                          </span>
+                        );
+                      })()}
+                    </div>
+                  </div>
+
+                  {/* 가격 */}
+                  {materials.find(m => m.material_id === previewMaterial)?.price_per_sqm && (
+                    <div>
+                      <p className="text-xs text-phomi-gray-500 mb-2">참고 가격</p>
+                      <p className="text-2xl font-black text-phomi-black">
+                        ₩{materials.find(m => m.material_id === previewMaterial)?.price_per_sqm?.toLocaleString()}
+                        <span className="text-sm font-normal text-phomi-gray-500 ml-2">/㎡</span>
+                      </p>
+                    </div>
+                  )}
+
+                  {/* 선택 버튼 */}
+                  <button
+                    onClick={() => {
+                      if (previewMaterial) {
+                        setSelectedMaterial(previewMaterial);
+                        setPreviewMaterial(null);
+                      }
+                    }}
+                    className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    <CheckCircle2 className="w-5 h-5" />
+                    이 자재 선택하기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 저장 모달 */}
       {showSaveModal && (

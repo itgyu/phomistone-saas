@@ -56,6 +56,25 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* ⭐ 얇은 스크롤바 추가 */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #C59C6C;
+    border-radius: 10px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #000000;
+  }
 }
 
 /* 추가 애니메이션 */
