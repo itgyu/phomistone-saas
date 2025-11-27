@@ -268,21 +268,27 @@ export default function AIStylingPage() {
             </div>
 
             {/* Step 2: 자재 선택 - flex-1으로 남은 공간 사용 */}
-            <div className={`flex-1 flex flex-col ${!originalImage && 'opacity-50 pointer-events-none'}`}>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                    step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
-                  }`}>
-                    {step > 2 ? <CheckCircle2 className="w-4 h-4" /> : '2'}
+            <div className={`flex-1 flex flex-col border-t border-phomi-gray-100 ${!originalImage && 'opacity-50 pointer-events-none'}`}>
+
+              {/* ⭐ 상단 헤더 - 고정 */}
+              <div className="px-6 py-4 border-b border-phomi-gray-100 bg-white">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                      step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
+                    }`}>
+                      {step > 2 ? <CheckCircle2 className="w-4 h-4" /> : '2'}
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-phomi-black">자재 선택</h3>
+                      <p className="text-[10px] text-phomi-gray-500">{materials.length}개 자재</p>
+                    </div>
                   </div>
-                  <h3 className="text-sm font-bold text-phomi-black">자재 선택</h3>
                 </div>
-                <span className="text-xs text-phomi-gray-500">{materials.length}개</span>
               </div>
 
-              {/* ⭐ 자재 그리드 - 스크롤 가능 */}
-              <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin">
+              {/* ⭐ 중간 자재 그리드 - 스크롤 가능 */}
+              <div className="flex-1 overflow-y-auto p-4 scrollbar-thin">
                 <div className="grid grid-cols-2 gap-3">
                   {materials.map((material) => (
                     <div
@@ -343,10 +349,10 @@ export default function AIStylingPage() {
                 </div>
               </div>
 
-              {/* ⭐ 하단 고정: 선택된 자재 + 버튼 */}
-              <div className="mt-4 pt-4 border-t border-phomi-gray-100">
+              {/* ⭐ 하단 버튼 영역 - 고정 */}
+              <div className="px-4 py-4 border-t border-phomi-gray-100 bg-phomi-gray-50">
                 {selectedMaterial && (
-                  <div className="mb-3 p-3 bg-phomi-gray-50 rounded-lg">
+                  <div className="mb-3 p-3 bg-white rounded-lg shadow-sm">
                     <div className="flex items-start gap-2">
                       <Palette className="w-4 h-4 text-phomi-gold flex-shrink-0 mt-0.5" />
                       <div className="flex-1 min-w-0">
