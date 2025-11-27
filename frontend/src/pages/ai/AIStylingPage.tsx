@@ -468,10 +468,10 @@ export default function AIStylingPage() {
                   </div>
 
                   {/* ⭐ 비교 슬라이더 - 더 크게 */}
-                  <div className="flex-1 relative rounded-xl overflow-hidden shadow-2xl min-h-[500px]">
+                  <div className="flex-1 relative rounded-xl overflow-hidden shadow-2xl min-h-[500px] bg-phomi-gray-100">
                     <ReactCompareSlider
-                      itemOne={<ReactCompareSliderImage src={originalImage} alt="Before" />}
-                      itemTwo={<ReactCompareSliderImage src={resultImage} alt="After" />}
+                      itemOne={<ReactCompareSliderImage src={originalImage} alt="Before" style={{ objectFit: 'contain' }} />}
+                      itemTwo={<ReactCompareSliderImage src={resultImage} alt="After" style={{ objectFit: 'contain' }} />}
                       style={{ height: '100%', minHeight: '500px' }}
                     />
                     <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm">
