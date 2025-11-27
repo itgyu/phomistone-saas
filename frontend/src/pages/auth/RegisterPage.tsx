@@ -150,7 +150,7 @@ export default function RegisterPage() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* 이메일 */}
               <div>
                 <label className="block text-sm font-semibold text-phomi-gray-900 mb-2">
@@ -167,7 +167,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                    className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'email'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
                         : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
@@ -194,7 +194,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('password')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                    className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'password'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
                         : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
@@ -240,7 +240,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('passwordConfirm')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-12 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                    className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'passwordConfirm'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
                         : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
@@ -276,7 +276,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('name')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                    className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'name'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
                         : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
@@ -303,7 +303,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('company')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                    className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'company'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
                         : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
@@ -330,7 +330,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('phone')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                    className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'phone'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
                         : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
@@ -368,8 +368,8 @@ export default function RegisterPage() {
             </form>
 
             {/* 하단 링크 */}
-            <div className="mt-6 text-center">
-              <p className="text-phomi-gray-500 text-sm mb-3">
+            <div className="mt-8 text-center">
+              <p className="text-phomi-gray-500 text-sm mb-4">
                 이미 계정이 있으신가요?
               </p>
               <Link
@@ -382,7 +382,7 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <p className="text-center text-phomi-gray-400 text-xs mt-6">
+          <p className="text-center text-phomi-gray-400 text-xs mt-8">
             © 2024 Phomistone. All rights reserved.
           </p>
         </div>
