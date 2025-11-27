@@ -90,11 +90,11 @@ export default function LoginPage() {
             <h1 className="text-4xl font-black text-phomi-black mb-1">
               PHOMI<span className="text-phomi-gold">STONE</span>
             </h1>
-            <p className="text-phomi-gray-500 text-sm">AI 스타일링 솔루션</p>
+            <p className="text-caption">AI 스타일링 솔루션</p>
           </div>
 
           {/* 로그인 카드 */}
-          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-phomi-gray-100 w-full">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-200 w-full">
             {/* 헤더 */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-phomi-gold/10 rounded-full mb-4 group hover:scale-110 transition-transform duration-300">
@@ -103,7 +103,7 @@ export default function LoginPage() {
               <h2 className="text-2xl font-bold text-phomi-black mb-2">
                 로그인
               </h2>
-              <p className="text-phomi-gray-500 text-sm">
+              <p className="text-caption">
                 전문가용 AI 스타일링 도구
               </p>
             </div>
@@ -112,12 +112,12 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* 이메일 */}
               <div className="relative">
-                <label className="block text-sm font-semibold text-phomi-gray-900 mb-2">
+                <label className="block text-body font-semibold text-gray-900 mb-2">
                   이메일
                 </label>
                 <div className="relative">
                   <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                    focusedField === 'email' ? 'text-phomi-gold' : 'text-phomi-gray-300'
+                    focusedField === 'email' ? 'text-phomi-gold' : 'text-gray-300'
                   }`} />
                   <input
                     type="email"
@@ -125,10 +125,10 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                    className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none text-input ${
                       focusedField === 'email'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
-                        : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                     placeholder="your@email.com"
                     required
@@ -138,12 +138,12 @@ export default function LoginPage() {
 
               {/* 비밀번호 */}
               <div className="relative">
-                <label className="block text-sm font-semibold text-phomi-gray-900 mb-2">
+                <label className="block text-body font-semibold text-gray-900 mb-2">
                   비밀번호
                 </label>
                 <div className="relative">
                   <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                    focusedField === 'password' ? 'text-phomi-gold' : 'text-phomi-gray-300'
+                    focusedField === 'password' ? 'text-phomi-gold' : 'text-gray-300'
                   }`} />
                   <input
                     type="password"
@@ -151,10 +151,10 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     onFocus={() => setFocusedField('password')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                    className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none text-input ${
                       focusedField === 'password'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
-                        : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                     placeholder="••••••••"
                     required
@@ -164,7 +164,7 @@ export default function LoginPage() {
 
               {/* 에러 메시지 */}
               {error && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm animate-shake">
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-body animate-shake">
                   {error}
                 </div>
               )}
@@ -173,7 +173,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white text-button py-4 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -191,12 +191,12 @@ export default function LoginPage() {
 
             {/* 하단 링크 */}
             <div className="mt-8 text-center">
-              <p className="text-phomi-gray-500 text-sm mb-4">
+              <p className="text-body mb-4">
                 계정이 없으신가요?
               </p>
               <Link
                 to="/register"
-                className="inline-flex items-center gap-2 text-phomi-gold font-semibold hover:text-phomi-black transition-colors duration-300 group"
+                className="inline-flex items-center gap-2 text-phomi-gold text-button hover:text-phomi-black transition-colors duration-300 group"
               >
                 회원가입하기
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -205,7 +205,7 @@ export default function LoginPage() {
           </div>
 
           {/* 푸터 */}
-          <p className="text-center text-phomi-gray-400 text-xs mt-8">
+          <p className="text-center text-caption mt-8">
             © 2024 Phomistone. All rights reserved.
           </p>
         </div>

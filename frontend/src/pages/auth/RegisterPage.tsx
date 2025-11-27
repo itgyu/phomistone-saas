@@ -134,10 +134,10 @@ export default function RegisterPage() {
             <h1 className="text-4xl font-black text-phomi-black mb-1">
               PHOMI<span className="text-phomi-gold">STONE</span>
             </h1>
-            <p className="text-phomi-gray-500 text-sm">AI 스타일링 솔루션</p>
+            <p className="text-caption">AI 스타일링 솔루션</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-phomi-gray-100 w-full">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-200 w-full">
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-phomi-gold/10 rounded-full mb-4 group hover:scale-110 transition-transform duration-300">
                 <Sparkles className="w-8 h-8 text-phomi-gold group-hover:rotate-12 transition-transform duration-300" />
@@ -145,7 +145,7 @@ export default function RegisterPage() {
               <h2 className="text-2xl font-bold text-phomi-black mb-2">
                 회원가입
               </h2>
-              <p className="text-phomi-gray-500 text-sm">
+              <p className="text-caption">
                 전문가용 계정 만들기
               </p>
             </div>
@@ -153,12 +153,12 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* 이메일 */}
               <div>
-                <label className="block text-sm font-semibold text-phomi-gray-900 mb-2">
+                <label className="block text-body font-semibold text-gray-900 mb-2">
                   이메일 <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                    focusedField === 'email' ? 'text-phomi-gold' : 'text-phomi-gray-300'
+                    focusedField === 'email' ? 'text-phomi-gold' : 'text-gray-300'
                   }`} />
                   <input
                     type="email"
@@ -170,7 +170,7 @@ export default function RegisterPage() {
                     className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'email'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
-                        : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                     placeholder="your@email.com"
                     required
@@ -180,12 +180,12 @@ export default function RegisterPage() {
 
               {/* 비밀번호 */}
               <div>
-                <label className="block text-sm font-semibold text-phomi-gray-900 mb-2">
+                <label className="block text-body font-semibold text-gray-900 mb-2">
                   비밀번호 <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                    focusedField === 'password' ? 'text-phomi-gold' : 'text-phomi-gray-300'
+                    focusedField === 'password' ? 'text-phomi-gold' : 'text-gray-300'
                   }`} />
                   <input
                     type="password"
@@ -197,7 +197,7 @@ export default function RegisterPage() {
                     className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'password'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
-                        : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                     placeholder="최소 6자 이상"
                     required
@@ -217,7 +217,7 @@ export default function RegisterPage() {
                         />
                       ))}
                     </div>
-                    <p className="text-xs text-phomi-gray-500">
+                    <p className="text-caption">
                       강도: {getStrengthText()}
                     </p>
                   </div>
@@ -226,12 +226,12 @@ export default function RegisterPage() {
 
               {/* 비밀번호 확인 */}
               <div>
-                <label className="block text-sm font-semibold text-phomi-gray-900 mb-2">
+                <label className="block text-body font-semibold text-gray-900 mb-2">
                   비밀번호 확인 <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                    focusedField === 'passwordConfirm' ? 'text-phomi-gold' : 'text-phomi-gray-300'
+                    focusedField === 'passwordConfirm' ? 'text-phomi-gold' : 'text-gray-300'
                   }`} />
                   <input
                     type="password"
@@ -243,7 +243,7 @@ export default function RegisterPage() {
                     className={`w-full pl-12 pr-12 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'passwordConfirm'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
-                        : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                     placeholder="비밀번호 재입력"
                     required
@@ -262,12 +262,12 @@ export default function RegisterPage() {
 
               {/* 이름 */}
               <div>
-                <label className="block text-sm font-semibold text-phomi-gray-900 mb-2">
+                <label className="block text-body font-semibold text-gray-900 mb-2">
                   이름 <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <User className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                    focusedField === 'name' ? 'text-phomi-gold' : 'text-phomi-gray-300'
+                    focusedField === 'name' ? 'text-phomi-gold' : 'text-gray-300'
                   }`} />
                   <input
                     type="text"
@@ -279,7 +279,7 @@ export default function RegisterPage() {
                     className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'name'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
-                        : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                     placeholder="홍길동"
                     required
@@ -289,12 +289,12 @@ export default function RegisterPage() {
 
               {/* 회사명 */}
               <div>
-                <label className="block text-sm font-semibold text-phomi-gray-900 mb-2">
+                <label className="block text-body font-semibold text-gray-900 mb-2">
                   회사명 <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Building className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                    focusedField === 'company' ? 'text-phomi-gold' : 'text-phomi-gray-300'
+                    focusedField === 'company' ? 'text-phomi-gold' : 'text-gray-300'
                   }`} />
                   <input
                     type="text"
@@ -306,7 +306,7 @@ export default function RegisterPage() {
                     className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'company'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
-                        : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                     placeholder="회사명 또는 소속"
                     required
@@ -316,12 +316,12 @@ export default function RegisterPage() {
 
               {/* 연락처 */}
               <div>
-                <label className="block text-sm font-semibold text-phomi-gray-900 mb-2">
+                <label className="block text-body font-semibold text-gray-900 mb-2">
                   연락처 <span className="text-phomi-gray-400">(선택)</span>
                 </label>
                 <div className="relative">
                   <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                    focusedField === 'phone' ? 'text-phomi-gold' : 'text-phomi-gray-300'
+                    focusedField === 'phone' ? 'text-phomi-gold' : 'text-gray-300'
                   }`} />
                   <input
                     type="tel"
@@ -333,7 +333,7 @@ export default function RegisterPage() {
                     className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                       focusedField === 'phone'
                         ? 'border-phomi-gold bg-phomi-gold/5 shadow-lg shadow-phomi-gold/20'
-                        : 'border-phomi-gray-100 bg-white hover:border-phomi-gray-300'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                     placeholder="010-1234-5678"
                   />
@@ -342,7 +342,7 @@ export default function RegisterPage() {
 
               {/* 에러 메시지 */}
               {error && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm animate-shake">
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-body animate-shake">
                   {error}
                 </div>
               )}
@@ -351,7 +351,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white text-button py-4 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -369,12 +369,12 @@ export default function RegisterPage() {
 
             {/* 하단 링크 */}
             <div className="mt-8 text-center">
-              <p className="text-phomi-gray-500 text-sm mb-4">
+              <p className="text-caption mb-4">
                 이미 계정이 있으신가요?
               </p>
               <Link
                 to="/login"
-                className="inline-flex items-center gap-2 text-phomi-gold font-semibold hover:text-phomi-black transition-colors duration-300 group"
+                className="inline-flex items-center gap-2 text-phomi-gold text-button hover:text-phomi-black transition-colors duration-300 group"
               >
                 로그인하기
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -382,7 +382,7 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <p className="text-center text-phomi-gray-400 text-xs mt-8">
+          <p className="text-center text-caption mt-8">
             © 2024 Phomistone. All rights reserved.
           </p>
         </div>
