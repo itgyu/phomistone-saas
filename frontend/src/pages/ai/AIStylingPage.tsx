@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Upload, Wand2, Download, Save, RotateCcw, CheckCircle2,
-  Sparkles, Image as ImageIcon, ArrowRight, RefreshCw,
-  Layers, Palette, Zap, X, ZoomIn
+  Upload, Download, Save, CheckCircle2,
+  Sparkles, ArrowLeft, RefreshCw, ZoomIn, X, Palette
 } from 'lucide-react';
 import {
   ReactCompareSlider,
@@ -16,8 +15,7 @@ export default function AIStylingPage() {
   const navigate = useNavigate();
 
   // State
-  const [step, setStep] = useState(1); // 1: 업로드, 2: 자재선택, 3: 결과
-  const [originalImage, setOriginalImage] = useState('');
+  const [uploadedImage, setUploadedImage] = useState('');
   const [resultImage, setResultImage] = useState('');
   const [selectedMaterial, setSelectedMaterial] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,13 +26,12 @@ export default function AIStylingPage() {
 
   // 이미지 업로드
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target?.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      setOriginalImage(event.target?.result as string);
-      setStep(2);
+      setUploadedImage(event.target?.result as string);
     };
     reader.readAsDataURL(file);
   };
@@ -50,7 +47,7 @@ export default function AIStylingPage() {
     setStatusMessage('AI가 공간을 분석하고 있습니다...');
 
     try {
-      const cleanImage = originalImage.split(',')[1];
+      const cleanImage = uploadedImage.split(',')[1];
 
       console.log('🚀 Sending request to n8n...');
       console.log('📦 Payload:', {
@@ -78,16 +75,12 @@ export default function AIStylingPage() {
 
       const data = await response.json();
       console.log('✅ Full response data:', data);
-      console.log('✅ data.success:', data.success);
-      console.log('✅ data.result_image_url exists:', !!data.result_image_url);
-      console.log('✅ data.result_image exists:', !!data.result_image);
 
       if (data.success) {
         console.log('🎉 Success is true!');
 
         const imgData = data.result_image_url || data.result_image;
         console.log('✅ Using image data:', imgData ? 'Found' : 'Not found');
-        console.log('✅ Image data length:', imgData?.length);
 
         if (imgData) {
           console.log('🖼️ Result image found!');
@@ -97,17 +90,15 @@ export default function AIStylingPage() {
             imageToSet = `data:image/jpeg;base64,${imgData}`;
             console.log('✅ Added base64 header to image');
           } else {
-            console.log('✅ Using image URL as-is:', imgData.substring(0, 50) + '...');
+            console.log('✅ Using image URL as-is');
           }
 
           setResultImage(imageToSet);
-          setStep(3);
           setStatusMessage('');
 
           console.log('✅ Result image set successfully!');
         } else {
           console.error('❌ result_image_url and result_image are both missing');
-          console.error('Response keys:', Object.keys(data));
           alert('AI 생성 실패: 결과 이미지가 없습니다. 콘솔을 확인해주세요.');
         }
       } else {
@@ -140,7 +131,7 @@ export default function AIStylingPage() {
       status: 'Draft',
       materialName: material?.name || '',
       estimatedCost: 4500000,
-      beforeImage: originalImage,
+      beforeImage: uploadedImage,
       afterImage: resultImage
     });
 
@@ -151,379 +142,333 @@ export default function AIStylingPage() {
 
   // 다시 시작
   const handleReset = () => {
-    setOriginalImage('');
+    setUploadedImage('');
     setResultImage('');
     setSelectedMaterial('');
-    setStep(1);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-phomi-gray-50 to-white flex flex-col">
-      {/* ⭐ 헤더 - 높이 축소 */}
-      <div className="bg-white border-b border-phomi-gray-100 sticky top-0 z-20 backdrop-blur-sm bg-white/90">
-        <div className="max-w-7xl mx-auto px-6 py-3">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+      {/* ===== 헤더 ===== */}
+      <div className="bg-black border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3">
-                <Wand2 className="w-6 h-6 text-phomi-gold" />
-                <h1 className="text-xl font-black text-phomi-black">
-                  AI 시각 제안
-                </h1>
-              </div>
+            <div className="flex items-center gap-3">
+              <Sparkles className="w-5 h-5 text-[#C59C6C]" />
+              <h1 className="text-title text-white">AI 스타일링</h1>
+            </div>
+            {uploadedImage && (
+              <button
+                onClick={handleReset}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-button transition-all"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                초기화
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
 
-              {/* 진행 단계 - 컴팩트 */}
-              <div className="hidden md:flex items-center gap-2">
-                {[
-                  { num: 1, label: '업로드' },
-                  { num: 2, label: '자재선택' },
-                  { num: 3, label: '결과' }
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center">
-                    <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-all duration-300 ${
-                      step >= item.num
-                        ? 'bg-phomi-gold text-white'
-                        : 'bg-phomi-gray-100 text-phomi-gray-400'
-                    }`}>
-                      <span>{item.num}</span>
-                      <span className="hidden lg:inline">{item.label}</span>
-                    </div>
-                    {i < 2 && (
-                      <div className={`w-6 h-0.5 mx-1 transition-colors duration-300 ${
-                        step > item.num ? 'bg-phomi-gold' : 'bg-phomi-gray-200'
-                      }`}></div>
+      {/* ===== 메인 컨텐츠 ===== */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
+
+        {/* 3단계 프로그레스 바 */}
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+            uploadedImage ? 'bg-[#C59C6C]/10 text-[#C59C6C]' : 'bg-gray-100 text-gray-400'
+          }`}>
+            <span className="step-badge">1</span>
+            <span className="text-caption font-medium">업로드</span>
+          </div>
+          <div className="w-8 h-0.5 bg-gray-200" />
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+            selectedMaterial ? 'bg-[#C59C6C]/10 text-[#C59C6C]' : 'bg-gray-100 text-gray-400'
+          }`}>
+            <span className="step-badge">2</span>
+            <span className="text-caption font-medium">자재선택</span>
+          </div>
+          <div className="w-8 h-0.5 bg-gray-200" />
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+            resultImage ? 'bg-[#C59C6C]/10 text-[#C59C6C]' : 'bg-gray-100 text-gray-400'
+          }`}>
+            <span className="step-badge">3</span>
+            <span className="text-caption font-medium">결과</span>
+          </div>
+        </div>
+
+        {/* Step 1: 이미지 업로드 */}
+        <div className="card-base p-6 mb-6">
+          <div className="section-header">
+            <span className="step-badge">1</span>
+            <div>
+              <h2 className="text-title">이미지 업로드</h2>
+              <p className="text-caption">건물 사진을 업로드하세요</p>
+            </div>
+          </div>
+
+          {!uploadedImage ? (
+            <label className="block cursor-pointer">
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 hover:border-[#C59C6C] hover:bg-gradient-to-br hover:from-gray-50 hover:to-[#C59C6C]/5 transition-all group text-center">
+                <Upload className="w-12 h-12 text-gray-400 group-hover:text-[#C59C6C] transition-colors mx-auto mb-4" />
+                <p className="text-body font-medium text-gray-700 mb-2">클릭하여 이미지 선택</p>
+                <p className="text-caption">JPG, PNG 파일 (최대 20MB)</p>
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+            </label>
+          ) : (
+            <div className="relative rounded-xl overflow-hidden border border-gray-200">
+              <img
+                src={uploadedImage}
+                alt="Uploaded"
+                className="w-full h-64 object-contain bg-gray-50"
+              />
+              <button
+                onClick={handleReset}
+                className="absolute top-3 right-3 bg-black/70 hover:bg-black text-white px-3 py-1.5 rounded-lg text-caption font-medium transition-all"
+              >
+                변경
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Step 2: 자재 선택 */}
+        {uploadedImage && (
+          <div className="card-base p-6 mb-6">
+            <div className="section-header">
+              <span className="step-badge">2</span>
+              <div className="flex-1">
+                <h2 className="text-title">자재 선택</h2>
+                <p className="text-caption">포미스톤 자재를 선택하세요 • {materials.length}개</p>
+              </div>
+              <p className="text-caption text-gray-400">← 좌우 스크롤 →</p>
+            </div>
+
+            {/* 가로 스크롤 자재 리스트 */}
+            <div className="relative -mx-6 px-6">
+              <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-gold">
+                {materials.map((material) => (
+                  <button
+                    key={material.material_id}
+                    onClick={() => setSelectedMaterial(material.material_id)}
+                    className={`relative flex-shrink-0 w-40 h-40 rounded-xl overflow-hidden border-2 transition-all ${
+                      selectedMaterial === material.material_id
+                        ? 'border-[#C59C6C] ring-4 ring-[#C59C6C]/20 scale-95'
+                        : 'border-gray-200 hover:border-[#C59C6C]/50 hover:scale-105'
+                    }`}
+                  >
+                    {/* 자재 이미지 */}
+                    <img
+                      src={material.image_path}
+                      alt={material.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        target.style.display = 'none';
+                        if (target.nextElementSibling) {
+                          (target.nextElementSibling as HTMLElement).classList.remove('hidden');
+                        }
+                      }}
+                    />
+
+                    {/* 폴백 색상 */}
+                    <div
+                      className="hidden w-full h-full"
+                      style={{ backgroundColor: material.color }}
+                    />
+
+                    {/* 선택 체크마크 */}
+                    {selectedMaterial === material.material_id && (
+                      <div className="absolute top-2 right-2 w-6 h-6 bg-[#C59C6C] rounded-full flex items-center justify-center shadow-lg">
+                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
                     )}
-                  </div>
+
+                    {/* 호버 효과 - 자세히 보기 */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity">
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPreviewMaterial(material.material_id);
+                          }}
+                          className="bg-white/90 backdrop-blur-sm text-gray-900 text-caption font-semibold px-3 py-1.5 rounded-lg hover:bg-white transition-colors flex items-center gap-1"
+                        >
+                          <ZoomIn className="w-3 h-3" />
+                          자세히
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 자재 정보 */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-2">
+                      <p className="text-caption font-bold text-white truncate">{material.name}</p>
+                    </div>
+                  </button>
                 ))}
               </div>
             </div>
-
-            <button
-              onClick={handleReset}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm text-phomi-gray-600 hover:text-phomi-black hover:bg-phomi-gray-100 rounded-lg transition-all duration-300"
-            >
-              <RotateCcw className="w-4 h-4" />
-              <span className="hidden sm:inline">다시 시작</span>
-            </button>
           </div>
-        </div>
-      </div>
+        )}
 
-      {/* ⭐ 메인 컨텐츠 - flex-1으로 남은 공간 전체 사용 */}
-      <div className="flex-1 flex">
-        <div className="max-w-7xl mx-auto w-full px-6 py-6 flex gap-6">
-
-          {/* ⭐ 좌측: 확대된 컨트롤 패널 (고정 너비 420px) */}
-          <div className="w-[420px] flex-shrink-0 bg-white rounded-2xl border border-phomi-gray-100 p-6 flex flex-col h-[calc(100vh-140px)] overflow-hidden">
-
-            {/* Step 1: 이미지 업로드 - 컴팩트 */}
-            <div className="mb-4 flex-shrink-0">
-              <div className="flex items-center gap-2 mb-2">
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                  step >= 1 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
-                }`}>
-                  {step > 1 ? <CheckCircle2 className="w-3 h-3" /> : '1'}
+        {/* Step 3: AI 스타일링 시작 버튼 */}
+        {uploadedImage && selectedMaterial && !resultImage && (
+          <div className="card-base p-6">
+            <button
+              onClick={handleGenerate}
+              disabled={loading}
+              className={`w-full py-4 rounded-xl font-bold text-white transition-all ${
+                loading
+                  ? 'bg-gray-300 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-[#C59C6C] to-[#A67C52] hover:shadow-lg hover:shadow-[#C59C6C]/30 hover:scale-[1.02] active:scale-[0.98]'
+              }`}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <RefreshCw className="w-5 h-5 animate-spin" />
+                  <span className="text-button">AI 스타일링 중...</span>
                 </div>
-                <h3 className="text-xs font-bold text-phomi-black">현장 사진</h3>
-              </div>
-
-              {!originalImage ? (
-                <label className="block cursor-pointer group">
-                  <div className="border-2 border-dashed border-phomi-gray-200 rounded-xl p-6 text-center hover:border-phomi-gold hover:bg-phomi-gold/5 transition-all">
-                    <Upload className="w-8 h-8 mx-auto mb-2 text-phomi-gray-400 group-hover:text-phomi-gold transition-colors" />
-                    <p className="text-xs font-semibold text-phomi-black">
-                      클릭하여 업로드
-                    </p>
-                  </div>
-                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-                </label>
               ) : (
-                <div className="space-y-2">
-                  <div className="relative rounded-xl overflow-hidden bg-phomi-gray-50" style={{ height: '120px' }}>
-                    <img
-                      src={originalImage}
-                      alt="Original"
-                      className="w-full h-full object-contain"
-                    />
-                    <div className="absolute top-2 right-2">
-                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-500 text-white text-[10px] font-semibold rounded-full">
-                        <CheckCircle2 className="w-3 h-3" />
-                      </span>
-                    </div>
-                  </div>
-                  <label className="block">
-                    <button
-                      type="button"
-                      className="w-full py-1.5 text-[10px] text-phomi-gray-600 hover:text-phomi-black hover:bg-phomi-gray-100 rounded-lg transition-all"
-                    >
-                      다른 이미지 선택
-                    </button>
-                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-                  </label>
+                <div className="flex items-center justify-center gap-2">
+                  <Sparkles className="w-5 h-5" />
+                  <span className="text-button">AI 스타일링 시작</span>
                 </div>
               )}
-            </div>
-
-            {/* Step 2: 자재 선택 - 가로 스크롤 (flex-1으로 남은 공간 사용) */}
-            <div className={`bg-white rounded-2xl border border-phomi-gray-100 flex-1 flex flex-col min-h-0 ${!originalImage && 'opacity-50 pointer-events-none'}`}>
-
-              {/* 상단 헤더 - 고정 */}
-              <div className="flex items-center justify-between p-4 border-b border-phomi-gray-100 flex-shrink-0">
-                <div className="flex items-center gap-2">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                    step >= 2 ? 'bg-phomi-gold text-white' : 'bg-phomi-gray-100 text-phomi-gray-400'
-                  }`}>
-                    {step > 2 ? <CheckCircle2 className="w-3 h-3" /> : '2'}
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold text-phomi-black">자재 선택</h2>
-                    <p className="text-[10px] text-phomi-gray-500">{materials.length}개</p>
-                  </div>
-                </div>
-                <p className="text-[10px] text-phomi-gray-400 hidden sm:block">← 스크롤 →</p>
-              </div>
-
-              {/* ⭐ 가로 스크롤 자재 리스트 - flex-1으로 확장 */}
-              <div className="flex-1 overflow-x-auto overflow-y-hidden p-4 min-h-0">
-                <div className="flex gap-3 h-full items-center">
-                  {materials.map((material) => (
-                    <button
-                      key={material.material_id}
-                      onClick={() => setSelectedMaterial(material.material_id)}
-                      className={`relative flex-shrink-0 w-36 h-36 rounded-xl overflow-hidden border-2 transition-all group ${
-                        selectedMaterial === material.material_id
-                          ? 'border-phomi-gold ring-4 ring-phomi-gold/20 scale-95'
-                          : 'border-phomi-gray-200 hover:border-phomi-gold/50 hover:scale-105'
-                      }`}
-                    >
-                      {/* 자재 이미지 */}
-                      <img
-                        src={material.image_path}
-                        alt={material.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.currentTarget as HTMLImageElement;
-                          target.style.display = 'none';
-                          if (target.nextElementSibling) {
-                            (target.nextElementSibling as HTMLElement).classList.remove('hidden');
-                          }
-                        }}
-                      />
-
-                      {/* 폴백 색상 */}
-                      <div
-                        className="hidden w-full h-full"
-                        style={{ backgroundColor: material.color }}
-                      />
-
-                      {/* 선택 체크마크 */}
-                      {selectedMaterial === material.material_id && (
-                        <div className="absolute top-2 right-2 w-6 h-6 bg-phomi-gold rounded-full flex items-center justify-center shadow-lg">
-                          <CheckCircle2 className="w-4 h-4 text-white" />
-                        </div>
-                      )}
-
-                      {/* 호버 효과 */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPreviewMaterial(material.material_id);
-                            }}
-                            className="bg-white/90 backdrop-blur-sm text-phomi-black text-[10px] font-semibold px-2 py-1 rounded-lg hover:bg-white transition-colors flex items-center gap-1"
-                          >
-                            <ZoomIn className="w-3 h-3" />
-                            자세히
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* 자재 정보 */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-2">
-                        <p className="text-[11px] font-bold text-white truncate">{material.name}</p>
-                        <p className="text-[9px] text-gray-300">{material.series}</p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 하단 버튼 - 고정 */}
-              <div className="p-4 border-t border-phomi-gray-100 bg-phomi-gray-50 flex-shrink-0">
-                {selectedMaterial && (
-                  <div className="mb-2 p-2 bg-white rounded-lg">
-                    <div className="flex items-start gap-2">
-                      <Palette className="w-3 h-3 text-phomi-gold flex-shrink-0 mt-0.5" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-bold text-phomi-black truncate">
-                          {materials.find(m => m.material_id === selectedMaterial)?.name}
-                        </p>
-                        <p className="text-[9px] text-phomi-gray-500">
-                          {materials.find(m => m.material_id === selectedMaterial)?.series}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <button
-                  onClick={handleGenerate}
-                  disabled={!selectedMaterial || loading}
-                  className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-3 rounded-xl hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                >
-                  {loading ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                      <span className="text-sm">AI 생성 중...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4" />
-                      <span className="text-sm">AI 스타일링 시작</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
+            </button>
           </div>
+        )}
 
-          {/* ⭐ 우측: 큰 뷰어 */}
-          <div className="flex-1 bg-white rounded-2xl border border-phomi-gray-100 p-6 relative h-[calc(100vh-140px)] overflow-hidden">
-
-            {loading ? (
-              /* 로딩 - 전체 화면 중앙 */
-              <div className="absolute inset-0 bg-white/95 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
-                <div className="flex flex-col items-center justify-center p-8">
-                  <div className="relative mb-8">
-                    <div className="w-32 h-32 border-8 border-phomi-gold/20 border-t-phomi-gold rounded-full animate-spin"></div>
-                    <Sparkles className="w-16 h-16 text-phomi-gold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
-                  </div>
-
-                  <h3 className="text-2xl font-bold text-phomi-black mb-3">
-                    AI가 작업 중입니다
-                  </h3>
-
-                  <p className="text-phomi-gray-500 text-center mb-8 max-w-md">
-                    {statusMessage || 'AI가 공간을 분석하고 자재를 적용하고 있습니다...'}
-                  </p>
-
-                  <div className="flex gap-2 mb-6">
-                    {[0, 1, 2].map((i) => (
-                      <div
-                        key={i}
-                        className="w-3 h-3 bg-phomi-gold rounded-full animate-bounce"
-                        style={{ animationDelay: `${i * 0.15}s` }}
-                      ></div>
-                    ))}
-                  </div>
-
-                  <p className="text-xs text-phomi-gray-400">
-                    ⏱️ 약 30초~1분 소요됩니다
-                  </p>
-                </div>
+        {/* Step 3: 결과 표시 */}
+        {resultImage && (
+          <div className="card-base p-6">
+            <div className="section-header mb-6">
+              <span className="step-badge">3</span>
+              <div className="flex-1">
+                <h2 className="text-title">스타일링 결과</h2>
+                <p className="text-caption">포미스톤이 적용된 모습</p>
               </div>
-            ) : resultImage ? (
-              /* 결과 표시 */
-              <div className="h-full flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-phomi-black flex items-center gap-2">
-                    <Layers className="w-5 h-5 text-phomi-gold" />
-                    Before / After 비교
-                  </h3>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => {
-                        const link = document.createElement('a');
-                        link.href = resultImage;
-                        link.download = 'phomistone-result.jpg';
-                        link.click();
-                      }}
-                      className="flex items-center gap-2 px-4 py-2 bg-phomi-gray-100 text-phomi-black rounded-lg hover:bg-phomi-gray-200 transition-all font-semibold text-sm"
-                    >
-                      <Download className="w-4 h-4" />
-                      다운로드
-                    </button>
-                    <button
-                      onClick={() => setShowSaveModal(true)}
-                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-phomi-gold to-phomi-black text-white rounded-lg hover:shadow-xl transition-all font-semibold text-sm"
-                    >
-                      <Save className="w-4 h-4" />
-                      견적 저장
-                    </button>
-                  </div>
-                </div>
+            </div>
 
-                {/* 비교 슬라이더 - 남은 공간 전체 사용 */}
-                <div className="flex-1 relative rounded-xl overflow-hidden shadow-2xl">
-                  <ReactCompareSlider
-                    itemOne={<ReactCompareSliderImage src={originalImage} alt="Before" />}
-                    itemTwo={<ReactCompareSliderImage src={resultImage} alt="After" />}
-                    style={{ height: '100%' }}
+            {/* Before / After 비교 슬라이더 */}
+            <div className="rounded-xl overflow-hidden border border-gray-200 mb-6 relative" style={{ height: '500px' }}>
+              <ReactCompareSlider
+                itemOne={
+                  <ReactCompareSliderImage
+                    src={uploadedImage}
+                    alt="Before"
+                    style={{ objectFit: 'contain' }}
                   />
-                  <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm">
-                    Before
-                  </div>
-                  <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm">
-                    After
-                  </div>
-                </div>
+                }
+                itemTwo={
+                  <ReactCompareSliderImage
+                    src={resultImage}
+                    alt="After"
+                    style={{ objectFit: 'contain' }}
+                  />
+                }
+                style={{ height: '100%' }}
+              />
+              <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-caption font-semibold backdrop-blur-sm">
+                Before
+              </div>
+              <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-caption font-semibold backdrop-blur-sm">
+                After
+              </div>
+            </div>
 
-                {/* 자재 정보 */}
-                <div className="mt-4 bg-phomi-gray-50 rounded-xl p-4">
-                  <div className="flex items-start gap-4">
-                    <Palette className="w-6 h-6 text-phomi-gold flex-shrink-0 mt-1" />
-                    <div className="flex-1">
-                      <p className="text-sm text-phomi-gray-500 mb-1">적용된 자재</p>
-                      <p className="text-lg font-bold text-phomi-black">
-                        {materials.find(m => m.material_id === selectedMaterial)?.name}
-                      </p>
-                      <p className="text-sm text-phomi-gray-600">
-                        {materials.find(m => m.material_id === selectedMaterial)?.series}
-                      </p>
-                    </div>
-                  </div>
+            {/* 적용된 자재 정보 */}
+            <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 mb-6 border border-gray-200">
+              <div className="flex items-start gap-4">
+                <Palette className="w-6 h-6 text-[#C59C6C] flex-shrink-0 mt-1" />
+                <div className="flex-1">
+                  <p className="text-caption mb-1">적용된 자재</p>
+                  <p className="text-title">
+                    {materials.find(m => m.material_id === selectedMaterial)?.name}
+                  </p>
+                  <p className="text-body mt-1">
+                    {materials.find(m => m.material_id === selectedMaterial)?.series}
+                  </p>
                 </div>
               </div>
-            ) : (
-              /* 초기 상태 */
-              <div className="h-full flex flex-col items-center justify-center text-center">
-                <div className="w-24 h-24 bg-phomi-gold/10 rounded-full flex items-center justify-center mb-6">
-                  <ImageIcon className="w-12 h-12 text-phomi-gold" />
-                </div>
-                <h3 className="text-2xl font-bold text-phomi-black mb-3">
-                  Ready to Design
-                </h3>
-                <p className="text-phomi-gray-500 max-w-md">
-                  좌측에서 현장 사진을 업로드하고<br />
-                  포미스톤 자재를 선택하여 시작하세요
-                </p>
-              </div>
-            )}
+            </div>
+
+            {/* 액션 버튼 */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = resultImage;
+                  link.download = 'phomistone-result.jpg';
+                  link.click();
+                }}
+                className="flex-1 py-3 bg-gradient-to-r from-[#C59C6C] to-[#A67C52] hover:shadow-lg text-white rounded-xl text-button transition-all flex items-center justify-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                다운로드
+              </button>
+              <button
+                onClick={() => setShowSaveModal(true)}
+                className="flex-1 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl text-button transition-all flex items-center justify-center gap-2"
+              >
+                <Save className="w-4 h-4" />
+                견적 저장
+              </button>
+              <button
+                onClick={handleReset}
+                className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-button transition-all"
+              >
+                새로 시작
+              </button>
+            </div>
           </div>
-
-        </div>
+        )}
       </div>
 
-      {/* ⭐ 자재 미리보기 모달 */}
+      {/* ===== 로딩 오버레이 ===== */}
+      {loading && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-3xl p-10 max-w-md text-center shadow-2xl">
+            <div className="relative w-20 h-20 mx-auto mb-6">
+              <div className="absolute inset-0 border-8 border-gray-200 rounded-full" />
+              <div className="absolute inset-0 border-8 border-transparent border-t-[#C59C6C] rounded-full animate-spin" />
+              <Sparkles className="absolute inset-0 m-auto w-8 h-8 text-[#C59C6C]" />
+            </div>
+            <h3 className="text-title mb-3">AI가 작업 중입니다</h3>
+            <p className="text-body text-gray-600 mb-6">
+              {statusMessage || '포미스톤 자재를 적용하고 있어요'}
+            </p>
+            <p className="text-caption">예상 시간: 30초 ~ 1분</p>
+          </div>
+        </div>
+      )}
+
+      {/* ===== 자재 미리보기 모달 ===== */}
       {previewMaterial && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
             {/* 모달 헤더 */}
-            <div className="flex items-center justify-between p-6 border-b border-phomi-gray-100">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div>
-                <h3 className="text-2xl font-bold text-phomi-black mb-1">
+                <h3 className="text-title mb-1">
                   {materials.find(m => m.material_id === previewMaterial)?.name}
                 </h3>
-                <p className="text-sm text-phomi-gray-500">
-                  {materials.find(m => m.material_id === previewMaterial)?.series} · {materials.find(m => m.material_id === previewMaterial)?.description}
+                <p className="text-caption">
+                  {materials.find(m => m.material_id === previewMaterial)?.series}
                 </p>
               </div>
               <button
                 onClick={() => setPreviewMaterial(null)}
-                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-phomi-gray-100 transition-colors"
+                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
               >
-                <X className="w-6 h-6 text-phomi-gray-600" />
+                <X className="w-6 h-6 text-gray-600" />
               </button>
             </div>
 
@@ -531,7 +476,7 @@ export default function AIStylingPage() {
             <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* 큰 이미지 */}
-                <div className="aspect-square rounded-xl overflow-hidden bg-phomi-gray-100">
+                <div className="aspect-square rounded-xl overflow-hidden bg-gray-100">
                   <img
                     src={materials.find(m => m.material_id === previewMaterial)?.image_path}
                     alt={materials.find(m => m.material_id === previewMaterial)?.name}
@@ -543,48 +488,52 @@ export default function AIStylingPage() {
                 <div className="space-y-6">
                   {/* 시리즈 */}
                   <div>
-                    <p className="text-xs text-phomi-gray-500 mb-2">시리즈</p>
-                    <p className="text-lg font-bold text-phomi-black">
+                    <p className="text-caption mb-2">시리즈</p>
+                    <p className="text-title">
                       {materials.find(m => m.material_id === previewMaterial)?.series}
                     </p>
                   </div>
 
                   {/* 설명 */}
-                  <div>
-                    <p className="text-xs text-phomi-gray-500 mb-2">제품 특징</p>
-                    <p className="text-sm text-phomi-gray-700 leading-relaxed">
-                      {materials.find(m => m.material_id === previewMaterial)?.description}
-                    </p>
-                  </div>
+                  {materials.find(m => m.material_id === previewMaterial)?.description && (
+                    <div>
+                      <p className="text-caption mb-2">제품 특징</p>
+                      <p className="text-body leading-relaxed">
+                        {materials.find(m => m.material_id === previewMaterial)?.description}
+                      </p>
+                    </div>
+                  )}
 
                   {/* 용도 */}
-                  <div>
-                    <p className="text-xs text-phomi-gray-500 mb-2">적용 부위</p>
-                    <div className="flex flex-wrap gap-2">
-                      {(() => {
-                        const category = materials.find(m => m.material_id === previewMaterial)?.category;
-                        const labels: Record<string, string> = {
-                          'interior_wall': '내벽',
-                          'exterior_wall': '외벽',
-                          'floor': '바닥',
-                          'ceiling': '천장'
-                        };
-                        return (
-                          <span className="px-3 py-1 bg-phomi-gold/10 text-phomi-gold text-xs font-semibold rounded-full border border-phomi-gold/20">
-                            {labels[category || ''] || category}
-                          </span>
-                        );
-                      })()}
+                  {materials.find(m => m.material_id === previewMaterial)?.category && (
+                    <div>
+                      <p className="text-caption mb-2">적용 부위</p>
+                      <div className="flex flex-wrap gap-2">
+                        {(() => {
+                          const category = materials.find(m => m.material_id === previewMaterial)?.category;
+                          const labels: Record<string, string> = {
+                            'interior_wall': '내벽',
+                            'exterior_wall': '외벽',
+                            'floor': '바닥',
+                            'ceiling': '천장'
+                          };
+                          return (
+                            <span className="px-3 py-1 bg-[#C59C6C]/10 text-[#C59C6C] text-caption font-semibold rounded-full border border-[#C59C6C]/20">
+                              {labels[category || ''] || category}
+                            </span>
+                          );
+                        })()}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* 가격 */}
                   {materials.find(m => m.material_id === previewMaterial)?.price_per_sqm && (
                     <div>
-                      <p className="text-xs text-phomi-gray-500 mb-2">참고 가격</p>
-                      <p className="text-2xl font-black text-phomi-black">
+                      <p className="text-caption mb-2">참고 가격</p>
+                      <p className="text-2xl font-black text-gray-900">
                         ₩{materials.find(m => m.material_id === previewMaterial)?.price_per_sqm?.toLocaleString()}
-                        <span className="text-sm font-normal text-phomi-gray-500 ml-2">/㎡</span>
+                        <span className="text-body font-normal text-gray-500 ml-2">/㎡</span>
                       </p>
                     </div>
                   )}
@@ -597,7 +546,7 @@ export default function AIStylingPage() {
                         setPreviewMaterial(null);
                       }
                     }}
-                    className="w-full bg-gradient-to-r from-phomi-gold to-phomi-black text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-[#C59C6C] to-[#A67C52] text-white font-bold py-4 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <CheckCircle2 className="w-5 h-5" />
                     이 자재 선택하기
@@ -609,12 +558,12 @@ export default function AIStylingPage() {
         </div>
       )}
 
-      {/* 저장 모달 */}
+      {/* ===== 저장 모달 ===== */}
       {showSaveModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl transform scale-100 animate-in">
-            <h3 className="text-2xl font-bold text-phomi-black mb-2">견적 저장</h3>
-            <p className="text-phomi-gray-500 mb-6">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <h3 className="text-title mb-2">견적 저장</h3>
+            <p className="text-body text-gray-600 mb-6">
               프로젝트 정보를 입력하세요
             </p>
             <input
@@ -622,18 +571,18 @@ export default function AIStylingPage() {
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
               placeholder="현장명 또는 고객명"
-              className="w-full px-4 py-3 border-2 border-phomi-gray-100 rounded-xl focus:border-phomi-gold focus:outline-none transition-colors duration-300 mb-6"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#C59C6C] focus:outline-none transition-colors duration-300 mb-6 text-input"
             />
             <div className="flex gap-3">
               <button
                 onClick={() => setShowSaveModal(false)}
-                className="flex-1 px-4 py-3 border-2 border-phomi-gray-200 text-phomi-gray-700 rounded-xl hover:bg-phomi-gray-50 transition-all duration-300 font-semibold"
+                className="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 text-button"
               >
                 취소
               </button>
               <button
                 onClick={handleSave}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-phomi-gold to-phomi-black text-white rounded-xl hover:shadow-xl transition-all duration-300 font-semibold"
+                className="flex-1 px-4 py-3 bg-gradient-to-r from-[#C59C6C] to-[#A67C52] text-white rounded-xl hover:shadow-xl transition-all duration-300 text-button"
               >
                 저장
               </button>

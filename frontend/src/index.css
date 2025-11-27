@@ -21,7 +21,52 @@
 }
 
 @layer components {
-  /* Phomi 스타일 버튼 */
+  /* ===== 통일된 타이포그래피 시스템 (3단계만 사용) ===== */
+
+  /* 타이틀 - 페이지 제목, 섹션 제목 */
+  .text-title {
+    @apply text-lg font-bold text-gray-900;
+  }
+
+  /* 본문 - 일반 텍스트, 설명 */
+  .text-body {
+    @apply text-sm text-gray-700;
+  }
+
+  /* 캡션 - 부가 정보, 날짜, 카운트 */
+  .text-caption {
+    @apply text-xs text-gray-500;
+  }
+
+  /* 버튼 텍스트 */
+  .text-button {
+    @apply text-sm font-bold;
+  }
+
+  /* 입력 필드 텍스트 */
+  .text-input {
+    @apply text-sm text-gray-900;
+  }
+
+  /* ===== 카드 & 섹션 스타일 ===== */
+
+  /* 기본 카드 컨테이너 */
+  .card-base {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-200;
+  }
+
+  /* 섹션 헤더 */
+  .section-header {
+    @apply flex items-center gap-2 mb-4;
+  }
+
+  /* 단계 번호 뱃지 */
+  .step-badge {
+    @apply w-8 h-8 bg-gradient-to-br from-[#C59C6C] to-[#A67C52] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0;
+  }
+
+  /* ===== 기존 Phomi 스타일 버튼 (레거시) ===== */
+
   .btn-primary {
     @apply px-8 py-4 bg-phomi-gold text-white font-medium tracking-wide
            hover:bg-phomi-black transition-all duration-300
@@ -84,6 +129,26 @@
 
   .scrollbar-track-phomi-gray-100::-webkit-scrollbar-track {
     background: #f1f1f1;
+  }
+
+  /* ⭐ Gold 스크롤바 (가로/세로 모두) */
+  .scrollbar-gold::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+  }
+
+  .scrollbar-gold::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .scrollbar-gold::-webkit-scrollbar-thumb {
+    background: #C59C6C;
+    border-radius: 10px;
+  }
+
+  .scrollbar-gold::-webkit-scrollbar-thumb:hover {
+    background: #A67C52;
   }
 }
 
