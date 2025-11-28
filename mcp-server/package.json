@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/http-server.ts",
+    "start": "tsx src/http-server.ts",
     "build": "tsc"
   },
   "dependencies": {

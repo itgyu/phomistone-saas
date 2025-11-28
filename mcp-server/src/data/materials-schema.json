@@ -2,366 +2,333 @@
   "materials": [
     {
       "material_id": "castol_white_01",
-      "name": "Castol White",
-      "series": "Castol",
-      "category": "interior_wall",
-      "color_code": "#F5F5F5",
-      "positive_prompt": "white marble texture, clean surface, bright lighting, luxury interior, pristine finish, architectural quality, 8K resolution",
+      "name": "Phomistone Castol White",
+      "category": "exterior_wall",
+      "positive_prompt": "white marble texture, clean surface, bright lighting, luxury finish, architectural quality, 8K resolution",
       "negative_prompt": "dirty, stained, dark, low quality, brick pattern",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#F5F5F5"
     },
     {
       "material_id": "veil_gray_02",
-      "name": "Veil Gray",
-      "series": "Veil",
-      "category": "interior_wall",
-      "color_code": "#B8B8B8",
-      "positive_prompt": "gray marble with veil pattern, elegant surface, modern interior, soft veining, sophisticated finish, 8K quality",
+      "name": "Phomistone Veil Gray",
+      "category": "exterior_wall",
+      "positive_prompt": "gray marble with veil pattern, elegant surface, modern style, soft veining, sophisticated finish, 8K quality",
       "negative_prompt": "plain, boring, low quality, brick pattern",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#B8B8B8"
     },
     {
       "material_id": "veil_dark_grey_03",
-      "name": "Veil Dark Grey",
-      "series": "Veil",
-      "category": "interior_wall",
-      "color_code": "#5A5E63",
-      "positive_prompt": "dark gray marble, luxury texture, sophisticated interior, elegant veining, deep tones, premium finish, 8K resolution",
+      "name": "Phomistone Veil Dark Grey",
+      "category": "exterior_wall",
+      "positive_prompt": "dark gray marble, luxury texture, sophisticated style, elegant veining, deep tones, premium finish, 8K resolution",
       "negative_prompt": "light, washed out, low quality, brick pattern",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#5A5E63"
     },
     {
       "material_id": "shahara_light_gray_04",
-      "name": "Shahara Light Gray",
-      "series": "Shahara",
-      "category": "interior_wall",
-      "color_code": "#D3D3D3",
-      "positive_prompt": "light gray marble, sahara pattern, natural texture, bright interior, desert-inspired veining, architectural elegance, 8K quality",
+      "name": "Phomistone Shahara Light Gray",
+      "category": "exterior_wall",
+      "positive_prompt": "light gray marble, sahara pattern, natural texture, bright tone, desert-inspired veining, architectural elegance, 8K quality",
       "negative_prompt": "dark, artificial, low quality, brick pattern",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#D3D3D3"
     },
     {
       "material_id": "cloud_yellow_05",
-      "name": "Cloud Yellow",
-      "series": "Cloud",
-      "category": "interior_wall",
-      "color_code": "#F5F5DC",
-      "positive_prompt": "yellow beige marble, cloud pattern, warm tone, elegant interior, soft swirls, natural finish, 8K resolution",
+      "name": "Phomistone Cloud Yellow",
+      "category": "exterior_wall",
+      "positive_prompt": "yellow beige marble, cloud pattern, warm tone, elegant texture, soft swirls, natural finish, 8K resolution",
       "negative_prompt": "cold, blue, low quality, brick pattern",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#F5F5DC"
     },
     {
       "material_id": "cloud_gray_06",
-      "name": "Cloud Gray",
-      "series": "Cloud",
-      "category": "interior_wall",
-      "color_code": "#808080",
+      "name": "Phomistone Cloud Gray",
+      "category": "exterior_wall",
       "positive_prompt": "gray marble, cloud texture, modern look, soft patterns, premium stone finish, 8K quality",
       "negative_prompt": "brown, warm, low quality, brick pattern",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#808080"
     },
     {
       "material_id": "ocean_black_07",
-      "name": "Ocean Black",
-      "series": "Ocean",
-      "category": "interior_wall",
-      "color_code": "#1A1A1A",
+      "name": "Phomistone Ocean Black",
+      "category": "exterior_wall",
       "positive_prompt": "black marble, ocean texture, deep dark surface, luxury elegance, subtle waves, high-end finish, 8K resolution",
       "negative_prompt": "light, white, low quality, brick pattern",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#1A1A1A"
     },
     {
       "material_id": "infinity_stone_08",
-      "name": "Infinity Stone",
-      "series": "Infinity",
-      "category": "interior_wall",
-      "color_code": "#708090",
+      "name": "Phomistone Infinity Stone",
+      "category": "exterior_wall",
       "positive_prompt": "infinity stone texture, futuristic pattern, seamless surface, modern architectural design, 8K quality",
       "negative_prompt": "rustic, old, low quality, brick pattern",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#708090"
     },
     {
       "material_id": "rammed_earth_09",
-      "name": "Rammed Earth",
-      "series": "Earth",
-      "category": "interior_wall",
-      "color_code": "#8B4513",
+      "name": "Phomistone Rammed Earth",
+      "category": "exterior_wall",
       "positive_prompt": "rammed earth texture, natural layers, earthy tones, sustainable architecture, raw finish, 8K resolution",
       "negative_prompt": "shiny, polished, modern, plastic",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#8B4513"
     },
     {
       "material_id": "travertine_10",
-      "name": "Travertine",
-      "series": "Travertine",
-      "category": "interior_wall",
-      "color_code": "#E3DCCB",
+      "name": "Phomistone Travertine",
+      "category": "exterior_wall",
       "positive_prompt": "classic travertine texture, beige limestone, porous surface, natural elegance, roman style, 8K quality",
       "negative_prompt": "smooth, plastic, artificial",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#E3DCCB"
     },
     {
       "material_id": "travertine_gold_11",
-      "name": "Travertine Gold",
-      "series": "Travertine",
-      "category": "interior_wall",
-      "color_code": "#DAA520",
+      "name": "Phomistone Travertine Gold",
+      "category": "exterior_wall",
       "positive_prompt": "gold travertine texture, warm yellow tones, porous stone, luxury finish, 8K resolution",
       "negative_prompt": "silver, gray, low quality",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#DAA520"
     },
     {
       "material_id": "travertine_gray_12",
-      "name": "Travertine Gray",
-      "series": "Travertine",
-      "category": "interior_wall",
-      "color_code": "#A9A9A9",
+      "name": "Phomistone Travertine Gray",
+      "category": "exterior_wall",
       "positive_prompt": "gray travertine, modern limestone, porous texture, cool tones, architectural finish, 8K quality",
       "negative_prompt": "warm, yellow, low quality",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#A9A9A9"
     },
     {
       "material_id": "new_moon_13",
-      "name": "New Moon",
-      "series": "Moon",
-      "category": "interior_wall",
-      "color_code": "#2F4F4F",
+      "name": "Phomistone New Moon",
+      "category": "exterior_wall",
       "positive_prompt": "dark stone texture, moon surface inspiration, crater-like details, modern dark grey, 8K resolution",
       "negative_prompt": "bright, light, low quality",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#2F4F4F"
     },
     {
       "material_id": "moon_crater_14",
-      "name": "Moon Crater",
-      "series": "Moon",
-      "category": "interior_wall",
-      "color_code": "#778899",
+      "name": "Phomistone Moon Crater",
+      "category": "exterior_wall",
       "positive_prompt": "textured stone, moon crater pattern, rough surface, unique architectural detail, 8K quality",
       "negative_prompt": "smooth, flat, low quality",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#778899"
     },
     {
       "material_id": "coarse_grain_15",
-      "name": "Coarse Grain",
-      "series": "Grain",
-      "category": "interior_wall",
-      "color_code": "#808080",
+      "name": "Phomistone Coarse Grain",
+      "category": "exterior_wall",
       "positive_prompt": "coarse grain stone, rough texture, natural aggregate look, durable finish, 8K resolution",
       "negative_prompt": "smooth, polished, low quality",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#808080"
     },
     {
       "material_id": "striped_stone_16",
-      "name": "Striped Stone",
-      "series": "Striped",
-      "category": "interior_wall",
-      "color_code": "#D3D3D3",
+      "name": "Phomistone Striped Stone",
+      "category": "exterior_wall",
       "positive_prompt": "striped stone texture, linear pattern, modern design, natural stone layers, 8K quality",
       "negative_prompt": "random pattern, chaotic, low quality",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#D3D3D3"
     },
     {
       "material_id": "waffle_rock_17",
-      "name": "Waffle Rock",
-      "series": "Rock",
-      "category": "interior_wall",
-      "color_code": "#A9A9A9",
+      "name": "Phomistone Waffle Rock",
+      "category": "exterior_wall",
       "positive_prompt": "waffle rock texture, grid pattern stone, geometric surface, unique architectural material, 8K resolution",
       "negative_prompt": "smooth, flat, low quality",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#A9A9A9"
     },
     {
       "material_id": "fambe_brick_18",
-      "name": "Fambe Brick",
-      "series": "Brick",
+      "name": "Phomistone Fambe Brick",
       "category": "exterior_wall",
-      "color_code": "#B22222",
       "positive_prompt": "fambe brick texture, varied color bricks, rustic style, kiln fired look, 8K quality",
       "negative_prompt": "uniform color, modern, plastic",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#B22222"
     },
     {
       "material_id": "m_brick_19",
-      "name": "M Brick",
-      "series": "Brick",
+      "name": "Phomistone M Brick",
       "category": "exterior_wall",
-      "color_code": "#8B0000",
       "positive_prompt": "modern brick texture, clean lines, uniform brick pattern, architectural facade, 8K resolution",
       "negative_prompt": "rustic, old, damaged",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#8B0000"
     },
     {
       "material_id": "k_brick_20",
-      "name": "K Brick",
-      "series": "Brick",
+      "name": "Phomistone K Brick",
       "category": "exterior_wall",
-      "color_code": "#A52A2A",
       "positive_prompt": "k brick texture, classic brick look, red clay tone, detailed mortar, 8K quality",
       "negative_prompt": "painted brick, artificial",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#A52A2A"
     },
     {
       "material_id": "a_brick_21",
-      "name": "A Brick",
-      "series": "Brick",
+      "name": "Phomistone A Brick",
       "category": "exterior_wall",
-      "color_code": "#CD5C5C",
       "positive_prompt": "antique brick texture, weathered look, aged masonry, historic charm, 8K resolution",
       "negative_prompt": "new, modern, clean",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#CD5C5C"
     },
     {
       "material_id": "great_wall_brick_22",
-      "name": "Great Wall Brick",
-      "series": "Brick",
+      "name": "Phomistone Great Wall Brick",
       "category": "exterior_wall",
-      "color_code": "#696969",
       "positive_prompt": "great wall brick texture, large robust bricks, grey stone look, ancient wall inspiration, 8K quality",
       "negative_prompt": "red brick, small brick",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#696969"
     },
     {
       "material_id": "stacking_stone_23",
-      "name": "Stacking Stone",
-      "series": "Stone",
+      "name": "Phomistone Stacking Stone",
       "category": "exterior_wall",
-      "color_code": "#808080",
       "positive_prompt": "stacked stone texture, layered stone wall, natural ledge stone, rustic elegance, 8K resolution",
       "negative_prompt": "flat surface, smooth",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#808080"
     },
     {
       "material_id": "g_stone_24",
-      "name": "G Stone",
-      "series": "Stone",
+      "name": "Phomistone G Stone",
       "category": "exterior_wall",
-      "color_code": "#696969",
       "positive_prompt": "granite stone texture, speckled pattern, durable surface, natural rock look, 8K quality",
       "negative_prompt": "smooth marble, plastic",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#696969"
     },
     {
       "material_id": "l_stone_25",
-      "name": "L Stone",
-      "series": "Stone",
+      "name": "Phomistone L Stone",
       "category": "exterior_wall",
-      "color_code": "#F5F5DC",
       "positive_prompt": "limestone texture, light beige stone, soft grain, elegant facade, 8K resolution",
       "negative_prompt": "dark colors, rough",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#F5F5DC"
     },
     {
       "material_id": "r_stone_26",
-      "name": "R Stone",
-      "series": "Stone",
+      "name": "Phomistone R Stone",
       "category": "exterior_wall",
-      "color_code": "#708090",
       "positive_prompt": "rough stone texture, natural rock face, rugged appearance, exterior cladding, 8K quality",
       "negative_prompt": "polished, smooth, flat",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#708090"
     },
     {
       "material_id": "weaving_27",
-      "name": "Weaving",
-      "series": "Weaving",
-      "category": "interior_wall",
-      "color_code": "#D3D3D3",
+      "name": "Phomistone Weaving",
+      "category": "exterior_wall",
       "positive_prompt": "woven texture effect, stone weaving pattern, unique architectural surface, 8K resolution",
       "negative_prompt": "plain wall, flat",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#D3D3D3"
     },
     {
       "material_id": "multi_color_red_28",
-      "name": "Multi-Color Red",
-      "series": "Multi-Color",
-      "category": "interior_wall",
-      "color_code": "#A52A2A",
+      "name": "Phomistone Multi-Color Red",
+      "category": "exterior_wall",
       "positive_prompt": "red brown marble, multi color pattern, unique texture, luxury interior, varied earth tones, premium finish, 8K resolution",
       "negative_prompt": "single color, plain",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#A52A2A"
     },
     {
       "material_id": "greyish_desert_29",
-      "name": "Greyish Desert",
-      "series": "Desert",
-      "category": "interior_wall",
-      "color_code": "#C2B280",
+      "name": "Phomistone Greyish Desert",
+      "category": "exterior_wall",
       "positive_prompt": "gray beige marble, desert pattern, natural texture, warm interior, sandy tones with subtle veining, 8K quality",
       "negative_prompt": "green tones, artificial",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#C2B280"
     },
     {
       "material_id": "andes_white_30",
-      "name": "Andes White",
-      "series": "Andes",
-      "category": "interior_wall",
-      "color_code": "#F0F8FF",
+      "name": "Phomistone Andes White",
+      "category": "exterior_wall",
       "positive_prompt": "white marble, andes texture, clean surface, bright interior, mountain stone elegance, architectural quality, 8K resolution",
       "negative_prompt": "dirty, dark",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#F0F8FF"
     },
     {
       "material_id": "andes_yellow_31",
-      "name": "Andes Yellow",
-      "series": "Andes",
-      "category": "interior_wall",
-      "color_code": "#F0E68C",
+      "name": "Phomistone Andes Yellow",
+      "category": "exterior_wall",
       "positive_prompt": "yellow beige marble, andes pattern, warm tone, elegant interior, natural earth colors, premium finish, 8K quality",
       "negative_prompt": "cool tones, blue",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#F0E68C"
     },
     {
       "material_id": "h2_32",
-      "name": "H2",
-      "series": "H Series",
-      "category": "interior_wall",
-      "color_code": "#DCDCDC",
+      "name": "Phomistone H2",
+      "category": "exterior_wall",
       "positive_prompt": "light gray marble, h2 texture, modern pattern, elegant interior, subtle veining, architectural stone, 8K resolution",
       "negative_prompt": "dark colors, rustic",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#DCDCDC"
     },
     {
       "material_id": "h4_33",
-      "name": "H4",
-      "series": "H Series",
-      "category": "interior_wall",
-      "color_code": "#808080",
+      "name": "Phomistone H4",
+      "category": "exterior_wall",
       "positive_prompt": "medium gray marble, h4 texture, contemporary look, durable surface, stone cladding, 8K quality",
       "negative_prompt": "bright colors, old",
       "lora_weight": 0.85,
-      "recommended_denoising": 0.55
+      "recommended_denoising": 0.55,
+      "color_code": "#808080"
     }
   ]
 }
