@@ -24,12 +24,12 @@ export default function Layout() {
     <div className="min-h-screen flex flex-col">
       {/* 헤더 */}
       <header className="bg-black text-white border-b border-neutral-800 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="flex justify-between items-center h-16">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-14 md:h-16">
             {/* 로고 */}
-            <Link to="/dashboard" className="flex items-center gap-6 hover:opacity-80 transition-opacity duration-300">
-              <Minus className="w-4 h-4 text-[#C59C6C]" strokeWidth={1} />
-              <span className="text-sm font-normal tracking-[0.25em] uppercase">
+            <Link to="/dashboard" className="flex items-center gap-3 md:gap-6 hover:opacity-80 transition-opacity duration-300">
+              <Minus className="w-3 h-3 md:w-4 md:h-4 text-[#C59C6C]" strokeWidth={1} />
+              <span className="text-xs md:text-sm font-normal tracking-[0.2em] md:tracking-[0.25em] uppercase">
                 Phomistone
               </span>
             </Link>
@@ -70,7 +70,8 @@ export default function Layout() {
             {/* 모바일 메뉴 버튼 */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 border border-neutral-800 hover:border-neutral-600 transition-colors duration-300"
+              className="md:hidden p-2 hover:bg-neutral-800 transition-colors duration-300 touch-target"
+              aria-label="Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" strokeWidth={1.5} /> : <Menu className="w-5 h-5" strokeWidth={1.5} />}
             </button>
@@ -79,37 +80,37 @@ export default function Layout() {
 
         {/* 모바일 메뉴 */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-neutral-800 bg-neutral-900">
-            <div className="px-6 py-6 space-y-1">
+          <div className="md:hidden border-t border-neutral-800 bg-neutral-900 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+            <div className="px-4 py-4 space-y-1">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-4 px-4 py-3 transition-colors duration-300 ${
+                  className={`flex items-center gap-3 px-3 py-3.5 transition-colors duration-300 touch-target ${
                     location.pathname === item.path
                       ? 'text-white border-l-2 border-white bg-neutral-800'
                       : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
                   }`}
                 >
-                  <item.icon className="w-4 h-4" strokeWidth={1.5} />
-                  <span className="text-xs font-medium tracking-wider uppercase">{item.label}</span>
+                  <item.icon className="w-5 h-5" strokeWidth={1.5} />
+                  <span className="text-sm font-medium tracking-wide uppercase">{item.label}</span>
                 </Link>
               ))}
-              <div className="pt-6 mt-6 border-t border-neutral-800">
-                <div className="px-4 mb-4">
-                  <p className="text-xs font-medium text-white tracking-wide">{user?.name}</p>
-                  <p className="text-[10px] font-medium text-neutral-500 tracking-wider mt-1">{user?.company}</p>
+              <div className="pt-4 mt-4 border-t border-neutral-800">
+                <div className="px-3 mb-3">
+                  <p className="text-sm font-medium text-white tracking-wide">{user?.name}</p>
+                  <p className="text-xs font-medium text-neutral-500 tracking-wide mt-1">{user?.company}</p>
                 </div>
                 <button
                   onClick={() => {
                     handleLogout();
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full flex items-center gap-4 px-4 py-3 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors duration-300"
+                  className="w-full flex items-center gap-3 px-3 py-3.5 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors duration-300 touch-target"
                 >
-                  <LogOut className="w-4 h-4" strokeWidth={1.5} />
-                  <span className="text-xs font-medium tracking-wider uppercase">Logout</span>
+                  <LogOut className="w-5 h-5" strokeWidth={1.5} />
+                  <span className="text-sm font-medium tracking-wide uppercase">Logout</span>
                 </button>
               </div>
             </div>
@@ -124,13 +125,13 @@ export default function Layout() {
 
       {/* 푸터 */}
       <footer className="bg-neutral-50 border-t border-neutral-200">
-        <div className="max-w-7xl mx-auto px-8 py-8">
-          <div className="flex items-center justify-center gap-3">
-            <Minus className="w-3 h-3 text-neutral-700" strokeWidth={1} />
-            <p className="text-center text-neutral-700 text-[10px] font-medium tracking-[0.2em] uppercase">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">
+          <div className="flex items-center justify-center gap-2 md:gap-3">
+            <Minus className="w-2 h-2 md:w-3 md:h-3 text-neutral-700" strokeWidth={1} />
+            <p className="text-center text-neutral-700 text-[9px] md:text-[10px] font-medium tracking-[0.15em] md:tracking-[0.2em] uppercase">
               © 2024 Phomistone. All rights reserved.
             </p>
-            <Minus className="w-3 h-3 text-neutral-700" strokeWidth={1} />
+            <Minus className="w-2 h-2 md:w-3 md:h-3 text-neutral-700" strokeWidth={1} />
           </div>
         </div>
       </footer>

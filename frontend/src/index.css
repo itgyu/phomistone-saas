@@ -18,6 +18,13 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold text-phomi-black;
   }
+
+  /* 모바일 입력 필드 줌 방지 (iOS) */
+  @media (max-width: 767px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+  }
 }
 
 @layer components {
@@ -149,6 +156,23 @@
 
   .scrollbar-gold::-webkit-scrollbar-thumb:hover {
     background: #A67C52;
+  }
+
+  /* ===== 모바일 반응형 유틸리티 ===== */
+
+  /* iOS Safe Area */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+
+  /* 터치 타겟 최소 크기 (44px) */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
