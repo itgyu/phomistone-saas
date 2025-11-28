@@ -74,7 +74,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// 프롬프트 생성 준비\nconst analysis = items[0].json.candidates[0].content.parts[0].text;\nconst mcp = $('Get Material from MCP').item.json;\n\nreturn [{\n  json: {\n    analysis,\n    mcp\n  }\n}];"
+        "jsCode": "// 1. 앞 단계(Brain) 분석 결과 가져오기\nconst candidates = items[0].json.candidates;\nlet analysisText = \"Modern architectural structure with clear geometry.\";\n\nif (candidates && candidates[0]?.content?.parts?.[0]?.text) {\n  analysisText = candidates[0].content.parts[0].text;\n}\n\n// 2. 자재 정보 가져오기\nconst mcp = $('Get Material from MCP').item.json;\n\n// 3. 🚨 [핵심] 자재 이미지 가져오기 (Webhook에서 직접 꺼내옴)\nconst webhookBody = $('Webhook').item.json.body;\nconst materialImage = webhookBody.material_image_base64 || \"\";\n\n// 4. Prompter(설계자)에게 보낼 데이터 생성\nconst parts = [\n  { \n    text: `ROLE: Prompt Engineer.\n    \n    [INPUT ANALYSIS]:\n    ${analysisText}\n    \n    [TARGET MATERIAL]:\n    ${mcp.name} (${mcp.positive_prompt})\n    \n    [TASK]:\n    Write a concise image generation prompt to apply the target material to the analyzed structure.\n    \n    [OUTPUT]:\n    Raw prompt text only.` \n  }\n];\n\n// 자재 이미지가 있으면 Prompter에게도 보여줌 (더 정확한 묘사를 위해)\nif (materialImage) {\n  parts.push({ inline_data: { mime_type: \"image/png\", data: materialImage } });\n}\n\nconst googleBody = {\n  contents: [{ parts: parts }],\n  generationConfig: { temperature: 0.7 }\n};\n\n// 5. 🚨 [수정] Gemini payload를 JSON 문자열로 변환\nreturn [{\n  json: {\n    prompterPayload: JSON.stringify(googleBody),\n    materialImage: materialImage,\n    mcp_name: mcp.name\n  }\n}];"
       },
       "id": "664c2f63-6783-4d3d-a7d8-7e9436f84a34",
       "name": "Prep for Prompter",
@@ -90,8 +90,9 @@
         "method": "POST",
         "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=AIzaSyB4s2yVL8vw4oy22nmkyYg7uQqZKvbjcwA",
         "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ $json.prompterPayload }}",
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.prompterPayload }}",
         "options": {}
       },
       "id": "5256c0d8-2c3c-42cd-b777-a0832259bb70",
@@ -123,7 +124,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Master에게 보낼 최종 데이터 (File URI 사용)\nconst fileUri = items[0].json.file.uri;\nconst prompt = $('2. The Prompter').item.json.candidates[0].content.parts[0].text;\nconst mcp_name = $('Get Material from MCP').item.json.name;\n\nconst payload = {\n  contents: [{\n    parts: [\n      { text: `FINAL TASK: Generate Image.\\nPROMPT: ${prompt}\\nINPUT: See attached file.\\nCONSTRAINT: Keep structure exactly.\\nOUTPUT: IMAGE ONLY.` },\n      { file_data: { mime_type: \"image/jpeg\", file_uri: fileUri } }\n    ]\n  }],\n  safetySettings: [\n    { category: \"HARM_CATEGORY_HARASSMENT\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_HATE_SPEECH\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_DANGEROUS_CONTENT\", threshold: \"BLOCK_NONE\" }\n  ],\n  generationConfig: { temperature: 0.4 }\n};\n\nreturn [{ json: { payload, materialName: mcp_name } }];"
+        "jsCode": "// Master에게 보낼 최종 데이터 (File URI 사용)\nconst fileUri = items[0].json.file.uri;\nconst prompt = $('2. The Prompter').item.json.candidates[0].content.parts[0].text;\nconst mcp_name = $('Get Material from MCP').item.json.name;\n\nconst payload = {\n  contents: [{\n    parts: [\n      { text: `FINAL TASK: Generate Image.\\nPROMPT: ${prompt}\\nINPUT: See attached file.\\nCONSTRAINT: Keep structure exactly.\\nOUTPUT: IMAGE ONLY.` },\n      { file_data: { mime_type: \"image/jpeg\", file_uri: fileUri } }\n    ]\n  }],\n  safetySettings: [\n    { category: \"HARM_CATEGORY_HARASSMENT\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_HATE_SPEECH\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_DANGEROUS_CONTENT\", threshold: \"BLOCK_NONE\" }\n  ],\n  generationConfig: { temperature: 0.4 }\n};\n\nreturn [{ json: { masterPayload: JSON.stringify(payload), materialName: mcp_name } }];"
       },
       "id": "6d8791c4-0e2c-46b5-a77d-486675d7bee9",
       "name": "Prep for Master",
@@ -139,8 +140,9 @@
         "method": "POST",
         "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=AIzaSyB4s2yVL8vw4oy22nmkyYg7uQqZKvbjcwA",
         "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ $json.masterPayload }}",
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.masterPayload }}",
         "options": {
           "timeout": 600000
         }
