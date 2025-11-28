@@ -76,6 +76,14 @@ export default function AIStylingPage() {
         ? uploadedImage.split(',')[1]
         : uploadedImage;
 
+      // (A-1) 🚨 원본 이미지 크기 추출
+      const img = new Image();
+      img.src = uploadedImage;
+      await new Promise((resolve) => { img.onload = resolve; });
+      const originalWidth = img.naturalWidth;
+      const originalHeight = img.naturalHeight;
+      console.log('📐 Original image dimensions:', originalWidth, 'x', originalHeight);
+
       // (B) 🚨 핵심 추가: 선택된 자재의 실물 이미지 준비
       const selectedMatData = materials.find(m => m.material_id === selectedMaterial);
 
@@ -90,7 +98,9 @@ export default function AIStylingPage() {
       console.log('📦 Payload:', {
         material_id: selectedMaterial,
         building_image_size: cleanImage.length,
-        material_image_size: materialImageBase64.length
+        material_image_size: materialImageBase64.length,
+        original_width: originalWidth,
+        original_height: originalHeight
       });
 
       const response = await fetch('/webhook/style-building', {
@@ -101,7 +111,9 @@ export default function AIStylingPage() {
         body: JSON.stringify({
           image_base64: cleanImage,
           material_id: selectedMaterial,
-          material_image_base64: materialImageBase64 // 👈 추가!
+          material_image_base64: materialImageBase64,
+          original_width: originalWidth,  // 👈 추가!
+          original_height: originalHeight  // 👈 추가!
         })
       });
 
