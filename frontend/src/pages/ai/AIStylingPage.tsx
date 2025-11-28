@@ -119,33 +119,38 @@ export default function AIStylingPage() {
 
   // 프로젝트 저장
   const handleSaveProject = async (formData: ProjectFormData) => {
-    const material = materials.find(m => m.material_id === selectedMaterial);
+    try {
+      const material = materials.find(m => m.material_id === selectedMaterial);
 
-    const projectData = {
-      name: formData.name,
-      clientName: formData.clientName,
-      siteAddress: formData.siteAddress,
-      status: 'draft' as const,
-      estimatedCost: formData.estimatedCost ? parseInt(formData.estimatedCost) : undefined,
-      materialName: material?.name || '',
-      beforeImage: uploadedImage,
-      afterImage: resultImage,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+      const projectData = {
+        name: formData.name,
+        clientName: formData.clientName,
+        siteAddress: formData.siteAddress,
+        status: 'draft' as const,
+        estimatedCost: formData.estimatedCost ? parseInt(formData.estimatedCost) : undefined,
+        materialName: material?.name || '',
+        beforeImage: uploadedImage,
+        afterImage: resultImage,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
 
-    // Save to localStorage temporarily (TODO: replace with API call)
-    const projects = JSON.parse(localStorage.getItem('projects') || '[]');
-    const newProject = {
-      ...projectData,
-      id: `project_${Date.now()}`
-    };
-    projects.push(newProject);
-    localStorage.setItem('projects', JSON.stringify(projects));
+      // Save to unified localStorage key (phomistone_projects)
+      const projects = JSON.parse(localStorage.getItem('phomistone_projects') || '[]');
+      const newProject = {
+        ...projectData,
+        id: `project_${Date.now()}`
+      };
+      projects.push(newProject);
+      localStorage.setItem('phomistone_projects', JSON.stringify(projects));
 
-    alert('✅ 프로젝트가 저장되었습니다!');
-    setShowSaveModal(false);
-    navigate('/dashboard');
+      alert('✅ 프로젝트가 저장되었습니다!');
+      setShowSaveModal(false);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('프로젝트 저장 실패:', error);
+      alert('프로젝트 저장에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   // 다시 시작

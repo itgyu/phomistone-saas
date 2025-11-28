@@ -13,14 +13,20 @@ export default function DashboardPage() {
   const [statusFilter, setStatusFilter] = useState<ProjectStatus | 'all'>('all');
 
   useEffect(() => {
-    const loadProjects = async () => {
-      setLoading(true);
+    loadProjects();
+  }, []);
 
-      // Load from localStorage
-      const storedProjects = localStorage.getItem('projects');
+  // Load projects safely
+  const loadProjects = async () => {
+    setLoading(true);
+
+    try {
+      // Load from unified localStorage key
+      const storedProjects = localStorage.getItem('phomistone_projects');
+
       if (storedProjects) {
         const parsedProjects: Project[] = JSON.parse(storedProjects);
-        setProjects(parsedProjects);
+        setProjects(Array.isArray(parsedProjects) ? parsedProjects : []);
       } else {
         // Fallback: Load legacy projects from service
         const legacyData = await projectService.getAll() as LegacyProject[];
@@ -28,7 +34,7 @@ export default function DashboardPage() {
         // Convert legacy projects to new format
         const convertedProjects: Project[] = legacyData.map(legacy => ({
           id: legacy.id,
-          name: legacy.clientName, // Using clientName as project name for now
+          name: legacy.clientName,
           clientName: legacy.clientName,
           status: convertLegacyStatus(legacy.status),
           estimatedCost: legacy.estimatedCost,
@@ -41,11 +47,13 @@ export default function DashboardPage() {
 
         setProjects(convertedProjects);
       }
-
+    } catch (error) {
+      console.error('프로젝트 로드 실패:', error);
+      setProjects([]);
+    } finally {
       setLoading(false);
-    };
-    loadProjects();
-  }, []);
+    }
+  };
 
   // Convert legacy status to new status
   const convertLegacyStatus = (status: string): ProjectStatus => {
@@ -58,19 +66,54 @@ export default function DashboardPage() {
     return statusMap[status] || 'draft';
   };
 
-  // Delete project
+  // Delete project safely
   const handleDeleteProject = (projectId: string, projectName: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent navigation to detail page
 
-    if (confirm(`"${projectName}" 프로젝트를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) {
+    if (!confirm(`"${projectName}" 프로젝트를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) {
+      return;
+    }
+
+    try {
+      // Get from unified localStorage key
+      const storedProjects = localStorage.getItem('phomistone_projects');
+
+      if (!storedProjects) {
+        // If no localStorage, just remove from state
+        setProjects(prev => prev.filter(p => p.id !== projectId));
+        alert('프로젝트가 삭제되었습니다.');
+        return;
+      }
+
       // Remove from localStorage
-      const updatedProjects = projects.filter(p => p.id !== projectId);
-      localStorage.setItem('projects', JSON.stringify(updatedProjects));
+      const projects = JSON.parse(storedProjects);
+      const updatedProjects = projects.filter((p: any) => p.id !== projectId);
+
+      // Save to localStorage
+      localStorage.setItem('phomistone_projects', JSON.stringify(updatedProjects));
 
       // Update state
       setProjects(updatedProjects);
 
       alert('프로젝트가 삭제되었습니다.');
+    } catch (error) {
+      console.error('프로젝트 삭제 실패:', error);
+      alert('프로젝트 삭제에 실패했습니다. 새로고침 후 다시 시도해주세요.');
+    }
+  };
+
+  // Reset all projects
+  const handleResetAllProjects = () => {
+    if (confirm('모든 프로젝트를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.')) {
+      try {
+        localStorage.removeItem('phomistone_projects');
+        localStorage.removeItem('projects'); // Remove old key too
+        setProjects([]);
+        alert('모든 프로젝트가 삭제되었습니다.');
+      } catch (error) {
+        console.error('초기화 실패:', error);
+        alert('초기화에 실패했습니다.');
+      }
     }
   };
 
@@ -106,14 +149,27 @@ export default function DashboardPage() {
                 Phomistone AI 스타일링 프로젝트 관리
               </p>
             </div>
-            <button
-              onClick={() => navigate('/ai-styling')}
-              className="bg-gradient-to-r from-phomi-gold to-phomi-black text-white text-button px-6 py-3 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2 group"
-            >
-              <Plus className="w-5 h-5" />
-              새 프로젝트
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
+            <div className="flex items-center gap-3">
+              {/* Debug button (development only) */}
+              {import.meta.env.DEV && (
+                <button
+                  onClick={handleResetAllProjects}
+                  className="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg text-caption transition-all"
+                  title="모든 프로젝트 삭제"
+                >
+                  초기화
+                </button>
+              )}
+
+              <button
+                onClick={() => navigate('/ai-styling')}
+                className="bg-gradient-to-r from-phomi-gold to-phomi-black text-white text-button px-6 py-3 rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2 group"
+              >
+                <Plus className="w-5 h-5" />
+                새 프로젝트
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

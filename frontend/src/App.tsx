@@ -8,6 +8,7 @@ import DashboardPage from '@/pages/dashboard/DashboardPage';
 import AIStylingPage from '@/pages/ai/AIStylingPage';
 import ProfilePage from '@/pages/profile/ProfilePage';
 import ProjectDetailPage from '@/pages/projects/ProjectDetailPage';
+import DebugPanel from '@/components/DebugPanel';
 
 function App() {
   return (
@@ -34,6 +35,9 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
           </Route>
         </Routes>
+
+        {/* Development Debug Panel */}
+        {import.meta.env.DEV && <DebugPanel />}
       </BrowserRouter>
     </AuthProvider>
   );

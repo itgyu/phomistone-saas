@@ -23,7 +23,7 @@ export default function ProjectDetailPage() {
 
   // Load project from localStorage
   useEffect(() => {
-    const storedProjects = localStorage.getItem('projects');
+    const storedProjects = localStorage.getItem('phomistone_projects');
     if (storedProjects) {
       const projects: Project[] = JSON.parse(storedProjects);
       const foundProject = projects.find(p => p.id === id);
@@ -50,13 +50,13 @@ export default function ProjectDetailPage() {
     };
 
     // Update in localStorage
-    const storedProjects = localStorage.getItem('projects');
+    const storedProjects = localStorage.getItem('phomistone_projects');
     if (storedProjects) {
       const projects: Project[] = JSON.parse(storedProjects);
       const updatedProjects = projects.map(p =>
         p.id === project.id ? updatedProject : p
       );
-      localStorage.setItem('projects', JSON.stringify(updatedProjects));
+      localStorage.setItem('phomistone_projects', JSON.stringify(updatedProjects));
     }
 
     setProject(updatedProject);
@@ -68,11 +68,11 @@ export default function ProjectDetailPage() {
 
     if (confirm(`"${project.name}" 프로젝트를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) {
       // Remove from localStorage
-      const storedProjects = localStorage.getItem('projects');
+      const storedProjects = localStorage.getItem('phomistone_projects');
       if (storedProjects) {
         const projects: Project[] = JSON.parse(storedProjects);
         const updatedProjects = projects.filter(p => p.id !== project.id);
-        localStorage.setItem('projects', JSON.stringify(updatedProjects));
+        localStorage.setItem('phomistone_projects', JSON.stringify(updatedProjects));
       }
 
       alert('프로젝트가 삭제되었습니다.');
@@ -93,13 +93,13 @@ export default function ProjectDetailPage() {
     };
 
     // Update in localStorage
-    const storedProjects = localStorage.getItem('projects');
+    const storedProjects = localStorage.getItem('phomistone_projects');
     if (storedProjects) {
       const projects: Project[] = JSON.parse(storedProjects);
       const updatedProjects = projects.map(p =>
         p.id === project.id ? updatedProject : p
       );
-      localStorage.setItem('projects', JSON.stringify(updatedProjects));
+      localStorage.setItem('phomistone_projects', JSON.stringify(updatedProjects));
     }
 
     setProject(updatedProject);
