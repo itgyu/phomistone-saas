@@ -139,17 +139,17 @@ export default function RegisterPage() {
                 PHOMISTONE
               </h1>
             </div>
-            <p className="text-xs font-light tracking-wider text-neutral-700 uppercase">AI Styling Solution</p>
+            <p className="text-xs font-normal tracking-wider text-neutral-600 uppercase">AI Styling Solution</p>
           </div>
 
           {/* 회원가입 카드 */}
           <div className="w-full">
             {/* 헤더 */}
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-light tracking-wider text-neutral-900 mb-3 uppercase">
+              <h2 className="text-3xl font-medium tracking-wider text-neutral-900 mb-3 uppercase">
                 REGISTER
               </h2>
-              <p className="text-xs font-light tracking-wider text-neutral-700 uppercase">
+              <p className="text-xs font-normal tracking-wider text-neutral-600 uppercase">
                 CREATE PROFESSIONAL ACCOUNT
               </p>
             </div>
@@ -158,7 +158,7 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* 이메일 */}
               <div>
-                <label className="block text-xs font-light tracking-wider text-neutral-900 mb-3 uppercase">
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
                   EMAIL <span className="text-red-900">*</span>
                 </label>
                 <input
@@ -168,7 +168,7 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   onFocus={() => setFocusedField('email')}
                   onBlur={() => setFocusedField(null)}
-                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-light tracking-wide ${
+                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide text-neutral-700 ${
                     focusedField === 'email'
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
@@ -180,7 +180,7 @@ export default function RegisterPage() {
 
               {/* 비밀번호 */}
               <div>
-                <label className="block text-xs font-light tracking-wider text-neutral-900 mb-3 uppercase">
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
                   PASSWORD <span className="text-red-900">*</span>
                 </label>
                 <input
@@ -190,7 +190,7 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   onFocus={() => setFocusedField('password')}
                   onBlur={() => setFocusedField(null)}
-                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-light tracking-wide ${
+                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide text-neutral-700 ${
                     focusedField === 'password'
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
@@ -212,7 +212,7 @@ export default function RegisterPage() {
                         />
                       ))}
                     </div>
-                    <p className="text-xs font-light tracking-wider text-neutral-700 uppercase">
+                    <p className="text-xs font-normal tracking-wider text-neutral-600 uppercase">
                       STRENGTH: {getStrengthText()}
                     </p>
                   </div>
@@ -221,7 +221,7 @@ export default function RegisterPage() {
 
               {/* 비밀번호 확인 */}
               <div>
-                <label className="block text-xs font-light tracking-wider text-neutral-900 mb-3 uppercase">
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
                   CONFIRM PASSWORD <span className="text-red-900">*</span>
                 </label>
                 <div className="relative">
@@ -232,7 +232,7 @@ export default function RegisterPage() {
                     onChange={handleChange}
                     onFocus={() => setFocusedField('passwordConfirm')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full px-0 py-3 pr-8 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-light tracking-wide ${
+                    className={`w-full px-0 py-3 pr-8 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide text-neutral-700 ${
                       focusedField === 'passwordConfirm'
                         ? 'border-neutral-900'
                         : 'border-neutral-300'
@@ -248,7 +248,7 @@ export default function RegisterPage() {
 
               {/* 이름 */}
               <div>
-                <label className="block text-xs font-light tracking-wider text-neutral-900 mb-3 uppercase">
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
                   NAME <span className="text-red-900">*</span>
                 </label>
                 <input
@@ -258,7 +258,7 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   onFocus={() => setFocusedField('name')}
                   onBlur={() => setFocusedField(null)}
-                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-light tracking-wide ${
+                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide text-neutral-700 ${
                     focusedField === 'name'
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
@@ -270,7 +270,7 @@ export default function RegisterPage() {
 
               {/* 회사명 */}
               <div>
-                <label className="block text-xs font-light tracking-wider text-neutral-900 mb-3 uppercase">
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
                   COMPANY <span className="text-red-900">*</span>
                 </label>
                 <input
@@ -280,7 +280,7 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   onFocus={() => setFocusedField('company')}
                   onBlur={() => setFocusedField(null)}
-                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-light tracking-wide ${
+                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide text-neutral-700 ${
                     focusedField === 'company'
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
@@ -292,8 +292,8 @@ export default function RegisterPage() {
 
               {/* 연락처 */}
               <div>
-                <label className="block text-xs font-light tracking-wider text-neutral-900 mb-3 uppercase">
-                  PHONE <span className="text-neutral-600">(OPTIONAL)</span>
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
+                  PHONE <span className="text-neutral-500">(OPTIONAL)</span>
                 </label>
                 <input
                   type="tel"
@@ -302,7 +302,7 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   onFocus={() => setFocusedField('phone')}
                   onBlur={() => setFocusedField(null)}
-                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-light tracking-wide ${
+                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide text-neutral-700 ${
                     focusedField === 'phone'
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
@@ -313,7 +313,7 @@ export default function RegisterPage() {
 
               {/* 에러 메시지 */}
               {error && (
-                <div className="p-4 border border-red-900 text-red-900 text-xs font-light tracking-wide">
+                <div className="p-4 border border-red-900 text-red-900 text-xs font-normal tracking-wide">
                   {error}
                 </div>
               )}
@@ -322,7 +322,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-neutral-900 text-white text-xs font-light tracking-wider py-4 hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed uppercase mt-8"
+                className="w-full bg-neutral-900 text-white text-xs font-medium tracking-wider py-4 hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed uppercase mt-8"
               >
                 {loading ? (
                   <>
@@ -337,12 +337,12 @@ export default function RegisterPage() {
 
             {/* 하단 링크 */}
             <div className="mt-12 text-center">
-              <p className="text-xs font-light tracking-wide text-neutral-700 mb-4 uppercase">
+              <p className="text-xs font-normal tracking-wide text-neutral-600 mb-4 uppercase">
                 ALREADY HAVE AN ACCOUNT?
               </p>
               <Link
                 to="/login"
-                className="inline-flex items-center gap-2 text-neutral-900 text-xs font-light tracking-wider hover:text-neutral-600 transition-colors duration-300 uppercase border-b border-neutral-900"
+                className="inline-flex items-center gap-2 text-neutral-900 text-xs font-medium tracking-wider hover:text-neutral-600 transition-colors duration-300 uppercase border-b border-neutral-900"
               >
                 LOGIN
               </Link>
@@ -350,7 +350,7 @@ export default function RegisterPage() {
           </div>
 
           {/* 푸터 */}
-          <p className="text-center text-xs font-light tracking-wide text-neutral-600 mt-16 uppercase">
+          <p className="text-center text-xs font-normal tracking-wide text-neutral-500 mt-16 uppercase">
             © 2024 PHOMISTONE. ALL RIGHTS RESERVED.
           </p>
         </div>

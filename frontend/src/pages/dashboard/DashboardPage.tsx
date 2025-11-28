@@ -146,11 +146,11 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-title text-phomi-black mb-1 flex items-center gap-3 font-light tracking-wider uppercase">
+              <h1 className="text-title text-phomi-black mb-1 flex items-center gap-3 font-medium tracking-wider uppercase">
                 <Minus className="w-5 h-5 text-phomi-black" />
                 프로젝트 대시보드
               </h1>
-              <p className="text-caption font-light tracking-wider">
+              <p className="text-caption font-medium tracking-wider text-neutral-500">
                 Phomistone AI 스타일링 프로젝트 관리
               </p>
             </div>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
               {import.meta.env.DEV && (
                 <button
                   onClick={handleResetAllProjects}
-                  className="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-caption transition-all font-light tracking-wider uppercase"
+                  className="px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-caption transition-all font-medium tracking-wider uppercase"
                   title="모든 프로젝트 삭제"
                 >
                   초기화
@@ -168,7 +168,7 @@ export default function DashboardPage() {
 
               <button
                 onClick={() => navigate('/ai-styling')}
-                className="bg-neutral-900 text-white text-button px-6 py-3 hover:bg-neutral-800 transition-all duration-300 flex items-center gap-2 group font-light tracking-wider uppercase"
+                className="bg-neutral-900 text-white text-button px-6 py-3 hover:bg-neutral-800 transition-all duration-300 flex items-center gap-2 group font-medium tracking-wider uppercase"
               >
                 <Plus className="w-5 h-5" />
                 새 프로젝트
@@ -189,10 +189,10 @@ export default function DashboardPage() {
                 <FileText className="w-6 h-6 text-gray-900 group-hover:text-white transition-colors duration-300" />
               </div>
               <div className="text-right">
-                <p className="text-title text-2xl mb-1 font-light tracking-wider">
+                <p className="text-title text-2xl mb-1 font-medium tracking-wider text-neutral-900">
                   {stats.total}
                 </p>
-                <p className="text-caption font-light tracking-wider uppercase">총 프로젝트</p>
+                <p className="text-caption font-medium tracking-wider uppercase text-neutral-500">총 프로젝트</p>
               </div>
             </div>
             <div className="h-1 bg-gray-100 overflow-hidden">
@@ -207,10 +207,10 @@ export default function DashboardPage() {
                 <Clock className="w-6 h-6 text-neutral-700 group-hover:text-white transition-colors duration-300" />
               </div>
               <div className="text-right">
-                <p className="text-title text-2xl mb-1 font-light tracking-wider">
+                <p className="text-title text-2xl mb-1 font-medium tracking-wider text-neutral-900">
                   {stats.inProgress}
                 </p>
-                <p className="text-caption font-light tracking-wider uppercase">진행 중</p>
+                <p className="text-caption font-medium tracking-wider uppercase text-neutral-500">진행 중</p>
               </div>
             </div>
             <div className="h-1 bg-gray-100 overflow-hidden">
@@ -228,10 +228,10 @@ export default function DashboardPage() {
                 <CheckCircle2 className="w-6 h-6 text-neutral-700 group-hover:text-white transition-colors duration-300" />
               </div>
               <div className="text-right">
-                <p className="text-title text-2xl mb-1 font-light tracking-wider">
+                <p className="text-title text-2xl mb-1 font-medium tracking-wider text-neutral-900">
                   {stats.completed}
                 </p>
-                <p className="text-caption font-light tracking-wider uppercase">완료됨</p>
+                <p className="text-caption font-medium tracking-wider uppercase text-neutral-500">완료됨</p>
               </div>
             </div>
             <div className="h-1 bg-gray-100 overflow-hidden">
@@ -249,10 +249,10 @@ export default function DashboardPage() {
                 <DollarSign className="w-6 h-6" />
               </div>
               <div className="text-right">
-                <p className="text-title text-2xl mb-1 font-light tracking-wider">
+                <p className="text-title text-2xl mb-1 font-medium tracking-wider">
                   ₩{(stats.totalValue / 10000).toFixed(0)}만
                 </p>
-                <p className="text-caption text-white/90 font-light tracking-wider uppercase">총 견적가</p>
+                <p className="text-caption text-white/90 font-medium tracking-wider uppercase">총 견적가</p>
               </div>
             </div>
             <div className="h-1 bg-white/20 overflow-hidden">
@@ -265,15 +265,15 @@ export default function DashboardPage() {
         {projects.length > 0 && (
           <div className="flex items-center gap-3 mb-6 overflow-x-auto pb-2 scrollbar-gold">
             <div className="flex items-center gap-2 flex-shrink-0">
-              <Filter className="w-4 h-4 text-gray-600" />
-              <span className="text-body font-light tracking-wider uppercase text-gray-700">상태 필터:</span>
+              <Filter className="w-4 h-4 text-neutral-700" />
+              <span className="text-body font-medium tracking-wider uppercase text-neutral-700">상태 필터:</span>
             </div>
             <button
               onClick={() => setStatusFilter('all')}
-              className={`px-4 py-2 text-button transition-all flex-shrink-0 font-light tracking-wider uppercase ${
+              className={`px-4 py-2 text-button transition-all flex-shrink-0 font-medium tracking-wider uppercase ${
                 statusFilter === 'all'
                   ? 'bg-black text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-gray-100 text-neutral-600 hover:bg-gray-200'
               }`}
             >
               전체 ({stats.total})
@@ -285,10 +285,10 @@ export default function DashboardPage() {
                 <button
                   key={key}
                   onClick={() => setStatusFilter(statusKey)}
-                  className={`px-4 py-2 text-button transition-all flex-shrink-0 border font-light tracking-wider uppercase ${
+                  className={`px-4 py-2 text-button transition-all flex-shrink-0 border font-medium tracking-wider uppercase ${
                     statusFilter === statusKey
                       ? `${config.bgColor} ${config.textColor} ${config.borderColor}`
-                      : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                      : 'bg-white text-neutral-600 border-gray-200 hover:bg-gray-50'
                   }`}
                 >
                   {config.label} ({count})
@@ -309,16 +309,16 @@ export default function DashboardPage() {
             <div className="inline-flex items-center justify-center w-20 h-20 bg-neutral-900/10 mb-6">
               <ImageIcon className="w-10 h-10 text-neutral-900" />
             </div>
-            <h3 className="text-title mb-2 font-light tracking-wider">
+            <h3 className="text-title mb-2 font-medium tracking-wider text-neutral-900">
               아직 프로젝트가 없습니다
             </h3>
-            <p className="text-body mb-8 max-w-md mx-auto font-light tracking-wider">
+            <p className="text-body mb-8 max-w-md mx-auto font-normal tracking-wider text-neutral-700">
               첫 번째 프로젝트를 생성하고<br />
               AI 스타일링을 시작하세요
             </p>
             <button
               onClick={() => navigate('/ai-styling')}
-              className="inline-flex items-center gap-2 bg-neutral-900 text-white text-button px-8 py-4 hover:bg-neutral-800 transition-all duration-300 group font-light tracking-wider uppercase"
+              className="inline-flex items-center gap-2 bg-neutral-900 text-white text-button px-8 py-4 hover:bg-neutral-800 transition-all duration-300 group font-medium tracking-wider uppercase"
             >
               <Plus className="w-5 h-5" />
               새 프로젝트 생성
@@ -329,17 +329,17 @@ export default function DashboardPage() {
           /* No results for filter */
           <div className="bg-white border border-gray-200 p-12 text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 mb-4">
-              <Filter className="w-8 h-8 text-gray-600" />
+              <Filter className="w-8 h-8 text-neutral-600" />
             </div>
-            <h3 className="text-title mb-2 font-light tracking-wider">
+            <h3 className="text-title mb-2 font-medium tracking-wider text-neutral-900">
               해당 상태의 프로젝트가 없습니다
             </h3>
-            <p className="text-body text-gray-700 mb-6 font-light tracking-wider">
+            <p className="text-body text-neutral-700 mb-6 font-normal tracking-wider">
               다른 상태 필터를 선택해보세요
             </p>
             <button
               onClick={() => setStatusFilter('all')}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 text-button transition-all font-light tracking-wider uppercase"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-neutral-700 text-button transition-all font-medium tracking-wider uppercase"
             >
               전체 보기
             </button>
@@ -348,10 +348,10 @@ export default function DashboardPage() {
           /* 프로젝트 그리드 */
           <div>
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-title font-light tracking-wider">
+              <h2 className="text-title font-medium tracking-wider text-neutral-900">
                 프로젝트 목록
               </h2>
-              <p className="text-caption font-light tracking-wider">
+              <p className="text-caption font-medium tracking-wider text-neutral-500">
                 {statusFilter === 'all' ? `총 ${projects.length}개` : `${filteredProjects.length}개 표시`}
               </p>
             </div>
@@ -395,19 +395,19 @@ export default function DashboardPage() {
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1 min-w-0">
-                        <p className="text-caption text-gray-600 font-light tracking-wider uppercase mb-1 truncate">
+                        <p className="text-caption text-neutral-500 font-medium tracking-wider uppercase mb-1 truncate">
                           #{project.id}
                         </p>
-                        <h3 className="text-title text-phomi-black mb-1 group-hover:text-phomi-gold transition-colors duration-300 truncate font-light tracking-wider">
+                        <h3 className="text-title text-phomi-black mb-1 group-hover:text-phomi-gold transition-colors duration-300 truncate font-medium tracking-wider">
                           {project.name}
                         </h3>
                         {project.clientName && (
-                          <p className="text-body text-gray-600 truncate font-light tracking-wider">
+                          <p className="text-body text-neutral-600 truncate font-normal tracking-wider">
                             {project.clientName}
                           </p>
                         )}
                         {project.materialName && (
-                          <p className="text-caption text-gray-700 line-clamp-1 mt-1 font-light tracking-wider">
+                          <p className="text-caption text-neutral-700 line-clamp-1 mt-1 font-normal tracking-wider">
                             {project.materialName}
                           </p>
                         )}
@@ -415,9 +415,9 @@ export default function DashboardPage() {
                     </div>
 
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                      <div className="flex items-center gap-1 text-gray-600">
+                      <div className="flex items-center gap-1 text-neutral-600">
                         <Calendar className="w-4 h-4 flex-shrink-0" />
-                        <span className="text-caption font-light tracking-wider">
+                        <span className="text-caption font-medium tracking-wider">
                           {new Date(project.createdAt).toLocaleDateString('ko-KR', {
                             month: 'short',
                             day: 'numeric'
@@ -425,7 +425,7 @@ export default function DashboardPage() {
                         </span>
                       </div>
                       {project.estimatedCost && (
-                        <p className="text-body font-light tracking-wider text-gray-900">
+                        <p className="text-body font-medium tracking-wider text-neutral-900">
                           ₩{project.estimatedCost.toLocaleString()}
                         </p>
                       )}

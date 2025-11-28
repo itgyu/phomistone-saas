@@ -90,17 +90,17 @@ export default function LoginPage() {
                 PHOMISTONE
               </h1>
             </div>
-            <p className="text-xs font-light tracking-wider text-neutral-700 uppercase">AI Styling Solution</p>
+            <p className="text-xs font-medium tracking-wider text-neutral-600 uppercase">AI Styling Solution</p>
           </div>
 
           {/* 로그인 카드 */}
           <div className="w-full">
             {/* 헤더 */}
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-light tracking-wider text-neutral-900 mb-3 uppercase">
+              <h2 className="text-3xl font-medium tracking-wider text-neutral-900 mb-3 uppercase">
                 LOGIN
               </h2>
-              <p className="text-xs font-light tracking-wider text-neutral-700 uppercase">
+              <p className="text-xs font-medium tracking-wider text-neutral-600 uppercase">
                 PROFESSIONAL AI STYLING TOOL
               </p>
             </div>
@@ -109,7 +109,7 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* 이메일 */}
               <div className="relative">
-                <label className="block text-xs font-light tracking-wider text-neutral-900 mb-3 uppercase">
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
                   EMAIL
                 </label>
                 <input
@@ -118,7 +118,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   onFocus={() => setFocusedField('email')}
                   onBlur={() => setFocusedField(null)}
-                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-light tracking-wide ${
+                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide ${
                     focusedField === 'email'
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
@@ -130,7 +130,7 @@ export default function LoginPage() {
 
               {/* 비밀번호 */}
               <div className="relative">
-                <label className="block text-xs font-light tracking-wider text-neutral-900 mb-3 uppercase">
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
                   PASSWORD
                 </label>
                 <input
@@ -139,7 +139,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setFocusedField('password')}
                   onBlur={() => setFocusedField(null)}
-                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-light tracking-wide ${
+                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide ${
                     focusedField === 'password'
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
@@ -151,7 +151,7 @@ export default function LoginPage() {
 
               {/* 에러 메시지 */}
               {error && (
-                <div className="p-4 border border-red-900 text-red-900 text-xs font-light tracking-wide">
+                <div className="p-4 border border-red-900 text-red-900 text-xs font-medium tracking-wide">
                   {error}
                 </div>
               )}
@@ -160,7 +160,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-neutral-900 text-white text-xs font-light tracking-wider py-4 hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed uppercase"
+                className="w-full bg-neutral-900 text-white text-xs font-medium tracking-wider py-4 hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed uppercase"
               >
                 {loading ? (
                   <>
@@ -175,12 +175,12 @@ export default function LoginPage() {
 
             {/* 하단 링크 */}
             <div className="mt-12 text-center">
-              <p className="text-xs font-light tracking-wide text-neutral-700 mb-4 uppercase">
+              <p className="text-xs font-medium tracking-wide text-neutral-600 mb-4 uppercase">
                 DON'T HAVE AN ACCOUNT?
               </p>
               <Link
                 to="/register"
-                className="inline-flex items-center gap-2 text-neutral-900 text-xs font-light tracking-wider hover:text-neutral-600 transition-colors duration-300 uppercase border-b border-neutral-900"
+                className="inline-flex items-center gap-2 text-neutral-900 text-xs font-medium tracking-wider hover:text-neutral-600 transition-colors duration-300 uppercase border-b border-neutral-900"
               >
                 REGISTER
               </Link>
@@ -188,7 +188,7 @@ export default function LoginPage() {
           </div>
 
           {/* 푸터 */}
-          <p className="text-center text-xs font-light tracking-wide text-neutral-600 mt-16 uppercase">
+          <p className="text-center text-xs font-medium tracking-wide text-neutral-500 mt-16 uppercase">
             © 2024 PHOMISTONE. ALL RIGHTS RESERVED.
           </p>
         </div>

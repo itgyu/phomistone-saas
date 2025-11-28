@@ -41,7 +41,7 @@ export default function ProjectStatusBadge({
       <span
         className={`
           inline-flex items-center gap-1.5
-          font-light tracking-[0.15em] uppercase
+          font-medium tracking-[0.15em] uppercase
           ${config.bgColor} ${config.textColor}
           border ${config.borderColor}
           ${sizeClasses[size]}
@@ -62,7 +62,7 @@ export default function ProjectStatusBadge({
           onClick={() => onStatusChange(config.nextStatus as ProjectStatus)}
           className={`
             inline-flex items-center gap-1.5
-            font-light tracking-[0.15em] uppercase
+            font-medium tracking-[0.15em] uppercase
             bg-gradient-to-r from-[#C59C6C] to-[#A67C52]
             hover:shadow-lg text-white
             transition-all duration-300 hover:scale-105
