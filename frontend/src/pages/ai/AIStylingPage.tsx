@@ -12,6 +12,25 @@ import { projectService } from '@/services/ProjectService';
 import { materials } from '@/data/materials';
 import SaveProjectModal, { ProjectFormData } from '@/components/project/SaveProjectModal';
 
+// 자재 이미지 URL → Base64 변환 함수
+const urlToBase64 = async (url: string): Promise<string> => {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        resolve(base64.split(',')[1]); // 헤더 제거
+      };
+      reader.readAsDataURL(blob);
+    });
+  } catch (e) {
+    console.error("자재 이미지 변환 실패:", e);
+    return "";
+  }
+};
+
 export default function AIStylingPage() {
   const navigate = useNavigate();
 
@@ -43,16 +62,35 @@ export default function AIStylingPage() {
       return;
     }
 
+    if (!uploadedImage) {
+      alert('건물 사진을 업로드해주세요');
+      return;
+    }
+
     setLoading(true);
-    setStatusMessage('AI가 공간을 분석하고 있습니다...');
+    setStatusMessage('AI가 자재의 질감을 분석하여 시공 중입니다...');
 
     try {
-      const cleanImage = uploadedImage.split(',')[1];
+      // (A) 건물 이미지 준비
+      const cleanImage = uploadedImage.includes(',')
+        ? uploadedImage.split(',')[1]
+        : uploadedImage;
+
+      // (B) 🚨 핵심 추가: 선택된 자재의 실물 이미지 준비
+      const selectedMatData = materials.find(m => m.material_id === selectedMaterial);
+
+      let materialImageBase64 = "";
+      if (selectedMatData?.image_path) {
+        console.log('🖼️ Converting material image:', selectedMatData.image_path);
+        materialImageBase64 = await urlToBase64(selectedMatData.image_path);
+        console.log('✅ 자재 이미지 변환 완료');
+      }
 
       console.log('🚀 Sending request to n8n...');
       console.log('📦 Payload:', {
         material_id: selectedMaterial,
-        image_size: cleanImage.length
+        building_image_size: cleanImage.length,
+        material_image_size: materialImageBase64.length
       });
 
       const response = await fetch('/webhook/style-building', {
@@ -62,7 +100,8 @@ export default function AIStylingPage() {
         },
         body: JSON.stringify({
           image_base64: cleanImage,
-          material_id: selectedMaterial
+          material_id: selectedMaterial,
+          material_image_base64: materialImageBase64 // 👈 추가!
         })
       });
 
