@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Edit2, Trash2, Download, Share2,
@@ -10,46 +10,116 @@ import {
 } from 'react-compare-slider';
 import ProjectStatusBadge from '@/components/project/ProjectStatusBadge';
 import { Project, ProjectStatus, PROJECT_STATUS_CONFIG, getStatusIndex } from '@/types/project';
+import EditProjectModal from '@/components/project/EditProjectModal';
+import { ProjectFormData } from '@/components/project/SaveProjectModal';
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // 임시 데이터 (실제로는 API에서 가져옴)
-  const [project, setProject] = useState<Project>({
-    id: id || '1',
-    name: '강남 아파트 리모델링',
-    clientName: '김철수',
-    siteAddress: '서울시 강남구 역삼동 123-45',
-    status: 'estimate',
-    estimatedCost: 15000000,
-    materialName: 'Stone Finish - Ivory',
-    beforeImage: '/placeholder-before.jpg',
-    afterImage: '/placeholder-after.jpg',
-    thumbnail: '/placeholder.jpg',
-    createdAt: '2024-01-15T09:15:00Z',
-    updatedAt: '2024-01-20T14:30:00Z',
-    createdBy: 'user@example.com'
-  });
+  const [project, setProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  // Load project from localStorage
+  useEffect(() => {
+    const storedProjects = localStorage.getItem('projects');
+    if (storedProjects) {
+      const projects: Project[] = JSON.parse(storedProjects);
+      const foundProject = projects.find(p => p.id === id);
+      if (foundProject) {
+        setProject(foundProject);
+      } else {
+        alert('프로젝트를 찾을 수 없습니다.');
+        navigate('/dashboard');
+      }
+    } else {
+      alert('저장된 프로젝트가 없습니다.');
+      navigate('/dashboard');
+    }
+    setLoading(false);
+  }, [id, navigate]);
 
   const handleStatusChange = (newStatus: ProjectStatus) => {
-    // TODO: API 호출
-    setProject(prev => ({
-      ...prev,
+    if (!project) return;
+
+    const updatedProject = {
+      ...project,
       status: newStatus,
       updatedAt: new Date().toISOString()
-    }));
+    };
 
-    // 성공 알림
+    // Update in localStorage
+    const storedProjects = localStorage.getItem('projects');
+    if (storedProjects) {
+      const projects: Project[] = JSON.parse(storedProjects);
+      const updatedProjects = projects.map(p =>
+        p.id === project.id ? updatedProject : p
+      );
+      localStorage.setItem('projects', JSON.stringify(updatedProjects));
+    }
+
+    setProject(updatedProject);
     alert(`프로젝트가 "${PROJECT_STATUS_CONFIG[newStatus].label}" 단계로 전환되었습니다.`);
   };
 
   const handleDelete = () => {
-    if (confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
-      // TODO: API 호출
+    if (!project) return;
+
+    if (confirm(`"${project.name}" 프로젝트를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) {
+      // Remove from localStorage
+      const storedProjects = localStorage.getItem('projects');
+      if (storedProjects) {
+        const projects: Project[] = JSON.parse(storedProjects);
+        const updatedProjects = projects.filter(p => p.id !== project.id);
+        localStorage.setItem('projects', JSON.stringify(updatedProjects));
+      }
+
+      alert('프로젝트가 삭제되었습니다.');
       navigate('/dashboard');
     }
   };
+
+  const handleEditProject = (formData: ProjectFormData) => {
+    if (!project) return;
+
+    const updatedProject: Project = {
+      ...project,
+      name: formData.name,
+      clientName: formData.clientName,
+      siteAddress: formData.siteAddress,
+      estimatedCost: formData.estimatedCost ? parseInt(formData.estimatedCost) : undefined,
+      updatedAt: new Date().toISOString()
+    };
+
+    // Update in localStorage
+    const storedProjects = localStorage.getItem('projects');
+    if (storedProjects) {
+      const projects: Project[] = JSON.parse(storedProjects);
+      const updatedProjects = projects.map(p =>
+        p.id === project.id ? updatedProject : p
+      );
+      localStorage.setItem('projects', JSON.stringify(updatedProjects));
+    }
+
+    setProject(updatedProject);
+    setShowEditModal(false);
+    alert('프로젝트가 수정되었습니다.');
+  };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-[#C59C6C]/30 border-t-[#C59C6C] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // Project not found (handled in useEffect, but just in case)
+  if (!project) {
+    return null;
+  }
 
   const statusKeys = Object.keys(PROJECT_STATUS_CONFIG) as ProjectStatus[];
   const currentStatusIndex = getStatusIndex(project.status);
@@ -82,7 +152,10 @@ export default function ProjectDetailPage() {
                 <Download className="w-4 h-4" />
                 다운로드
               </button>
-              <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-button transition-all flex items-center gap-2">
+              <button
+                onClick={() => setShowEditModal(true)}
+                className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-button transition-all flex items-center gap-2"
+              >
                 <Edit2 className="w-4 h-4" />
                 수정
               </button>
@@ -287,6 +360,16 @@ export default function ProjectDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Edit Project Modal */}
+      {showEditModal && project && (
+        <EditProjectModal
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          onSave={handleEditProject}
+          project={project}
+        />
+      )}
     </div>
   );
 }

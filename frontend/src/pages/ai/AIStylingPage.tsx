@@ -10,6 +10,7 @@ import {
 } from 'react-compare-slider';
 import { projectService } from '@/services/ProjectService';
 import { materials } from '@/data/materials';
+import SaveProjectModal, { ProjectFormData } from '@/components/project/SaveProjectModal';
 
 export default function AIStylingPage() {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ export default function AIStylingPage() {
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
-  const [clientName, setClientName] = useState('');
   const [previewMaterial, setPreviewMaterial] = useState<string | null>(null);
 
   // 이미지 업로드
@@ -117,25 +117,33 @@ export default function AIStylingPage() {
     }
   };
 
-  // 견적 저장
-  const handleSave = async () => {
-    if (!clientName.trim()) {
-      alert('현장명을 입력해주세요');
-      return;
-    }
-
+  // 프로젝트 저장
+  const handleSaveProject = async (formData: ProjectFormData) => {
     const material = materials.find(m => m.material_id === selectedMaterial);
 
-    await projectService.create({
-      clientName,
-      status: 'Draft',
+    const projectData = {
+      name: formData.name,
+      clientName: formData.clientName,
+      siteAddress: formData.siteAddress,
+      status: 'draft' as const,
+      estimatedCost: formData.estimatedCost ? parseInt(formData.estimatedCost) : undefined,
       materialName: material?.name || '',
-      estimatedCost: 4500000,
       beforeImage: uploadedImage,
-      afterImage: resultImage
-    });
+      afterImage: resultImage,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
 
-    alert('✅ 견적이 저장되었습니다!');
+    // Save to localStorage temporarily (TODO: replace with API call)
+    const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+    const newProject = {
+      ...projectData,
+      id: `project_${Date.now()}`
+    };
+    projects.push(newProject);
+    localStorage.setItem('projects', JSON.stringify(projects));
+
+    alert('✅ 프로젝트가 저장되었습니다!');
     setShowSaveModal(false);
     navigate('/dashboard');
   };
@@ -578,38 +586,14 @@ export default function AIStylingPage() {
         </div>
       )}
 
-      {/* ===== 저장 모달 ===== */}
-      {showSaveModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
-            <h3 className="text-title mb-2">견적 저장</h3>
-            <p className="text-body text-gray-600 mb-6">
-              프로젝트 정보를 입력하세요
-            </p>
-            <input
-              type="text"
-              value={clientName}
-              onChange={(e) => setClientName(e.target.value)}
-              placeholder="현장명 또는 고객명"
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#C59C6C] focus:outline-none transition-colors duration-300 mb-6 text-input"
-            />
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowSaveModal(false)}
-                className="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 text-button"
-              >
-                취소
-              </button>
-              <button
-                onClick={handleSave}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-[#C59C6C] to-[#A67C52] text-white rounded-xl hover:shadow-xl transition-all duration-300 text-button"
-              >
-                저장
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* ===== 프로젝트 저장 모달 ===== */}
+      <SaveProjectModal
+        isOpen={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        onSave={handleSaveProject}
+        resultImage={resultImage}
+        selectedMaterialName={materials.find(m => m.material_id === selectedMaterial)?.name || ''}
+      />
     </div>
   );
 }

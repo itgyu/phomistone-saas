@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Calendar, DollarSign, Sparkles, FileText, Clock, CheckCircle2, Image as ImageIcon, ArrowRight, Filter } from 'lucide-react';
+import { Plus, Calendar, DollarSign, Sparkles, FileText, Clock, CheckCircle2, Image as ImageIcon, ArrowRight, Filter, Trash2 } from 'lucide-react';
 import { projectService } from '@/services/ProjectService';
 import ProjectStatusBadge from '@/components/project/ProjectStatusBadge';
 import { Project, ProjectStatus, PROJECT_STATUS_CONFIG } from '@/types/project';
@@ -15,23 +15,33 @@ export default function DashboardPage() {
   useEffect(() => {
     const loadProjects = async () => {
       setLoading(true);
-      const legacyData = await projectService.getAll() as LegacyProject[];
 
-      // Convert legacy projects to new format
-      const convertedProjects: Project[] = legacyData.map(legacy => ({
-        id: legacy.id,
-        name: legacy.clientName, // Using clientName as project name for now
-        clientName: legacy.clientName,
-        status: convertLegacyStatus(legacy.status),
-        estimatedCost: legacy.estimatedCost,
-        materialName: legacy.materialName,
-        beforeImage: legacy.beforeImage,
-        afterImage: legacy.afterImage,
-        createdAt: legacy.createdAt,
-        updatedAt: legacy.updatedAt || legacy.createdAt
-      }));
+      // Load from localStorage
+      const storedProjects = localStorage.getItem('projects');
+      if (storedProjects) {
+        const parsedProjects: Project[] = JSON.parse(storedProjects);
+        setProjects(parsedProjects);
+      } else {
+        // Fallback: Load legacy projects from service
+        const legacyData = await projectService.getAll() as LegacyProject[];
 
-      setProjects(convertedProjects);
+        // Convert legacy projects to new format
+        const convertedProjects: Project[] = legacyData.map(legacy => ({
+          id: legacy.id,
+          name: legacy.clientName, // Using clientName as project name for now
+          clientName: legacy.clientName,
+          status: convertLegacyStatus(legacy.status),
+          estimatedCost: legacy.estimatedCost,
+          materialName: legacy.materialName,
+          beforeImage: legacy.beforeImage,
+          afterImage: legacy.afterImage,
+          createdAt: legacy.createdAt,
+          updatedAt: legacy.updatedAt || legacy.createdAt
+        }));
+
+        setProjects(convertedProjects);
+      }
+
       setLoading(false);
     };
     loadProjects();
@@ -46,6 +56,22 @@ export default function DashboardPage() {
       'Construction': 'construction'
     };
     return statusMap[status] || 'draft';
+  };
+
+  // Delete project
+  const handleDeleteProject = (projectId: string, projectName: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent navigation to detail page
+
+    if (confirm(`"${projectName}" 프로젝트를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) {
+      // Remove from localStorage
+      const updatedProjects = projects.filter(p => p.id !== projectId);
+      localStorage.setItem('projects', JSON.stringify(updatedProjects));
+
+      // Update state
+      setProjects(updatedProjects);
+
+      alert('프로젝트가 삭제되었습니다.');
+    }
   };
 
   // Filter projects by status
@@ -291,6 +317,15 @@ export default function DashboardPage() {
                     )}
                     <div className="absolute top-3 right-3">
                       <ProjectStatusBadge status={project.status} size="sm" />
+                    </div>
+                    <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <button
+                        onClick={(e) => handleDeleteProject(project.id, project.name, e)}
+                        className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-lg transition-all hover:scale-110"
+                        title="프로젝트 삭제"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
