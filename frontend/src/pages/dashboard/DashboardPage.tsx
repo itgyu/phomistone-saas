@@ -1,56 +1,68 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Calendar, DollarSign, Sparkles, FileText, Clock, CheckCircle2, Image as ImageIcon, ArrowRight } from 'lucide-react';
+import { Plus, Calendar, DollarSign, Sparkles, FileText, Clock, CheckCircle2, Image as ImageIcon, ArrowRight, Filter } from 'lucide-react';
 import { projectService } from '@/services/ProjectService';
-import type { Project } from '@/types';
+import ProjectStatusBadge from '@/components/project/ProjectStatusBadge';
+import { Project, ProjectStatus, PROJECT_STATUS_CONFIG } from '@/types/project';
+import { LegacyProject } from '@/types';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<ProjectStatus | 'all'>('all');
 
   useEffect(() => {
     const loadProjects = async () => {
       setLoading(true);
-      const data = await projectService.getAll();
-      setProjects(data);
+      const legacyData = await projectService.getAll() as LegacyProject[];
+
+      // Convert legacy projects to new format
+      const convertedProjects: Project[] = legacyData.map(legacy => ({
+        id: legacy.id,
+        name: legacy.clientName, // Using clientName as project name for now
+        clientName: legacy.clientName,
+        status: convertLegacyStatus(legacy.status),
+        estimatedCost: legacy.estimatedCost,
+        materialName: legacy.materialName,
+        beforeImage: legacy.beforeImage,
+        afterImage: legacy.afterImage,
+        createdAt: legacy.createdAt,
+        updatedAt: legacy.updatedAt || legacy.createdAt
+      }));
+
+      setProjects(convertedProjects);
       setLoading(false);
     };
     loadProjects();
   }, []);
 
-  const stats = {
-    total: projects.length,
-    inProgress: projects.filter(p => p.status === 'Draft' || p.status === 'Proposal').length,
-    completed: projects.filter(p => p.status === 'Contract' || p.status === 'Construction').length,
-    totalValue: projects.reduce((sum, p) => sum + p.estimatedCost, 0)
+  // Convert legacy status to new status
+  const convertLegacyStatus = (status: string): ProjectStatus => {
+    const statusMap: Record<string, ProjectStatus> = {
+      'Draft': 'draft',
+      'Proposal': 'proposal',
+      'Contract': 'contract',
+      'Construction': 'construction'
+    };
+    return statusMap[status] || 'draft';
   };
 
-  const getStatusBadge = (status: string) => {
-    const styles = {
-      'Draft': 'bg-phomi-gray-100 text-phomi-gray-700 border border-phomi-gray-200',
-      'Proposal': 'bg-blue-50 text-blue-700 border border-blue-200',
-      'Contract': 'bg-green-50 text-green-700 border border-green-200',
-      'Construction': 'bg-phomi-gold/10 text-phomi-gold border border-phomi-gold/30'
-    };
+  // Filter projects by status
+  const filteredProjects = projects.filter(p =>
+    statusFilter === 'all' || p.status === statusFilter
+  );
 
-    const labels = {
-      'Draft': '작성 중',
-      'Proposal': '제안',
-      'Contract': '계약',
-      'Construction': '시공'
-    };
-
-    return (
-      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${styles[status as keyof typeof styles] || styles.Draft}`}>
-        {status === 'Contract' || status === 'Construction' ? (
-          <CheckCircle2 className="w-3 h-3" />
-        ) : (
-          <Clock className="w-3 h-3" />
-        )}
-        {labels[status as keyof typeof labels] || status}
-      </span>
-    );
+  const stats = {
+    total: projects.length,
+    draft: projects.filter(p => p.status === 'draft').length,
+    estimate: projects.filter(p => p.status === 'estimate').length,
+    proposal: projects.filter(p => p.status === 'proposal').length,
+    contract: projects.filter(p => p.status === 'contract').length,
+    construction: projects.filter(p => p.status === 'construction').length,
+    completed: projects.filter(p => p.status === 'completed').length,
+    inProgress: projects.filter(p => ['draft', 'estimate', 'proposal'].includes(p.status)).length,
+    totalValue: projects.reduce((sum, p) => sum + (p.estimatedCost || 0), 0)
   };
 
   return (
@@ -162,6 +174,43 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* 상태 필터 */}
+        {projects.length > 0 && (
+          <div className="flex items-center gap-3 mb-6 overflow-x-auto pb-2 scrollbar-gold">
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <Filter className="w-4 h-4 text-gray-400" />
+              <span className="text-body font-semibold text-gray-700">상태 필터:</span>
+            </div>
+            <button
+              onClick={() => setStatusFilter('all')}
+              className={`px-4 py-2 rounded-lg text-button transition-all flex-shrink-0 ${
+                statusFilter === 'all'
+                  ? 'bg-black text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              전체 ({stats.total})
+            </button>
+            {Object.entries(PROJECT_STATUS_CONFIG).map(([key, config]) => {
+              const statusKey = key as ProjectStatus;
+              const count = stats[statusKey] || 0;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setStatusFilter(statusKey)}
+                  className={`px-4 py-2 rounded-lg text-button transition-all flex-shrink-0 border ${
+                    statusFilter === statusKey
+                      ? `${config.bgColor} ${config.textColor} ${config.borderColor} shadow-lg`
+                      : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                  }`}
+                >
+                  {config.label} ({count})
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* 프로젝트 리스트 */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
@@ -189,6 +238,25 @@ export default function DashboardPage() {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
           </div>
+        ) : filteredProjects.length === 0 ? (
+          /* No results for filter */
+          <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+              <Filter className="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 className="text-title mb-2">
+              해당 상태의 프로젝트가 없습니다
+            </h3>
+            <p className="text-body text-gray-500 mb-6">
+              다른 상태 필터를 선택해보세요
+            </p>
+            <button
+              onClick={() => setStatusFilter('all')}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-button transition-all"
+            >
+              전체 보기
+            </button>
+          </div>
         ) : (
           /* 프로젝트 그리드 */
           <div>
@@ -197,26 +265,32 @@ export default function DashboardPage() {
                 프로젝트 목록
               </h2>
               <p className="text-caption">
-                총 {projects.length}개
+                {statusFilter === 'all' ? `총 ${projects.length}개` : `${filteredProjects.length}개 표시`}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {projects.map((project) => (
+              {filteredProjects.map((project) => (
                 <div
                   key={project.id}
-                  className="group bg-white rounded-2xl border border-phomi-gray-100 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
-                  onClick={() => {/* 상세 페이지로 이동 */}}
+                  className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                  onClick={() => navigate(`/projects/${project.id}`)}
                 >
                   {/* 이미지 */}
-                  <div className="relative aspect-video bg-phomi-gray-100 overflow-hidden">
-                    <img
-                      src={project.afterImage}
-                      alt={project.clientName}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
+                  <div className="relative aspect-video bg-gray-100 overflow-hidden">
+                    {project.afterImage ? (
+                      <img
+                        src={project.afterImage}
+                        alt={project.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon className="w-12 h-12 text-gray-300" />
+                      </div>
+                    )}
                     <div className="absolute top-3 right-3">
-                      {getStatusBadge(project.status)}
+                      <ProjectStatusBadge status={project.status} size="sm" />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
@@ -224,22 +298,29 @@ export default function DashboardPage() {
                   {/* 정보 */}
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1">
-                        <p className="text-caption text-gray-400 font-semibold mb-1">
-                          {project.id}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-caption text-gray-400 font-semibold mb-1 truncate">
+                          #{project.id}
                         </p>
-                        <h3 className="text-title text-phomi-black mb-1 group-hover:text-phomi-gold transition-colors duration-300">
-                          {project.clientName}
+                        <h3 className="text-title text-phomi-black mb-1 group-hover:text-phomi-gold transition-colors duration-300 truncate">
+                          {project.name}
                         </h3>
-                        <p className="text-body line-clamp-1">
-                          {project.materialName}
-                        </p>
+                        {project.clientName && (
+                          <p className="text-body text-gray-600 truncate">
+                            {project.clientName}
+                          </p>
+                        )}
+                        {project.materialName && (
+                          <p className="text-caption text-gray-500 line-clamp-1 mt-1">
+                            {project.materialName}
+                          </p>
+                        )}
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                       <div className="flex items-center gap-1 text-gray-400">
-                        <Calendar className="w-4 h-4" />
+                        <Calendar className="w-4 h-4 flex-shrink-0" />
                         <span className="text-caption">
                           {new Date(project.createdAt).toLocaleDateString('ko-KR', {
                             month: 'short',
@@ -247,9 +328,11 @@ export default function DashboardPage() {
                           })}
                         </span>
                       </div>
-                      <p className="text-title">
-                        ₩{project.estimatedCost.toLocaleString()}
-                      </p>
+                      {project.estimatedCost && (
+                        <p className="text-body font-semibold text-gray-900">
+                          ₩{project.estimatedCost.toLocaleString()}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

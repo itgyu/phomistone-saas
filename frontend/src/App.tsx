@@ -7,6 +7,7 @@ import RegisterPage from '@/pages/auth/RegisterPage';
 import DashboardPage from '@/pages/dashboard/DashboardPage';
 import AIStylingPage from '@/pages/ai/AIStylingPage';
 import ProfilePage from '@/pages/profile/ProfilePage';
+import ProjectDetailPage from '@/pages/projects/ProjectDetailPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="ai-styling" element={<AIStylingPage />} />
+            <Route path="projects/:id" element={<ProjectDetailPage />} />
             <Route path="profile" element={<ProfilePage />} />
           </Route>
         </Routes>
