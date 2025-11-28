@@ -1,7 +1,8 @@
 # n8n "The Formatter" 노드 업데이트 가이드
 
 ## 🎯 목적
-AI가 자재 이름만 보고 상상하는 대신, **실제 자재 사진**을 참조하여 정확한 질감/색상을 재현하도록 개선
+1. AI가 자재 이름만 보고 상상하는 대신, **실제 자재 사진**을 참조하여 정확한 질감/색상을 재현
+2. **원본 이미지 비율 유지** - Before/After 슬라이더에서 자연스럽게 비교 가능
 
 ---
 
@@ -32,7 +33,7 @@ if (webhookBody.image_base64.includes("image/png")) {
   mimeType = "image/png";
 }
 
-// 4. Gemini에게 보낼 Prompt 조립
+// 4. 🚨 개선된 Prompt (자재 참조 + 해상도 유지)
 const parts = [
   {
     text: `High-fidelity Architectural Material Transfer Task.
@@ -41,14 +42,22 @@ const parts = [
 - Image 1 (Building): Target structure to modify
 - Image 2 (Material): Reference texture to apply
 
+[CRITICAL REQUIREMENTS]
+1. OUTPUT IMAGE MUST MATCH EXACT DIMENSIONS OF IMAGE 1
+2. Preserve original aspect ratio and resolution
+3. Do NOT crop, resize, or change composition
+4. Apply texture from Image 2 only to the building walls
+
 [INSTRUCTIONS]
 1. Analyze the building facade/wall in Image 1
 2. Apply the EXACT texture, color, and pattern from Image 2 to the walls
-3. Preserve original lighting, shadows, and geometry from Image 1
-4. The result must look like real construction of "${mcp.name}"
+3. Preserve original lighting, shadows, geometry, and background
+4. Keep all windows, doors, and other elements unchanged
+5. The result must look like real construction of "${mcp.name}"
+6. MAINTAIN ORIGINAL IMAGE DIMENSIONS AND ASPECT RATIO
 
 [OUTPUT]
-Generate only the final composite image.`
+Generate the modified image with IDENTICAL dimensions to Image 1.`
   },
   // 이미지 1: 건물 (구조 유지)
   {
@@ -79,10 +88,10 @@ const payload = {
     { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
   ],
   generationConfig: {
-    temperature: 0.3,  // 낮은 창의성 = 높은 재현율
-    topK: 32,
-    topP: 0.95,
-    maxOutputTokens: 4096
+    temperature: 0.2,  // 더 낮춤 (창의성 ↓ = 원본 충실도 ↑)
+    topK: 20,
+    topP: 0.9,
+    maxOutputTokens: 8192  // 더 높은 해상도 지원
   }
 };
 
