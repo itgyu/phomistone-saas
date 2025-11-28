@@ -144,7 +144,7 @@ export default function DashboardPage() {
       {/* 헤더 */}
       <div className="bg-[#FAFAFA] border-b border-gray-200 sticky top-0 z-10 backdrop-blur-sm bg-[#FAFAFA]/80">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h1 className="text-lg md:text-xl lg:text-title text-phomi-black mb-1 flex items-center gap-2 md:gap-3 font-medium tracking-wider uppercase">
                 <Minus className="w-4 h-4 md:w-5 md:h-5 text-phomi-black" />
@@ -154,12 +154,12 @@ export default function DashboardPage() {
                 Phomistone AI 스타일링 프로젝트 관리
               </p>
             </div>
-            <div className="flex items-center gap-2 md:gap-3">
+            <div className="flex items-center gap-2">
               {/* Debug button (development only) */}
               {import.meta.env.DEV && (
                 <button
                   onClick={handleResetAllProjects}
-                  className="px-2 py-1.5 md:px-3 md:py-2 bg-red-100 hover:bg-red-200 text-red-700 text-xs md:text-caption transition-all font-medium tracking-wider uppercase"
+                  className="flex-1 sm:flex-none whitespace-nowrap px-3 py-2 md:px-4 md:py-2.5 bg-red-100 hover:bg-red-200 text-red-700 text-xs md:text-caption transition-all font-medium tracking-wider uppercase touch-target"
                   title="모든 프로젝트 삭제"
                 >
                   초기화
@@ -168,12 +168,12 @@ export default function DashboardPage() {
 
               <button
                 onClick={() => navigate('/ai-styling')}
-                className="bg-neutral-900 text-white text-button px-4 py-2.5 md:px-6 md:py-3 hover:bg-neutral-800 transition-all duration-300 flex items-center gap-2 group font-medium tracking-wider uppercase"
+                className="flex-1 sm:flex-none whitespace-nowrap bg-neutral-900 text-white px-3 py-2 md:px-6 md:py-3 hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-1.5 md:gap-2 group font-medium tracking-wider uppercase text-xs md:text-sm touch-target"
               >
-                <Plus className="w-4 h-4 md:w-5 md:h-5" />
+                <Plus className="w-4 h-4 flex-shrink-0" />
                 <span className="hidden sm:inline">새 프로젝트</span>
-                <span className="sm:hidden">새 생성</span>
-                <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                <span className="sm:hidden">생성</span>
+                <ArrowRight className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0 group-hover:translate-x-1 transition-transform duration-300" />
               </button>
             </div>
           </div>
