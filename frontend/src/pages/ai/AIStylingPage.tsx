@@ -226,18 +226,18 @@ export default function AIStylingPage() {
     <div className="h-screen flex flex-col bg-[#FAFAFA]">
       {/* ===== 헤더 ===== */}
       <div className="bg-black border-b border-neutral-800 flex-shrink-0">
-        <div className="max-w-[1920px] mx-auto px-8 py-6">
+        <div className="max-w-[1920px] mx-auto px-4 md:px-8 py-4 md:py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <Minus className="w-4 h-4 text-[#C59C6C]" strokeWidth={1} />
-              <h1 className="text-sm font-light tracking-[0.3em] text-white uppercase">AI Styling</h1>
+            <div className="flex items-center gap-3 md:gap-6">
+              <Minus className="w-4 h-4 md:w-5 md:h-5 text-[#C59C6C]" strokeWidth={1} />
+              <h1 className="text-xs md:text-sm font-light tracking-[0.3em] text-white uppercase">AI Styling</h1>
             </div>
             {uploadedImage && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-3 px-5 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white text-xs font-light tracking-wider uppercase transition-colors duration-300"
+                className="flex items-center gap-2 md:gap-3 px-3 md:px-5 py-2 md:py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white text-xs font-light tracking-wider uppercase transition-colors duration-300"
               >
-                <RefreshCw className="w-3.5 h-3.5" strokeWidth={1.5} />
+                <RefreshCw className="w-3.5 h-3.5 md:w-4 md:h-4" strokeWidth={1.5} />
                 Reset
               </button>
             )}
@@ -247,16 +247,16 @@ export default function AIStylingPage() {
 
       {/* ===== 메인 컨텐츠 (2단 레이아웃) ===== */}
       <div className="flex-1 overflow-hidden">
-        <div className="h-full max-w-[1920px] mx-auto px-6 py-6">
-          <div className="h-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
+        <div className="h-full max-w-[1920px] mx-auto px-4 md:px-6 py-4 md:py-6">
+          <div className="h-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-4 md:gap-6">
 
             {/* ===== 좌측: 이미지 뷰어 ===== */}
             <div className="flex items-center justify-center bg-white border border-neutral-200 overflow-hidden">
               {!uploadedImage ? (
                 /* 초기 상태: 업로드 안내 */
-                <div className="text-center p-16">
-                  <Upload className="w-12 h-12 text-neutral-300 mx-auto mb-8" strokeWidth={1} />
-                  <h3 className="text-xs font-medium tracking-[0.25em] text-neutral-900 uppercase mb-4">Upload Image</h3>
+                <div className="text-center p-8 md:p-16">
+                  <Upload className="w-10 h-10 md:w-12 md:h-12 text-neutral-300 mx-auto mb-6 md:mb-8" strokeWidth={1} />
+                  <h3 className="text-xs md:text-sm font-medium tracking-[0.25em] text-neutral-900 uppercase mb-3 md:mb-4">Upload Image</h3>
                   <p className="text-xs text-neutral-700 leading-relaxed tracking-wide">
                     우측 패널에서 건물 사진을 선택하면<br />
                     이곳에 미리보기가 표시됩니다
@@ -264,7 +264,7 @@ export default function AIStylingPage() {
                 </div>
               ) : !resultImage ? (
                 /* 업로드 후: Before 이미지 */
-                <div className="w-full h-full flex items-center justify-center p-8">
+                <div className="w-full h-full flex items-center justify-center p-4 md:p-8">
                   <img
                     src={uploadedImage}
                     alt="Uploaded"
@@ -291,10 +291,10 @@ export default function AIStylingPage() {
                     }
                     style={{ height: '100%' }}
                   />
-                  <div className="absolute top-6 left-6 bg-black/80 text-white px-4 py-2 text-[10px] font-light tracking-[0.2em] uppercase backdrop-blur-sm">
+                  <div className="absolute top-3 left-3 md:top-6 md:left-6 bg-black/80 text-white px-3 md:px-4 py-1.5 md:py-2 text-[10px] font-light tracking-[0.2em] uppercase backdrop-blur-sm">
                     Before
                   </div>
-                  <div className="absolute top-6 right-6 bg-black/80 text-white px-4 py-2 text-[10px] font-light tracking-[0.2em] uppercase backdrop-blur-sm">
+                  <div className="absolute top-3 right-3 md:top-6 md:right-6 bg-black/80 text-white px-3 md:px-4 py-1.5 md:py-2 text-[10px] font-light tracking-[0.2em] uppercase backdrop-blur-sm">
                     After
                   </div>
                 </div>
@@ -302,20 +302,20 @@ export default function AIStylingPage() {
             </div>
 
             {/* ===== 우측: 컨트롤 패널 (400px 고정) ===== */}
-            <div className="flex flex-col gap-4 h-full overflow-hidden">
+            <div className="flex flex-col gap-3 md:gap-4 h-full overflow-hidden">
 
               {/* Step 1: 이미지 업로드 */}
-              <div className="bg-white border border-neutral-200 p-6 flex-shrink-0">
-                <div className="mb-6 pb-4 border-b border-neutral-100">
-                  <span className="text-[10px] font-medium tracking-[0.3em] text-neutral-500 uppercase mb-3 block">Step 01</span>
-                  <h2 className="text-sm font-medium text-neutral-900 tracking-wide">이미지 업로드</h2>
+              <div className="bg-white border border-neutral-200 p-4 md:p-6 flex-shrink-0">
+                <div className="mb-4 md:mb-6 pb-3 md:pb-4 border-b border-neutral-100">
+                  <span className="text-[10px] font-medium tracking-[0.3em] text-neutral-500 uppercase mb-2 md:mb-3 block">Step 01</span>
+                  <h2 className="text-xs md:text-sm font-medium text-neutral-900 tracking-wide">이미지 업로드</h2>
                   <p className="text-xs text-neutral-600 mt-1 tracking-wide">건물 사진 선택</p>
                 </div>
 
                 {!uploadedImage ? (
                   <label className="block cursor-pointer">
-                    <div className="border border-neutral-200 p-10 hover:border-neutral-400 transition-colors duration-300 text-center">
-                      <Upload className="w-10 h-10 text-neutral-300 mx-auto mb-4" strokeWidth={1} />
+                    <div className="border border-neutral-200 p-6 md:p-10 hover:border-neutral-400 transition-colors duration-300 text-center">
+                      <Upload className="w-8 h-8 md:w-10 md:h-10 text-neutral-300 mx-auto mb-3 md:mb-4" strokeWidth={1} />
                       <p className="text-xs text-neutral-900 mb-1 tracking-wide">이미지 선택</p>
                       <p className="text-[10px] font-medium text-neutral-500 tracking-wider">JPG, PNG (최대 20MB)</p>
                     </div>
@@ -327,15 +327,15 @@ export default function AIStylingPage() {
                     />
                   </label>
                 ) : (
-                  <div className="flex items-center gap-4 p-4 border border-neutral-900 bg-neutral-50">
-                    <CheckCircle2 className="w-5 h-5 text-neutral-900 flex-shrink-0" strokeWidth={1.5} />
+                  <div className="flex items-center gap-3 md:gap-4 p-3 md:p-4 border border-neutral-900 bg-neutral-50">
+                    <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-neutral-900 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium text-neutral-900 tracking-wide">업로드 완료</p>
                       <p className="text-[10px] text-neutral-700 tracking-wide mt-0.5">이미지가 준비되었습니다</p>
                     </div>
                     <button
                       onClick={handleReset}
-                      className="px-4 py-2 border border-neutral-300 text-neutral-700 text-[10px] font-medium tracking-wider uppercase hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-300 flex-shrink-0"
+                      className="px-3 md:px-4 py-1.5 md:py-2 border border-neutral-300 text-neutral-700 text-[10px] font-medium tracking-wider uppercase hover:border-neutral-900 hover:text-neutral-900 transition-colors duration-300 flex-shrink-0"
                     >
                       Change
                     </button>
@@ -346,27 +346,27 @@ export default function AIStylingPage() {
               {/* Step 2: 자재 선택 (세로 스크롤) */}
               {uploadedImage && !resultImage && (
                 <div className="bg-white border border-neutral-200 flex flex-col flex-1 min-h-0 overflow-hidden">
-                  <div className="p-6 flex-shrink-0 border-b border-neutral-100">
-                    <span className="text-[10px] font-medium tracking-[0.3em] text-neutral-500 uppercase mb-3 block">Step 02</span>
-                    <h2 className="text-sm font-medium text-neutral-900 tracking-wide">자재 선택</h2>
+                  <div className="p-4 md:p-6 flex-shrink-0 border-b border-neutral-100">
+                    <span className="text-[10px] font-medium tracking-[0.3em] text-neutral-500 uppercase mb-2 md:mb-3 block">Step 02</span>
+                    <h2 className="text-xs md:text-sm font-medium text-neutral-900 tracking-wide">자재 선택</h2>
                     <p className="text-xs text-neutral-600 mt-1 tracking-wide">포미스톤 자재 • {materials.length}개</p>
                   </div>
 
                   {/* 세로 스크롤 자재 리스트 */}
-                  <div className="flex-1 overflow-y-auto scrollbar-gold p-4">
-                    <div className="space-y-3">
+                  <div className="flex-1 overflow-y-auto scrollbar-gold p-3 md:p-4">
+                    <div className="space-y-2 md:space-y-3">
                       {materials.map((material) => (
                         <button
                           key={material.material_id}
                           onClick={() => setSelectedMaterial(material.material_id)}
-                          className={`w-full flex items-center gap-4 p-4 border transition-colors duration-300 ${
+                          className={`w-full flex items-center gap-3 md:gap-4 p-3 md:p-4 border transition-colors duration-300 ${
                             selectedMaterial === material.material_id
                               ? 'border-neutral-900 bg-white'
                               : 'border-neutral-200 hover:border-neutral-400 bg-white'
                           }`}
                         >
                           {/* 썸네일 */}
-                          <div className="relative w-[100px] h-[100px] flex-shrink-0 overflow-hidden bg-neutral-100">
+                          <div className="relative w-[80px] h-[80px] md:w-[100px] md:h-[100px] flex-shrink-0 overflow-hidden bg-neutral-100">
                             <img
                               src={material.image_path}
                               alt={material.name}
@@ -387,8 +387,8 @@ export default function AIStylingPage() {
 
                             {/* 선택 체크마크 */}
                             {selectedMaterial === material.material_id && (
-                              <div className="absolute top-2 right-2 w-5 h-5 bg-neutral-900 flex items-center justify-center">
-                                <Minus className="w-3 h-3 text-white" strokeWidth={1} />
+                              <div className="absolute top-1.5 right-1.5 md:top-2 md:right-2 w-4 h-4 md:w-5 md:h-5 bg-neutral-900 flex items-center justify-center">
+                                <Minus className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" strokeWidth={1} />
                               </div>
                             )}
                           </div>
@@ -398,7 +398,7 @@ export default function AIStylingPage() {
                             <p className="text-xs font-medium text-neutral-900 mb-1 truncate tracking-wide">
                               {material.name}
                             </p>
-                            <p className="text-[10px] text-neutral-700 mb-2 line-clamp-2 tracking-wide">
+                            <p className="text-[10px] text-neutral-700 mb-1 md:mb-2 line-clamp-2 tracking-wide">
                               {material.series}
                             </p>
                             {material.price_per_sqm && (
@@ -414,9 +414,9 @@ export default function AIStylingPage() {
                               e.stopPropagation();
                               setPreviewMaterial(material.material_id);
                             }}
-                            className="flex-shrink-0 w-8 h-8 flex items-center justify-center border border-neutral-200 hover:border-neutral-900 text-neutral-600 hover:text-neutral-900 transition-colors duration-300 cursor-pointer"
+                            className="flex-shrink-0 w-7 h-7 md:w-8 md:h-8 flex items-center justify-center border border-neutral-200 hover:border-neutral-900 text-neutral-600 hover:text-neutral-900 transition-colors duration-300 cursor-pointer"
                           >
-                            <ZoomIn className="w-3.5 h-3.5" strokeWidth={1.5} />
+                            <ZoomIn className="w-3 h-3 md:w-3.5 md:h-3.5" strokeWidth={1.5} />
                           </div>
                         </button>
                       ))}
@@ -427,19 +427,19 @@ export default function AIStylingPage() {
 
               {/* Step 3: AI 스타일링 시작 버튼 */}
               {uploadedImage && selectedMaterial && !resultImage && (
-                <div className="flex-shrink-0 border-t border-neutral-100 pt-4">
+                <div className="flex-shrink-0 border-t border-neutral-100 pt-3 md:pt-4">
                   <button
                     onClick={handleGenerate}
                     disabled={loading}
-                    className={`w-full py-4 font-medium text-white transition-colors duration-300 tracking-wider uppercase text-xs ${
+                    className={`w-full py-3.5 md:py-4 font-medium text-white transition-colors duration-300 tracking-wider uppercase text-xs ${
                       loading
                         ? 'bg-neutral-300 cursor-not-allowed'
                         : 'bg-neutral-900 hover:bg-black'
                     }`}
                   >
                     {loading ? (
-                      <div className="flex items-center justify-center gap-3">
-                        <div className="w-4 h-4 border border-white border-t-transparent rounded-full animate-spin"></div>
+                      <div className="flex items-center justify-center gap-2 md:gap-3">
+                        <div className="w-4 h-4 md:w-5 md:h-5 border border-white border-t-transparent rounded-full animate-spin"></div>
                         <span>Processing...</span>
                       </div>
                     ) : (
@@ -451,20 +451,20 @@ export default function AIStylingPage() {
 
               {/* Step 3: 결과 표시 (액션 버튼들) */}
               {resultImage && (
-                <div className="flex flex-col gap-4 flex-1 overflow-y-auto scrollbar-gold">
+                <div className="flex flex-col gap-3 md:gap-4 flex-1 overflow-y-auto scrollbar-gold">
                   {/* 적용된 자재 정보 */}
-                  <div className="bg-white border border-neutral-200 p-6 flex-shrink-0">
-                    <div className="mb-6 pb-4 border-b border-neutral-100">
-                      <span className="text-[10px] font-medium tracking-[0.3em] text-neutral-500 uppercase mb-3 block">Step 03</span>
-                      <h2 className="text-sm font-medium text-neutral-900 tracking-wide">스타일링 완료</h2>
+                  <div className="bg-white border border-neutral-200 p-4 md:p-6 flex-shrink-0">
+                    <div className="mb-4 md:mb-6 pb-3 md:pb-4 border-b border-neutral-100">
+                      <span className="text-[10px] font-medium tracking-[0.3em] text-neutral-500 uppercase mb-2 md:mb-3 block">Step 03</span>
+                      <h2 className="text-xs md:text-sm font-medium text-neutral-900 tracking-wide">스타일링 완료</h2>
                       <p className="text-xs text-neutral-600 mt-1 tracking-wide">결과를 확인하세요</p>
                     </div>
 
-                    <div className="bg-neutral-50 p-5 border border-neutral-200">
-                      <div className="flex items-start gap-4">
-                        <Palette className="w-5 h-5 text-neutral-600 flex-shrink-0 mt-1" strokeWidth={1.5} />
+                    <div className="bg-neutral-50 p-4 md:p-5 border border-neutral-200">
+                      <div className="flex items-start gap-3 md:gap-4">
+                        <Palette className="w-4 h-4 md:w-5 md:h-5 text-neutral-600 flex-shrink-0 mt-1" strokeWidth={1.5} />
                         <div className="flex-1 min-w-0">
-                          <p className="text-[10px] font-medium tracking-wider text-neutral-500 uppercase mb-2">Applied Material</p>
+                          <p className="text-[10px] font-medium tracking-wider text-neutral-500 uppercase mb-1 md:mb-2">Applied Material</p>
                           <p className="text-xs font-medium text-neutral-900 truncate tracking-wide mb-1">
                             {materials.find(m => m.material_id === selectedMaterial)?.name}
                           </p>
@@ -477,7 +477,7 @@ export default function AIStylingPage() {
                   </div>
 
                   {/* 액션 버튼 */}
-                  <div className="flex-shrink-0 space-y-3">
+                  <div className="flex-shrink-0 space-y-2 md:space-y-3">
                     <button
                       onClick={() => {
                         const link = document.createElement('a');
@@ -485,21 +485,21 @@ export default function AIStylingPage() {
                         link.download = 'phomistone-result.jpg';
                         link.click();
                       }}
-                      className="w-full py-4 bg-neutral-900 hover:bg-black text-white text-xs font-medium tracking-wider uppercase transition-colors duration-300 flex items-center justify-center gap-3"
+                      className="w-full py-3.5 md:py-4 bg-neutral-900 hover:bg-black text-white text-xs font-medium tracking-wider uppercase transition-colors duration-300 flex items-center justify-center gap-2 md:gap-3"
                     >
-                      <Download className="w-4 h-4" strokeWidth={1.5} />
+                      <Download className="w-4 h-4 md:w-5 md:h-5" strokeWidth={1.5} />
                       Download
                     </button>
                     <button
                       onClick={() => setShowSaveModal(true)}
-                      className="w-full py-4 border border-neutral-900 hover:bg-neutral-900 hover:text-white text-neutral-900 text-xs font-medium tracking-wider uppercase transition-colors duration-300 flex items-center justify-center gap-3"
+                      className="w-full py-3.5 md:py-4 border border-neutral-900 hover:bg-neutral-900 hover:text-white text-neutral-900 text-xs font-medium tracking-wider uppercase transition-colors duration-300 flex items-center justify-center gap-2 md:gap-3"
                     >
-                      <Save className="w-4 h-4" strokeWidth={1.5} />
+                      <Save className="w-4 h-4 md:w-5 md:h-5" strokeWidth={1.5} />
                       Save as Project
                     </button>
                     <button
                       onClick={handleReset}
-                      className="w-full py-4 border border-neutral-200 hover:border-neutral-400 text-neutral-600 text-xs font-medium tracking-wider uppercase transition-colors duration-300"
+                      className="w-full py-3.5 md:py-4 border border-neutral-200 hover:border-neutral-400 text-neutral-600 text-xs font-medium tracking-wider uppercase transition-colors duration-300"
                     >
                       Start Over
                     </button>
@@ -514,14 +514,14 @@ export default function AIStylingPage() {
 
       {/* ===== 로딩 오버레이 ===== */}
       {loading && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white p-12 max-w-md text-center border border-neutral-200">
-            <div className="relative w-16 h-16 mx-auto mb-8">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white p-8 md:p-12 max-w-md text-center border border-neutral-200">
+            <div className="relative w-12 h-12 md:w-16 md:h-16 mx-auto mb-6 md:mb-8">
               <div className="absolute inset-0 border border-neutral-200 rounded-full" />
               <div className="absolute inset-0 border border-transparent border-t-neutral-900 rounded-full animate-spin" />
             </div>
-            <h3 className="text-sm font-medium tracking-[0.2em] text-neutral-900 uppercase mb-4">Processing</h3>
-            <p className="text-xs text-neutral-700 mb-6 leading-relaxed tracking-wide">
+            <h3 className="text-xs md:text-sm font-medium tracking-[0.2em] text-neutral-900 uppercase mb-3 md:mb-4">Processing</h3>
+            <p className="text-xs text-neutral-700 mb-4 md:mb-6 leading-relaxed tracking-wide">
               {statusMessage || 'AI가 포미스톤 자재를 적용하고 있습니다'}
             </p>
             <div className="flex items-center justify-center gap-2">
@@ -538,9 +538,9 @@ export default function AIStylingPage() {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white max-w-4xl w-full max-h-[90vh] overflow-hidden border border-neutral-200">
             {/* 모달 헤더 */}
-            <div className="flex items-center justify-between p-8 border-b border-neutral-200">
+            <div className="flex items-center justify-between p-4 md:p-8 border-b border-neutral-200">
               <div>
-                <h3 className="text-sm font-medium text-neutral-900 tracking-wide mb-1">
+                <h3 className="text-xs md:text-sm font-medium text-neutral-900 tracking-wide mb-1">
                   {materials.find(m => m.material_id === previewMaterial)?.name}
                 </h3>
                 <p className="text-xs text-neutral-700 tracking-wide">
@@ -549,15 +549,15 @@ export default function AIStylingPage() {
               </div>
               <button
                 onClick={() => setPreviewMaterial(null)}
-                className="w-10 h-10 flex items-center justify-center border border-neutral-200 hover:border-neutral-900 transition-colors duration-300"
+                className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center border border-neutral-200 hover:border-neutral-900 transition-colors duration-300"
               >
-                <X className="w-5 h-5 text-neutral-600" strokeWidth={1.5} />
+                <X className="w-4 h-4 md:w-5 md:h-5 text-neutral-600" strokeWidth={1.5} />
               </button>
             </div>
 
             {/* 모달 바디 */}
-            <div className="p-8 overflow-y-auto max-h-[calc(90vh-140px)]">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="p-4 md:p-8 overflow-y-auto max-h-[calc(90vh-140px)]">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
                 {/* 큰 이미지 */}
                 <div className="aspect-square overflow-hidden bg-neutral-100 border border-neutral-200">
                   <img
@@ -568,18 +568,18 @@ export default function AIStylingPage() {
                 </div>
 
                 {/* 상세 정보 */}
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   {/* 시리즈 */}
-                  <div className="border-b border-neutral-100 pb-4">
+                  <div className="border-b border-neutral-100 pb-3 md:pb-4">
                     <p className="text-[10px] font-medium tracking-wider text-neutral-500 uppercase mb-2">Series</p>
-                    <p className="text-sm font-medium text-neutral-900 tracking-wide">
+                    <p className="text-xs md:text-sm font-medium text-neutral-900 tracking-wide">
                       {materials.find(m => m.material_id === previewMaterial)?.series}
                     </p>
                   </div>
 
                   {/* 설명 */}
                   {materials.find(m => m.material_id === previewMaterial)?.description && (
-                    <div className="border-b border-neutral-100 pb-4">
+                    <div className="border-b border-neutral-100 pb-3 md:pb-4">
                       <p className="text-[10px] font-medium tracking-wider text-neutral-500 uppercase mb-2">Description</p>
                       <p className="text-xs text-neutral-600 leading-relaxed tracking-wide">
                         {materials.find(m => m.material_id === previewMaterial)?.description}
@@ -589,7 +589,7 @@ export default function AIStylingPage() {
 
                   {/* 용도 */}
                   {materials.find(m => m.material_id === previewMaterial)?.category && (
-                    <div className="border-b border-neutral-100 pb-4">
+                    <div className="border-b border-neutral-100 pb-3 md:pb-4">
                       <p className="text-[10px] font-medium tracking-wider text-neutral-500 uppercase mb-2">Application</p>
                       <div className="flex flex-wrap gap-2">
                         {(() => {
@@ -612,9 +612,9 @@ export default function AIStylingPage() {
 
                   {/* 가격 */}
                   {materials.find(m => m.material_id === previewMaterial)?.price_per_sqm && (
-                    <div className="border-b border-neutral-100 pb-4">
+                    <div className="border-b border-neutral-100 pb-3 md:pb-4">
                       <p className="text-[10px] font-medium tracking-wider text-neutral-500 uppercase mb-2">Price</p>
-                      <p className="text-lg font-medium text-neutral-900 tracking-wide">
+                      <p className="text-base md:text-lg font-medium text-neutral-900 tracking-wide">
                         ₩{materials.find(m => m.material_id === previewMaterial)?.price_per_sqm?.toLocaleString()}
                         <span className="text-xs text-neutral-700 ml-2">/㎡</span>
                       </p>
@@ -629,9 +629,9 @@ export default function AIStylingPage() {
                         setPreviewMaterial(null);
                       }
                     }}
-                    className="w-full bg-neutral-900 hover:bg-black text-white font-medium py-4 transition-colors duration-300 flex items-center justify-center gap-3 tracking-wider uppercase text-xs"
+                    className="w-full bg-neutral-900 hover:bg-black text-white font-medium py-3.5 md:py-4 transition-colors duration-300 flex items-center justify-center gap-2 md:gap-3 tracking-wider uppercase text-xs"
                   >
-                    <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
+                    <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5" strokeWidth={1.5} />
                     Select Material
                   </button>
                 </div>

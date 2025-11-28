@@ -128,9 +128,9 @@ export default function ProjectDetailPage() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <div className="bg-neutral-900 border-b border-neutral-800 flex-shrink-0">
-        <div className="max-w-[1920px] mx-auto px-6 py-6">
+        <div className="max-w-[1920px] mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 md:gap-6">
               <button
                 onClick={() => navigate('/dashboard')}
                 className="p-2 hover:bg-neutral-800 transition-colors duration-300"
@@ -138,33 +138,33 @@ export default function ProjectDetailPage() {
                 <ArrowLeft className="w-5 h-5 text-white" strokeWidth={1.5} />
               </button>
               <div>
-                <h1 className="text-2xl font-medium tracking-wider text-white uppercase">{project.name}</h1>
-                <p className="text-sm font-medium tracking-wider text-neutral-400 mt-1 uppercase">Project Detail</p>
+                <h1 className="text-lg md:text-xl lg:text-2xl font-medium tracking-wider text-white uppercase">{project.name}</h1>
+                <p className="text-xs md:text-sm font-medium tracking-wider text-neutral-400 mt-1 uppercase">Project Detail</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <button className="px-6 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white transition-colors duration-300 flex items-center gap-2 font-medium tracking-wider uppercase text-sm">
+            <div className="flex items-center gap-2 md:gap-3">
+              <button className="px-4 md:px-6 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white transition-colors duration-300 flex items-center gap-2 font-medium tracking-wider uppercase text-xs md:text-sm">
                 <Share2 className="w-4 h-4" strokeWidth={1.5} />
-                Share
+                <span className="hidden sm:inline">Share</span>
               </button>
-              <button className="px-6 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white transition-colors duration-300 flex items-center gap-2 font-medium tracking-wider uppercase text-sm">
+              <button className="px-4 md:px-6 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white transition-colors duration-300 flex items-center gap-2 font-medium tracking-wider uppercase text-xs md:text-sm">
                 <Download className="w-4 h-4" strokeWidth={1.5} />
-                Download
+                <span className="hidden sm:inline">Download</span>
               </button>
               <button
                 onClick={() => setShowEditModal(true)}
-                className="px-6 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white transition-colors duration-300 flex items-center gap-2 font-medium tracking-wider uppercase text-sm"
+                className="px-4 md:px-6 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white transition-colors duration-300 flex items-center gap-2 font-medium tracking-wider uppercase text-xs md:text-sm"
               >
                 <Edit2 className="w-4 h-4" strokeWidth={1.5} />
-                Edit
+                <span className="hidden sm:inline">Edit</span>
               </button>
               <button
                 onClick={handleDelete}
-                className="px-6 py-2.5 bg-neutral-800 border border-neutral-800 hover:bg-neutral-700 hover:border-neutral-700 text-white transition-colors duration-300 flex items-center gap-2 font-medium tracking-wider uppercase text-sm"
+                className="px-4 md:px-6 py-2.5 bg-neutral-800 border border-neutral-800 hover:bg-neutral-700 hover:border-neutral-700 text-white transition-colors duration-300 flex items-center gap-2 font-medium tracking-wider uppercase text-xs md:text-sm"
               >
                 <Trash2 className="w-4 h-4" strokeWidth={1.5} />
-                Delete
+                <span className="hidden sm:inline">Delete</span>
               </button>
             </div>
           </div>
@@ -173,21 +173,21 @@ export default function ProjectDetailPage() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
-        <div className="h-full max-w-[1920px] mx-auto px-6 py-8">
-          <div className="h-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
+        <div className="h-full max-w-[1920px] mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-8">
+          <div className="h-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-4 md:gap-8">
 
             {/* Left: Project Information */}
-            <div className="flex flex-col gap-8 overflow-y-auto">
+            <div className="flex flex-col gap-4 md:gap-8 overflow-y-auto">
 
               {/* Styling Images (Before/After) */}
               {project.beforeImage && project.afterImage && (
-                <div className="bg-neutral-50 border border-neutral-200 p-8">
-                  <div className="flex items-center gap-3 mb-6">
+                <div className="bg-neutral-50 border border-neutral-200 p-4 md:p-6 lg:p-8">
+                  <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
                     <Minus className="w-5 h-5 text-neutral-900" strokeWidth={1.5} />
-                    <h2 className="text-lg font-medium tracking-wider uppercase text-neutral-900">Styling Result</h2>
+                    <h2 className="text-base md:text-lg font-medium tracking-wider uppercase text-neutral-900">Styling Result</h2>
                   </div>
 
-                  <div className="overflow-hidden border border-neutral-300 relative" style={{ height: '500px' }}>
+                  <div className="overflow-hidden border border-neutral-300 relative" style={{ height: '300px', md: '400px', lg: '500px' }}>
                     <ReactCompareSlider
                       itemOne={
                         <ReactCompareSliderImage
@@ -205,10 +205,10 @@ export default function ProjectDetailPage() {
                       }
                       style={{ height: '100%' }}
                     />
-                    <div className="absolute top-4 left-4 bg-neutral-900 text-white px-4 py-2 text-xs font-medium tracking-wider uppercase shadow-sm">
+                    <div className="absolute top-2 md:top-4 left-2 md:left-4 bg-neutral-900 text-white px-3 md:px-4 py-1.5 md:py-2 text-xs font-medium tracking-wider uppercase shadow-sm">
                       Before
                     </div>
-                    <div className="absolute top-4 right-4 bg-neutral-900 text-white px-4 py-2 text-xs font-medium tracking-wider uppercase shadow-sm">
+                    <div className="absolute top-2 md:top-4 right-2 md:right-4 bg-neutral-900 text-white px-3 md:px-4 py-1.5 md:py-2 text-xs font-medium tracking-wider uppercase shadow-sm">
                       After
                     </div>
                   </div>
@@ -216,42 +216,42 @@ export default function ProjectDetailPage() {
               )}
 
               {/* Basic Information Card */}
-              <div className="bg-neutral-50 border border-neutral-200 p-8">
-                <div className="flex items-center gap-3 mb-6">
+              <div className="bg-neutral-50 border border-neutral-200 p-4 md:p-6 lg:p-8">
+                <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
                   <Minus className="w-5 h-5 text-neutral-900" strokeWidth={1.5} />
-                  <h2 className="text-lg font-medium tracking-wider uppercase text-neutral-900">Project Information</h2>
+                  <h2 className="text-base md:text-lg font-medium tracking-wider uppercase text-neutral-900">Project Information</h2>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4 pb-6 border-b border-neutral-200">
-                    <User className="w-5 h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
+                <div className="space-y-4 md:space-y-6">
+                  <div className="flex items-start gap-3 md:gap-4 pb-4 md:pb-6 border-b border-neutral-200">
+                    <User className="w-4 md:w-5 h-4 md:h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2">Client Name</p>
-                      <p className="text-base text-neutral-900">{project.clientName || '-'}</p>
+                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-1 md:mb-2">Client Name</p>
+                      <p className="text-sm md:text-base text-neutral-900">{project.clientName || '-'}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 pb-6 border-b border-neutral-200">
-                    <MapPin className="w-5 h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
+                  <div className="flex items-start gap-3 md:gap-4 pb-4 md:pb-6 border-b border-neutral-200">
+                    <MapPin className="w-4 md:w-5 h-4 md:h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2">Site Address</p>
-                      <p className="text-base text-neutral-900">{project.siteAddress || '-'}</p>
+                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-1 md:mb-2">Site Address</p>
+                      <p className="text-sm md:text-base text-neutral-900">{project.siteAddress || '-'}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 pb-6 border-b border-neutral-200">
-                    <Minus className="w-5 h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
+                  <div className="flex items-start gap-3 md:gap-4 pb-4 md:pb-6 border-b border-neutral-200">
+                    <Minus className="w-4 md:w-5 h-4 md:h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2">Material</p>
-                      <p className="text-base text-neutral-900">{project.materialName || '-'}</p>
+                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-1 md:mb-2">Material</p>
+                      <p className="text-sm md:text-base text-neutral-900">{project.materialName || '-'}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 pb-6 border-b border-neutral-200">
-                    <DollarSign className="w-5 h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
+                  <div className="flex items-start gap-3 md:gap-4 pb-4 md:pb-6 border-b border-neutral-200">
+                    <DollarSign className="w-4 md:w-5 h-4 md:h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2">Estimated Cost</p>
-                      <p className="text-base text-neutral-900">
+                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-1 md:mb-2">Estimated Cost</p>
+                      <p className="text-sm md:text-base text-neutral-900">
                         {project.estimatedCost
                           ? `₩${project.estimatedCost.toLocaleString()}`
                           : '-'
@@ -260,11 +260,11 @@ export default function ProjectDetailPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <Calendar className="w-5 h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
+                  <div className="flex items-start gap-3 md:gap-4">
+                    <Calendar className="w-4 md:w-5 h-4 md:h-5 text-neutral-600 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2">Created Date</p>
-                      <p className="text-base text-neutral-900">
+                      <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-1 md:mb-2">Created Date</p>
+                      <p className="text-sm md:text-base text-neutral-900">
                         {new Date(project.createdAt).toLocaleDateString('ko-KR', {
                           year: 'numeric',
                           month: 'long',
@@ -278,11 +278,11 @@ export default function ProjectDetailPage() {
             </div>
 
             {/* Right: Status Management Panel */}
-            <div className="flex flex-col gap-6 overflow-y-auto">
+            <div className="flex flex-col gap-4 md:gap-6 overflow-y-auto">
 
               {/* Current Status Card */}
-              <div className="bg-neutral-50 border border-neutral-200 p-6 flex-shrink-0">
-                <h2 className="text-lg font-medium tracking-wider uppercase text-neutral-900 mb-6">Project Status</h2>
+              <div className="bg-neutral-50 border border-neutral-200 p-4 md:p-6 flex-shrink-0">
+                <h2 className="text-base md:text-lg font-medium tracking-wider uppercase text-neutral-900 mb-4 md:mb-6">Project Status</h2>
 
                 <ProjectStatusBadge
                   status={project.status}
@@ -291,24 +291,24 @@ export default function ProjectDetailPage() {
                   size="lg"
                 />
 
-                <div className="mt-8 pt-8 border-t border-neutral-200">
-                  <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-4">Progress Steps</p>
-                  <div className="space-y-3">
+                <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-neutral-200">
+                  <p className="text-xs font-medium tracking-wider uppercase text-neutral-500 mb-3 md:mb-4">Progress Steps</p>
+                  <div className="space-y-2 md:space-y-3">
                     {statusKeys.map((statusKey, index) => {
                       const config = PROJECT_STATUS_CONFIG[statusKey];
                       const isCompleted = index < currentStatusIndex;
                       const isCurrent = index === currentStatusIndex;
 
                       return (
-                        <div key={statusKey} className="flex items-center gap-4">
-                          <div className={`w-6 h-6 border flex items-center justify-center text-xs font-medium flex-shrink-0 transition-colors duration-300 ${
+                        <div key={statusKey} className="flex items-center gap-3 md:gap-4">
+                          <div className={`w-5 md:w-6 h-5 md:h-6 border flex items-center justify-center text-xs font-medium flex-shrink-0 transition-colors duration-300 ${
                             isCompleted ? 'bg-neutral-900 border-neutral-900 text-white' :
                             isCurrent ? 'bg-neutral-900 border-neutral-900 text-white' :
                             'bg-transparent border-neutral-300 text-neutral-600'
                           }`}>
                             {isCompleted ? '—' : index + 1}
                           </div>
-                          <span className={`text-sm tracking-wider ${
+                          <span className={`text-xs md:text-sm tracking-wider ${
                             isCurrent ? 'text-neutral-900 font-medium' : 'text-neutral-700'
                           }`}>
                             {config.label}
@@ -321,14 +321,14 @@ export default function ProjectDetailPage() {
               </div>
 
               {/* Change History */}
-              <div className="bg-neutral-50 border border-neutral-200 p-6 flex-shrink-0">
-                <h2 className="text-lg font-medium tracking-wider uppercase text-neutral-900 mb-6">Change History</h2>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3 pb-4 border-b border-neutral-200">
+              <div className="bg-neutral-50 border border-neutral-200 p-4 md:p-6 flex-shrink-0">
+                <h2 className="text-base md:text-lg font-medium tracking-wider uppercase text-neutral-900 mb-4 md:mb-6">Change History</h2>
+                <div className="space-y-3 md:space-y-4">
+                  <div className="flex items-start gap-2 md:gap-3 pb-3 md:pb-4 border-b border-neutral-200">
                     <div className="w-1.5 h-1.5 bg-neutral-900 mt-2 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-neutral-900">견적 단계로 전환</p>
-                      <p className="text-xs font-medium tracking-wider text-neutral-500 mt-1.5">
+                      <p className="text-xs md:text-sm text-neutral-900">견적 단계로 전환</p>
+                      <p className="text-xs font-medium tracking-wider text-neutral-500 mt-1 md:mt-1.5">
                         {new Date(project.updatedAt).toLocaleString('ko-KR', {
                           year: 'numeric',
                           month: '2-digit',
@@ -339,11 +339,11 @@ export default function ProjectDetailPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2 md:gap-3">
                     <div className="w-1.5 h-1.5 bg-neutral-600 mt-2 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-neutral-900">프로젝트 생성</p>
-                      <p className="text-xs font-medium tracking-wider text-neutral-500 mt-1.5">
+                      <p className="text-xs md:text-sm text-neutral-900">프로젝트 생성</p>
+                      <p className="text-xs font-medium tracking-wider text-neutral-500 mt-1 md:mt-1.5">
                         {new Date(project.createdAt).toLocaleString('ko-KR', {
                           year: 'numeric',
                           month: '2-digit',

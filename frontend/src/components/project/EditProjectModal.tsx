@@ -59,16 +59,21 @@ export default function EditProjectModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto scrollbar-gold">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+      <div className="bg-white w-full sm:max-w-md md:max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-gold pb-safe">
+        {/* 모바일 드래그 바 */}
+        <div className="sm:hidden flex justify-center py-2 bg-white">
+          <div className="w-10 h-1 bg-neutral-300 rounded-full"></div>
+        </div>
+
         {/* 헤더 */}
-        <div className="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4">
+        <div className="sticky top-0 bg-white border-b border-neutral-200 px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Minus className="w-5 h-5 text-neutral-900" />
+            <div className="flex items-center gap-2 md:gap-3">
+              <Minus className="w-4 h-4 md:w-5 md:h-5 text-neutral-900" />
               <div>
-                <h2 className="text-[15px] font-medium tracking-wider uppercase text-neutral-900">EDIT PROJECT</h2>
-                <p className="text-[12px] font-medium tracking-wider text-neutral-500 mt-1">MODIFY PROJECT INFORMATION</p>
+                <h2 className="text-[13px] md:text-[15px] font-medium tracking-wider uppercase text-neutral-900">EDIT PROJECT</h2>
+                <p className="text-[11px] md:text-[12px] font-medium tracking-wider text-neutral-500 mt-1">MODIFY PROJECT INFORMATION</p>
               </div>
             </div>
             <button
@@ -81,11 +86,11 @@ export default function EditProjectModal({
         </div>
 
         {/* 내용 */}
-        <form onSubmit={handleSubmit} className="p-6">
+        <form onSubmit={handleSubmit} className="p-4 md:p-6">
 
           {/* 프로젝트명 (필수) */}
-          <div className="mb-4">
-            <label className="block text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
+          <div className="mb-3 md:mb-4">
+            <label className="block text-[11px] md:text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
               PROJECT NAME <span className="text-red-500">*</span>
             </label>
             <input
@@ -96,7 +101,7 @@ export default function EditProjectModal({
                 setErrors(prev => ({ ...prev, name: undefined }));
               }}
               placeholder="예: 강남 아파트 리모델링"
-              className={`w-full px-4 py-3 border focus:outline-none transition-colors text-[14px] font-normal tracking-wider text-neutral-700 ${
+              className={`w-full px-4 py-3 border focus:outline-none transition-colors text-base md:text-[14px] font-normal tracking-wider text-neutral-700 ${
                 errors.name
                   ? 'border-red-300 focus:border-red-500'
                   : 'border-neutral-200 focus:border-neutral-900'
@@ -108,8 +113,8 @@ export default function EditProjectModal({
           </div>
 
           {/* 고객명 */}
-          <div className="mb-4">
-            <label className="block text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
+          <div className="mb-3 md:mb-4">
+            <label className="block text-[11px] md:text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
               CLIENT NAME
             </label>
             <input
@@ -117,13 +122,13 @@ export default function EditProjectModal({
               value={formData.clientName}
               onChange={(e) => setFormData(prev => ({ ...prev, clientName: e.target.value }))}
               placeholder="예: 김철수"
-              className="w-full px-4 py-3 border border-neutral-200 focus:outline-none focus:border-neutral-900 transition-colors text-[14px] font-normal tracking-wider text-neutral-700"
+              className="w-full px-4 py-3 border border-neutral-200 focus:outline-none focus:border-neutral-900 transition-colors text-base md:text-[14px] font-normal tracking-wider text-neutral-700"
             />
           </div>
 
           {/* 현장 주소 */}
-          <div className="mb-4">
-            <label className="block text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
+          <div className="mb-3 md:mb-4">
+            <label className="block text-[11px] md:text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
               SITE ADDRESS
             </label>
             <input
@@ -131,13 +136,13 @@ export default function EditProjectModal({
               value={formData.siteAddress}
               onChange={(e) => setFormData(prev => ({ ...prev, siteAddress: e.target.value }))}
               placeholder="예: 서울시 강남구 역삼동 123-45"
-              className="w-full px-4 py-3 border border-neutral-200 focus:outline-none focus:border-neutral-900 transition-colors text-[14px] font-normal tracking-wider text-neutral-700"
+              className="w-full px-4 py-3 border border-neutral-200 focus:outline-none focus:border-neutral-900 transition-colors text-base md:text-[14px] font-normal tracking-wider text-neutral-700"
             />
           </div>
 
           {/* 예상 견적 금액 */}
-          <div className="mb-4">
-            <label className="block text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
+          <div className="mb-3 md:mb-4">
+            <label className="block text-[11px] md:text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
               ESTIMATED COST
             </label>
             <div className="relative">
@@ -149,7 +154,7 @@ export default function EditProjectModal({
                   setFormData(prev => ({ ...prev, estimatedCost: value }));
                 }}
                 placeholder="예: 15000000"
-                className="w-full px-4 py-3 border border-neutral-200 focus:outline-none focus:border-neutral-900 transition-colors text-[14px] font-normal tracking-wider text-neutral-700 pr-12"
+                className="w-full px-4 py-3 border border-neutral-200 focus:outline-none focus:border-neutral-900 transition-colors text-base md:text-[14px] font-normal tracking-wider text-neutral-700 pr-12"
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[13px] font-medium tracking-wider text-neutral-600">원</span>
             </div>
@@ -161,8 +166,8 @@ export default function EditProjectModal({
           </div>
 
           {/* 메모 */}
-          <div className="mb-6">
-            <label className="block text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
+          <div className="mb-4 md:mb-6">
+            <label className="block text-[11px] md:text-[12px] font-medium tracking-wider uppercase text-neutral-500 mb-2">
               MEMO
             </label>
             <textarea
@@ -170,22 +175,22 @@ export default function EditProjectModal({
               onChange={(e) => setFormData(prev => ({ ...prev, memo: e.target.value }))}
               placeholder="프로젝트에 대한 메모를 입력하세요"
               rows={3}
-              className="w-full px-4 py-3 border border-neutral-200 focus:outline-none focus:border-neutral-900 transition-colors text-[14px] font-normal tracking-wider text-neutral-700 resize-none"
+              className="w-full px-4 py-3 border border-neutral-200 focus:outline-none focus:border-neutral-900 transition-colors text-base md:text-[14px] font-normal tracking-wider text-neutral-700 resize-none"
             />
           </div>
 
           {/* 버튼 */}
-          <div className="flex gap-3">
+          <div className="flex gap-2 md:gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-[12px] font-medium tracking-wider uppercase transition-all"
+              className="flex-1 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-sm font-medium tracking-wider uppercase transition-all"
             >
               CANCEL
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 bg-neutral-900 hover:bg-neutral-800 text-white text-[12px] font-medium tracking-wider uppercase transition-all flex items-center justify-center gap-2"
+              className="flex-1 py-3 bg-neutral-900 hover:bg-neutral-800 text-white text-sm font-medium tracking-wider uppercase transition-all flex items-center justify-center gap-2"
             >
               <Minus className="w-4 h-4" />
               SAVE

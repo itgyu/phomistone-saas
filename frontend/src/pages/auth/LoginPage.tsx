@@ -81,12 +81,12 @@ export default function LoginPage() {
 
       {/* 우측: 로그인 폼 (50%) */}
       <div className="flex-1 bg-white overflow-y-scroll flex justify-center items-center">
-        <div className="w-full max-w-[420px] px-8">
+        <div className="w-full max-w-sm md:max-w-[420px] px-4 py-8 md:px-6 md:py-12">
           {/* 모바일 로고 */}
-          <div className="lg:hidden text-center mb-12">
+          <div className="lg:hidden text-center mb-8 md:mb-12">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Minus className="w-8 h-8 text-neutral-900" strokeWidth={1} />
-              <h1 className="text-2xl font-light tracking-wider text-neutral-900 uppercase">
+              <h1 className="text-xl md:text-2xl font-light tracking-wider text-neutral-900 uppercase">
                 PHOMISTONE
               </h1>
             </div>
@@ -96,8 +96,8 @@ export default function LoginPage() {
           {/* 로그인 카드 */}
           <div className="w-full">
             {/* 헤더 */}
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-medium tracking-wider text-neutral-900 mb-3 uppercase">
+            <div className="text-center mb-8 md:mb-12">
+              <h2 className="text-2xl md:text-3xl font-medium tracking-wider text-neutral-900 mb-3 uppercase">
                 LOGIN
               </h2>
               <p className="text-xs font-medium tracking-wider text-neutral-600 uppercase">
@@ -106,7 +106,7 @@ export default function LoginPage() {
             </div>
 
             {/* 폼 */}
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
               {/* 이메일 */}
               <div className="relative">
                 <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
@@ -118,7 +118,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   onFocus={() => setFocusedField('email')}
                   onBlur={() => setFocusedField(null)}
-                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide ${
+                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-base md:text-sm font-normal tracking-wide ${
                     focusedField === 'email'
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
@@ -139,7 +139,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setFocusedField('password')}
                   onBlur={() => setFocusedField(null)}
-                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-sm font-normal tracking-wide ${
+                  className={`w-full px-0 py-3 border-b bg-transparent transition-all duration-300 focus:outline-none text-base md:text-sm font-normal tracking-wide ${
                     focusedField === 'password'
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
@@ -151,7 +151,7 @@ export default function LoginPage() {
 
               {/* 에러 메시지 */}
               {error && (
-                <div className="p-4 border border-red-900 text-red-900 text-xs font-medium tracking-wide">
+                <div className="p-3 md:p-4 border border-red-900 text-red-900 text-xs font-medium tracking-wide">
                   {error}
                 </div>
               )}
@@ -160,7 +160,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-neutral-900 text-white text-xs font-medium tracking-wider py-4 hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed uppercase"
+                className="w-full bg-neutral-900 text-white text-xs font-medium tracking-wider py-3.5 md:py-4 hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed uppercase"
               >
                 {loading ? (
                   <>
@@ -174,7 +174,7 @@ export default function LoginPage() {
             </form>
 
             {/* 하단 링크 */}
-            <div className="mt-12 text-center">
+            <div className="mt-8 md:mt-12 text-center">
               <p className="text-xs font-medium tracking-wide text-neutral-600 mb-4 uppercase">
                 DON'T HAVE AN ACCOUNT?
               </p>
@@ -188,7 +188,7 @@ export default function LoginPage() {
           </div>
 
           {/* 푸터 */}
-          <p className="text-center text-xs font-medium tracking-wide text-neutral-500 mt-16 uppercase">
+          <p className="text-center text-xs font-medium tracking-wide text-neutral-500 mt-12 md:mt-16 uppercase">
             © 2024 PHOMISTONE. ALL RIGHTS RESERVED.
           </p>
         </div>

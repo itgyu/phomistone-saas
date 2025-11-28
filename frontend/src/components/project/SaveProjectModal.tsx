@@ -54,14 +54,19 @@ export default function SaveProjectModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+      <div className="bg-white w-full sm:max-w-md md:max-w-2xl max-h-[90vh] overflow-y-auto pb-safe">
+        {/* 모바일 드래그 바 */}
+        <div className="sm:hidden flex justify-center pt-2 pb-1">
+          <div className="w-10 h-1 bg-neutral-300 rounded-full"></div>
+        </div>
+
         {/* 헤더 */}
-        <div className="sticky top-0 bg-white border-b border-neutral-200 px-8 py-6">
+        <div className="sticky top-0 bg-white border-b border-neutral-200 px-4 md:px-8 py-4 md:py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-medium tracking-wider text-neutral-900">프로젝트로 저장</h2>
-              <p className="text-sm text-neutral-600 mt-2 tracking-wide">스타일링 결과를 프로젝트로 저장합니다</p>
+              <h2 className="text-base md:text-2xl font-medium tracking-wider text-neutral-900">프로젝트로 저장</h2>
+              <p className="text-xs md:text-sm text-neutral-600 mt-1 md:mt-2 tracking-wide">스타일링 결과를 프로젝트로 저장합니다</p>
             </div>
             <button
               onClick={onClose}
@@ -73,11 +78,11 @@ export default function SaveProjectModal({
         </div>
 
         {/* 내용 */}
-        <form onSubmit={handleSubmit} className="p-8">
+        <form onSubmit={handleSubmit} className="p-4 md:p-8">
 
           {/* 결과 이미지 미리보기 */}
-          <div className="mb-8">
-            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-3">
+          <div className="mb-6 md:mb-8">
+            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2 md:mb-3">
               스타일링 결과
             </label>
             <div className="relative overflow-hidden border border-neutral-200">
@@ -93,8 +98,8 @@ export default function SaveProjectModal({
           </div>
 
           {/* 프로젝트명 (필수) */}
-          <div className="mb-6">
-            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-3">
+          <div className="mb-4 md:mb-6">
+            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2 md:mb-3">
               프로젝트명 <span className="text-red-500">*</span>
             </label>
             <input
@@ -105,7 +110,7 @@ export default function SaveProjectModal({
                 setErrors(prev => ({ ...prev, name: undefined }));
               }}
               placeholder="예: 강남 아파트 리모델링"
-              className={`w-full px-4 py-3 border tracking-wide focus:outline-none transition-colors ${
+              className={`w-full px-4 py-3 border tracking-wide focus:outline-none transition-colors text-base md:text-sm ${
                 errors.name
                   ? 'border-red-300 focus:border-red-500'
                   : 'border-neutral-300 focus:border-neutral-900'
@@ -117,8 +122,8 @@ export default function SaveProjectModal({
           </div>
 
           {/* 고객명 */}
-          <div className="mb-6">
-            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-3">
+          <div className="mb-4 md:mb-6">
+            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2 md:mb-3">
               고객명
             </label>
             <input
@@ -126,13 +131,13 @@ export default function SaveProjectModal({
               value={formData.clientName}
               onChange={(e) => setFormData(prev => ({ ...prev, clientName: e.target.value }))}
               placeholder="예: 김철수"
-              className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors tracking-wide"
+              className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors tracking-wide text-base md:text-sm"
             />
           </div>
 
           {/* 현장 주소 */}
-          <div className="mb-6">
-            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-3">
+          <div className="mb-4 md:mb-6">
+            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2 md:mb-3">
               현장 주소
             </label>
             <input
@@ -140,13 +145,13 @@ export default function SaveProjectModal({
               value={formData.siteAddress}
               onChange={(e) => setFormData(prev => ({ ...prev, siteAddress: e.target.value }))}
               placeholder="예: 서울시 강남구 역삼동 123-45"
-              className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors tracking-wide"
+              className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors tracking-wide text-base md:text-sm"
             />
           </div>
 
           {/* 예상 견적 금액 */}
-          <div className="mb-6">
-            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-3">
+          <div className="mb-4 md:mb-6">
+            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2 md:mb-3">
               예상 견적 금액
             </label>
             <div className="relative">
@@ -158,7 +163,7 @@ export default function SaveProjectModal({
                   setFormData(prev => ({ ...prev, estimatedCost: value }));
                 }}
                 placeholder="예: 15000000"
-                className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors tracking-wide pr-12"
+                className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors tracking-wide pr-12 text-base md:text-sm"
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-neutral-600">원</span>
             </div>
@@ -170,8 +175,8 @@ export default function SaveProjectModal({
           </div>
 
           {/* 메모 */}
-          <div className="mb-8">
-            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-3">
+          <div className="mb-6 md:mb-8">
+            <label className="block text-xs font-medium tracking-wider uppercase text-neutral-500 mb-2 md:mb-3">
               메모
             </label>
             <textarea
@@ -179,12 +184,12 @@ export default function SaveProjectModal({
               onChange={(e) => setFormData(prev => ({ ...prev, memo: e.target.value }))}
               placeholder="프로젝트에 대한 메모를 입력하세요"
               rows={3}
-              className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors tracking-wide resize-none"
+              className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors tracking-wide resize-none text-base md:text-sm"
             />
           </div>
 
           {/* 버튼 */}
-          <div className="flex gap-4">
+          <div className="flex gap-2 md:gap-4">
             <button
               type="button"
               onClick={onClose}

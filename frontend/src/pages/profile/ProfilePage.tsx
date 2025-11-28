@@ -59,7 +59,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-white">
       {/* 헤더 */}
       <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-5xl mx-auto px-6 py-4">
+        <div className="max-w-full md:max-w-5xl mx-auto px-4 md:px-6 py-4">
           <div className="flex items-center gap-3">
             <Minus className="w-5 h-5 text-neutral-900" />
             <div>
@@ -74,10 +74,10 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="max-w-full md:max-w-5xl mx-auto px-4 md:px-6 py-4 md:py-6 lg:py-8">
         {/* 메시지 알림 */}
         {message && (
-          <div className={`mb-6 p-4 border-2 animate-in ${
+          <div className={`mb-4 md:mb-6 p-4 border-2 animate-in ${
             messageType === 'success'
               ? 'bg-green-50 border-green-200 text-green-700'
               : 'bg-red-50 border-red-200 text-red-700'
@@ -86,12 +86,12 @@ export default function ProfilePage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* 좌측: 프로필 카드 */}
           <div className="lg:col-span-1">
-            <div className="bg-white border border-neutral-200 p-6 sticky top-6">
+            <div className="bg-white border border-neutral-200 p-4 md:p-6 sticky top-6">
               {/* 아바타 */}
-              <div className="text-center mb-6">
+              <div className="text-center mb-4 md:mb-6">
                 <div className="inline-flex items-center justify-center w-24 h-24 bg-neutral-900 text-white text-3xl font-light uppercase mb-4">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
@@ -108,7 +108,7 @@ export default function ProfilePage() {
               </div>
 
               {/* 가입 정보 */}
-              <div className="pt-6 border-t border-neutral-200">
+              <div className="pt-4 md:pt-6 border-t border-neutral-200">
                 <div className="flex items-center gap-2 text-[12px] font-medium tracking-wider text-neutral-600">
                   <Calendar className="w-4 h-4" />
                   <span>
@@ -120,7 +120,7 @@ export default function ProfilePage() {
               {/* 로그아웃 버튼 */}
               <button
                 onClick={logout}
-                className="w-full mt-6 flex items-center justify-center gap-2 px-4 py-3 border border-neutral-200 text-neutral-700 hover:border-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-300 text-[12px] font-medium tracking-wider uppercase"
+                className="w-full mt-4 md:mt-6 flex items-center justify-center gap-2 px-4 py-2.5 md:py-3 border border-neutral-200 text-neutral-700 hover:border-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-300 text-[12px] font-medium tracking-wider uppercase"
               >
                 <LogOut className="w-4 h-4" />
                 LOGOUT
@@ -129,10 +129,10 @@ export default function ProfilePage() {
           </div>
 
           {/* 우측: 정보 및 통계 */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 md:space-y-6">
             {/* 계정 정보 카드 */}
-            <div className="bg-white border border-neutral-200 p-6">
-              <div className="flex items-center justify-between mb-6">
+            <div className="bg-white border border-neutral-200 p-4 md:p-6">
+              <div className="flex items-center justify-between mb-4 md:mb-6">
                 <h3 className="text-[15px] font-medium tracking-wider uppercase text-neutral-900 flex items-center gap-2">
                   <User className="w-5 h-5 text-neutral-900" />
                   ACCOUNT INFO
@@ -140,7 +140,7 @@ export default function ProfilePage() {
                 {!isEditing && (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 text-neutral-900 hover:bg-neutral-900 hover:text-white transition-all duration-300 text-[11px] font-medium tracking-wider uppercase"
+                    className="flex items-center gap-2 px-4 py-2.5 md:py-2 bg-neutral-100 text-neutral-900 hover:bg-neutral-900 hover:text-white transition-all duration-300 text-[11px] font-medium tracking-wider uppercase"
                   >
                     <Edit2 className="w-4 h-4" />
                     EDIT
@@ -224,17 +224,17 @@ export default function ProfilePage() {
 
               {/* 수정 모드 버튼 */}
               {isEditing && (
-                <div className="flex gap-3 mt-6">
+                <div className="flex gap-3 mt-4 md:mt-6">
                   <button
                     onClick={handleCancel}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition-all duration-300 text-[12px] font-medium tracking-wider uppercase"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 md:py-3 border border-neutral-200 text-neutral-700 hover:bg-neutral-50 transition-all duration-300 text-[12px] font-medium tracking-wider uppercase"
                   >
                     <X className="w-4 h-4" />
                     CANCEL
                   </button>
                   <button
                     onClick={handleSave}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-neutral-900 text-white hover:bg-neutral-800 transition-all duration-300 text-[12px] font-medium tracking-wider uppercase"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 md:py-3 bg-neutral-900 text-white hover:bg-neutral-800 transition-all duration-300 text-[12px] font-medium tracking-wider uppercase"
                   >
                     <Check className="w-4 h-4" />
                     SAVE
@@ -244,13 +244,13 @@ export default function ProfilePage() {
             </div>
 
             {/* 활동 통계 카드 */}
-            <div className="bg-white border border-neutral-200 p-6">
-              <h3 className="text-[15px] font-medium tracking-wider uppercase text-neutral-900 mb-6 flex items-center gap-2">
+            <div className="bg-white border border-neutral-200 p-4 md:p-6">
+              <h3 className="text-[15px] font-medium tracking-wider uppercase text-neutral-900 mb-4 md:mb-6 flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-neutral-900" />
                 ACTIVITY STATS
               </h3>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {stats.map((stat, i) => {
                   const Icon = stat.icon;
                   return (
@@ -272,7 +272,7 @@ export default function ProfilePage() {
                 })}
               </div>
 
-              <div className="mt-6 p-4 bg-blue-50 border border-blue-200">
+              <div className="mt-4 md:mt-6 p-4 bg-blue-50 border border-blue-200">
                 <p className="text-[13px] font-normal tracking-wider text-blue-700">
                   CREATE PROJECTS AND USE AI STYLING TO UPDATE YOUR STATS AUTOMATICALLY.
                 </p>
@@ -280,8 +280,8 @@ export default function ProfilePage() {
             </div>
 
             {/* 계정 보안 카드 */}
-            <div className="bg-white border border-neutral-200 p-6">
-              <h3 className="text-[15px] font-medium tracking-wider uppercase text-neutral-900 mb-6 flex items-center gap-2">
+            <div className="bg-white border border-neutral-200 p-4 md:p-6">
+              <h3 className="text-[15px] font-medium tracking-wider uppercase text-neutral-900 mb-4 md:mb-6 flex items-center gap-2">
                 <Shield className="w-5 h-5 text-neutral-900" />
                 ACCOUNT SECURITY
               </h3>
@@ -296,7 +296,7 @@ export default function ProfilePage() {
                       CHANGE YOUR PASSWORD REGULARLY FOR SECURITY
                     </p>
                   </div>
-                  <button className="px-4 py-2 bg-neutral-200 text-neutral-700 hover:bg-neutral-900 hover:text-white transition-all duration-300 text-[11px] font-medium tracking-wider uppercase">
+                  <button className="px-4 py-2.5 md:py-2 bg-neutral-200 text-neutral-700 hover:bg-neutral-900 hover:text-white transition-all duration-300 text-[11px] font-medium tracking-wider uppercase">
                     CHANGE
                   </button>
                 </div>
@@ -310,7 +310,7 @@ export default function ProfilePage() {
                       ALL YOUR DATA WILL BE PERMANENTLY DELETED
                     </p>
                   </div>
-                  <button className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 hover:bg-red-500 hover:text-white transition-all duration-300 text-[11px] font-medium tracking-wider uppercase">
+                  <button className="px-4 py-2.5 md:py-2 bg-red-50 text-red-600 border border-red-200 hover:bg-red-500 hover:text-white transition-all duration-300 text-[11px] font-medium tracking-wider uppercase">
                     DELETE
                   </button>
                 </div>
