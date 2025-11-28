@@ -2,6 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ESM에서 __dirname 정의
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3001;
@@ -14,53 +19,31 @@ let materials: any[] = [];
 
 const loadMaterials = () => {
   try {
-    // 여러 경로 시도
-    const possiblePaths = [
-      path.join(__dirname, 'data/materials.json'),
-      path.join(__dirname, '../data/materials.json'),
-      path.join(__dirname, 'materials.json'),
-      path.join(__dirname, '../materials.json'),
-      path.join(__dirname, '../../materials.json'),
-      path.join(process.cwd(), 'src/data/materials.json'),
-      path.join(process.cwd(), 'data/materials.json'),
-      path.join(process.cwd(), 'materials.json')
-    ];
+    // 절대 경로로 직접 지정 (가장 확실한 방법)
+    const materialsPath = path.join(__dirname, 'data', 'materials.json');
 
-    let materialsPath = '';
-    for (const p of possiblePaths) {
-      if (fs.existsSync(p)) {
-        materialsPath = p;
-        break;
+    console.log('📂 Trying to load from:', materialsPath);
+
+    if (!fs.existsSync(materialsPath)) {
+      console.error('❌ materials.json not found at:', materialsPath);
+      console.log('📂 Current directory:', __dirname);
+      console.log('📂 Files in current directory:');
+      try {
+        fs.readdirSync(__dirname).forEach(file => {
+          console.log(`   - ${file}`);
+        });
+      } catch (err) {
+        console.error('Cannot read directory:', err);
       }
-    }
-
-    if (!materialsPath) {
-      console.error('❌ materials.json not found in any of these paths:');
-      possiblePaths.forEach(p => console.error(`   - ${p}`));
       return;
     }
 
-    console.log('✅ Found materials.json at:', materialsPath);
-
     const materialsData = fs.readFileSync(materialsPath, 'utf-8');
-    const parsed = JSON.parse(materialsData);
-
-    // Handle different JSON structures
-    if (Array.isArray(parsed)) {
-      materials = parsed;
-    } else if (parsed.materials && Array.isArray(parsed.materials)) {
-      materials = parsed.materials;
-    } else if (parsed.default) {
-      if (Array.isArray(parsed.default)) {
-        materials = parsed.default;
-      } else if (parsed.default.materials && Array.isArray(parsed.default.materials)) {
-        materials = parsed.default.materials;
-      }
-    }
+    materials = JSON.parse(materialsData);
 
     console.log(`✅ Loaded ${materials.length} materials`);
-    console.log('First 5 material IDs:');
-    materials.slice(0, 5).forEach(m => {
+    console.log('First 3 material IDs:');
+    materials.slice(0, 3).forEach(m => {
       console.log(`   - ${m.material_id}: ${m.name}`);
     });
 
