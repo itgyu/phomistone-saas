@@ -107,12 +107,30 @@ export default function AIStylingPage() {
 
       console.log('📡 Response status:', response.status);
       console.log('📡 Response ok:', response.ok);
+      console.log('📡 Response content-type:', response.headers.get('content-type'));
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      // 응답 텍스트 먼저 확인
+      const responseText = await response.text();
+      console.log('📡 Response text length:', responseText.length);
+      console.log('📡 Response text preview:', responseText.substring(0, 200));
+
+      if (!responseText || responseText.trim().length === 0) {
+        throw new Error('서버로부터 빈 응답을 받았습니다. n8n 워크플로우를 확인해주세요.');
+      }
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('❌ JSON 파싱 실패:', parseError);
+        console.error('❌ 원본 응답:', responseText);
+        throw new Error(`잘못된 응답 형식입니다: ${responseText.substring(0, 100)}`);
+      }
+
       console.log('✅ Full response data:', data);
 
       if (data.success) {
@@ -389,15 +407,15 @@ export default function AIStylingPage() {
                           </div>
 
                           {/* 자세히 보기 버튼 */}
-                          <button
+                          <div
                             onClick={(e) => {
                               e.stopPropagation();
                               setPreviewMaterial(material.material_id);
                             }}
-                            className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-[#C59C6C] hover:text-white text-gray-600 transition-colors"
+                            className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-[#C59C6C] hover:text-white text-gray-600 transition-colors cursor-pointer"
                           >
                             <ZoomIn className="w-4 h-4" />
-                          </button>
+                          </div>
                         </button>
                       ))}
                     </div>
