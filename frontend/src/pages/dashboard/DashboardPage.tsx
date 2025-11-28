@@ -26,7 +26,12 @@ export default function DashboardPage() {
 
       if (storedProjects) {
         const parsedProjects: Project[] = JSON.parse(storedProjects);
-        setProjects(Array.isArray(parsedProjects) ? parsedProjects : []);
+        // Ensure all projects have a status field with default value
+        const projectsWithStatus = (Array.isArray(parsedProjects) ? parsedProjects : []).map(p => ({
+          ...p,
+          status: p.status || 'draft' as ProjectStatus
+        }));
+        setProjects(projectsWithStatus);
       } else {
         // Fallback: Load legacy projects from service
         const legacyData = await projectService.getAll() as LegacyProject[];

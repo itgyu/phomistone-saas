@@ -3,19 +3,20 @@ import { PROJECT_STATUS_CONFIG, ProjectStatus } from '@/types/project';
 import { ArrowRight, Clock, CheckCircle2 } from 'lucide-react';
 
 interface Props {
-  status: ProjectStatus;
+  status?: ProjectStatus; // Make optional
   onStatusChange?: (newStatus: ProjectStatus) => void;
   showActions?: boolean;
   size?: 'sm' | 'md' | 'lg';
 }
 
 export default function ProjectStatusBadge({
-  status,
+  status = 'draft', // Default to 'draft'
   onStatusChange,
   showActions = false,
   size = 'md'
 }: Props) {
-  const config = PROJECT_STATUS_CONFIG[status];
+  // Safe config access with fallback
+  const config = PROJECT_STATUS_CONFIG[status] || PROJECT_STATUS_CONFIG.draft;
 
   const sizeClasses = {
     sm: 'px-2 py-0.5 text-xs',
