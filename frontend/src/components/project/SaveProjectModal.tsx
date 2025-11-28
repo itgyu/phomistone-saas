@@ -55,44 +55,46 @@ export default function SaveProjectModal({
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto scrollbar-gold">
+      <div className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* 헤더 */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-3xl">
+        <div className="sticky top-0 bg-white border-b border-neutral-200 px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-title">프로젝트로 저장</h2>
-              <p className="text-caption mt-1">스타일링 결과를 프로젝트로 저장합니다</p>
+              <h2 className="text-2xl font-light tracking-wider text-neutral-900">프로젝트로 저장</h2>
+              <p className="text-sm font-light text-neutral-700 mt-2 tracking-wide">스타일링 결과를 프로젝트로 저장합니다</p>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-all"
+              className="p-2 hover:bg-neutral-100 transition-colors"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-neutral-600" strokeWidth={1.5} />
             </button>
           </div>
         </div>
 
         {/* 내용 */}
-        <form onSubmit={handleSubmit} className="p-6">
+        <form onSubmit={handleSubmit} className="p-8">
 
           {/* 결과 이미지 미리보기 */}
-          <div className="mb-6">
-            <p className="text-caption text-gray-500 mb-2">스타일링 결과</p>
-            <div className="relative rounded-xl overflow-hidden border border-gray-200">
+          <div className="mb-8">
+            <label className="block text-xs font-light tracking-wider uppercase text-neutral-700 mb-3">
+              스타일링 결과
+            </label>
+            <div className="relative overflow-hidden border border-neutral-200">
               <img
                 src={resultImage}
                 alt="Result"
                 className="w-full h-48 object-cover"
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                <p className="text-caption text-white font-medium">적용 자재: {selectedMaterialName}</p>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
+                <p className="text-sm font-light text-white tracking-wide">적용 자재: {selectedMaterialName}</p>
               </div>
             </div>
           </div>
 
           {/* 프로젝트명 (필수) */}
-          <div className="mb-4">
-            <label className="block text-body font-semibold text-gray-900 mb-2">
+          <div className="mb-6">
+            <label className="block text-xs font-light tracking-wider uppercase text-neutral-900 mb-3">
               프로젝트명 <span className="text-red-500">*</span>
             </label>
             <input
@@ -103,20 +105,20 @@ export default function SaveProjectModal({
                 setErrors(prev => ({ ...prev, name: undefined }));
               }}
               placeholder="예: 강남 아파트 리모델링"
-              className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors text-input ${
+              className={`w-full px-4 py-3 border font-light tracking-wide focus:outline-none transition-colors ${
                 errors.name
                   ? 'border-red-300 focus:border-red-500'
-                  : 'border-gray-200 focus:border-[#C59C6C]'
+                  : 'border-neutral-300 focus:border-neutral-900'
               }`}
             />
             {errors.name && (
-              <p className="text-caption text-red-500 mt-1">{errors.name}</p>
+              <p className="text-sm font-light text-red-500 mt-2">{errors.name}</p>
             )}
           </div>
 
           {/* 고객명 */}
-          <div className="mb-4">
-            <label className="block text-body font-semibold text-gray-900 mb-2">
+          <div className="mb-6">
+            <label className="block text-xs font-light tracking-wider uppercase text-neutral-900 mb-3">
               고객명
             </label>
             <input
@@ -124,13 +126,13 @@ export default function SaveProjectModal({
               value={formData.clientName}
               onChange={(e) => setFormData(prev => ({ ...prev, clientName: e.target.value }))}
               placeholder="예: 김철수"
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#C59C6C] transition-colors text-input"
+              className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors font-light tracking-wide"
             />
           </div>
 
           {/* 현장 주소 */}
-          <div className="mb-4">
-            <label className="block text-body font-semibold text-gray-900 mb-2">
+          <div className="mb-6">
+            <label className="block text-xs font-light tracking-wider uppercase text-neutral-900 mb-3">
               현장 주소
             </label>
             <input
@@ -138,13 +140,13 @@ export default function SaveProjectModal({
               value={formData.siteAddress}
               onChange={(e) => setFormData(prev => ({ ...prev, siteAddress: e.target.value }))}
               placeholder="예: 서울시 강남구 역삼동 123-45"
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#C59C6C] transition-colors text-input"
+              className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors font-light tracking-wide"
             />
           </div>
 
           {/* 예상 견적 금액 */}
-          <div className="mb-4">
-            <label className="block text-body font-semibold text-gray-900 mb-2">
+          <div className="mb-6">
+            <label className="block text-xs font-light tracking-wider uppercase text-neutral-900 mb-3">
               예상 견적 금액
             </label>
             <div className="relative">
@@ -156,20 +158,20 @@ export default function SaveProjectModal({
                   setFormData(prev => ({ ...prev, estimatedCost: value }));
                 }}
                 placeholder="예: 15000000"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#C59C6C] transition-colors text-input pr-12"
+                className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors font-light tracking-wide pr-12"
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-body text-gray-500">원</span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-light text-neutral-700">원</span>
             </div>
             {formData.estimatedCost && (
-              <p className="text-caption text-gray-500 mt-1">
+              <p className="text-sm font-light text-neutral-700 mt-2 tracking-wide">
                 {parseInt(formData.estimatedCost).toLocaleString()}원
               </p>
             )}
           </div>
 
           {/* 메모 */}
-          <div className="mb-6">
-            <label className="block text-body font-semibold text-gray-900 mb-2">
+          <div className="mb-8">
+            <label className="block text-xs font-light tracking-wider uppercase text-neutral-900 mb-3">
               메모
             </label>
             <textarea
@@ -177,24 +179,24 @@ export default function SaveProjectModal({
               onChange={(e) => setFormData(prev => ({ ...prev, memo: e.target.value }))}
               placeholder="프로젝트에 대한 메모를 입력하세요"
               rows={3}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#C59C6C] transition-colors text-input resize-none"
+              className="w-full px-4 py-3 border border-neutral-300 focus:outline-none focus:border-neutral-900 transition-colors font-light tracking-wide resize-none"
             />
           </div>
 
           {/* 버튼 */}
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-button transition-all"
+              className="flex-1 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-light tracking-wider uppercase text-sm transition-colors"
             >
               취소
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 bg-gradient-to-r from-[#C59C6C] to-[#A67C52] hover:shadow-lg text-white rounded-xl text-button transition-all flex items-center justify-center gap-2"
+              className="flex-1 py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-light tracking-wider uppercase text-sm transition-colors flex items-center justify-center gap-2"
             >
-              <Save className="w-4 h-4" />
+              <Save className="w-4 h-4" strokeWidth={1.5} />
               프로젝트 저장
             </button>
           </div>

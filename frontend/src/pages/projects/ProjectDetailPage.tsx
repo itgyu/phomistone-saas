@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Edit2, Trash2, Download, Share2,
-  Calendar, MapPin, User, DollarSign, Sparkles, Image as ImageIcon
+  Calendar, MapPin, User, DollarSign, Minus, Image as ImageIcon
 } from 'lucide-react';
 import {
   ReactCompareSlider,
@@ -110,8 +110,8 @@ export default function ProjectDetailPage() {
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-[#C59C6C]/30 border-t-[#C59C6C] rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="w-12 h-12 border border-neutral-900 border-t-transparent animate-spin"></div>
       </div>
     );
   }
@@ -125,69 +125,69 @@ export default function ProjectDetailPage() {
   const currentStatusIndex = getStatusIndex(project.status);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-col">
-      {/* 헤더 */}
-      <div className="bg-black border-b border-gray-800 flex-shrink-0">
-        <div className="max-w-[1920px] mx-auto px-6 py-4">
+    <div className="min-h-screen bg-white flex flex-col">
+      {/* Header */}
+      <div className="bg-neutral-900 border-b border-neutral-800 flex-shrink-0">
+        <div className="max-w-[1920px] mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="p-2 hover:bg-gray-800 rounded-lg transition-all"
+                className="p-2 hover:bg-neutral-800 transition-colors duration-300"
               >
-                <ArrowLeft className="w-5 h-5 text-white" />
+                <ArrowLeft className="w-5 h-5 text-white" strokeWidth={1.5} />
               </button>
               <div>
-                <h1 className="text-title text-white">{project.name}</h1>
-                <p className="text-caption text-gray-400">프로젝트 상세</p>
+                <h1 className="text-2xl font-light tracking-wider text-white uppercase">{project.name}</h1>
+                <p className="text-sm font-light tracking-wider text-neutral-600 mt-1 uppercase">Project Detail</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-button transition-all flex items-center gap-2">
-                <Share2 className="w-4 h-4" />
-                공유
+            <div className="flex items-center gap-3">
+              <button className="px-6 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white transition-colors duration-300 flex items-center gap-2 font-light tracking-wider uppercase text-sm">
+                <Share2 className="w-4 h-4" strokeWidth={1.5} />
+                Share
               </button>
-              <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-button transition-all flex items-center gap-2">
-                <Download className="w-4 h-4" />
-                다운로드
+              <button className="px-6 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white transition-colors duration-300 flex items-center gap-2 font-light tracking-wider uppercase text-sm">
+                <Download className="w-4 h-4" strokeWidth={1.5} />
+                Download
               </button>
               <button
                 onClick={() => setShowEditModal(true)}
-                className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-button transition-all flex items-center gap-2"
+                className="px-6 py-2.5 bg-transparent border border-neutral-700 hover:border-neutral-500 text-white transition-colors duration-300 flex items-center gap-2 font-light tracking-wider uppercase text-sm"
               >
-                <Edit2 className="w-4 h-4" />
-                수정
+                <Edit2 className="w-4 h-4" strokeWidth={1.5} />
+                Edit
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-button transition-all flex items-center gap-2"
+                className="px-6 py-2.5 bg-neutral-800 border border-neutral-800 hover:bg-neutral-700 hover:border-neutral-700 text-white transition-colors duration-300 flex items-center gap-2 font-light tracking-wider uppercase text-sm"
               >
-                <Trash2 className="w-4 h-4" />
-                삭제
+                <Trash2 className="w-4 h-4" strokeWidth={1.5} />
+                Delete
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 메인 컨텐츠 */}
+      {/* Main Content */}
       <div className="flex-1 overflow-hidden">
-        <div className="h-full max-w-[1920px] mx-auto px-6 py-6">
-          <div className="h-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
+        <div className="h-full max-w-[1920px] mx-auto px-6 py-8">
+          <div className="h-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
 
-            {/* 왼쪽: 프로젝트 정보 */}
-            <div className="flex flex-col gap-6 overflow-y-auto scrollbar-gold">
+            {/* Left: Project Information */}
+            <div className="flex flex-col gap-8 overflow-y-auto">
 
-              {/* 스타일링 이미지 (Before/After) */}
+              {/* Styling Images (Before/After) */}
               {project.beforeImage && project.afterImage && (
-                <div className="card-base p-6">
-                  <div className="section-header mb-4">
-                    <ImageIcon className="w-5 h-5 text-[#C59C6C]" />
-                    <h2 className="text-title">스타일링 결과</h2>
+                <div className="bg-neutral-50 border border-neutral-200 p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Minus className="w-5 h-5 text-neutral-900" strokeWidth={1.5} />
+                    <h2 className="text-lg font-light tracking-wider uppercase text-neutral-900">Styling Result</h2>
                   </div>
 
-                  <div className="rounded-xl overflow-hidden border border-gray-200 relative" style={{ height: '500px' }}>
+                  <div className="overflow-hidden border border-neutral-300 relative" style={{ height: '500px' }}>
                     <ReactCompareSlider
                       itemOne={
                         <ReactCompareSliderImage
@@ -205,53 +205,53 @@ export default function ProjectDetailPage() {
                       }
                       style={{ height: '100%' }}
                     />
-                    <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-caption font-semibold backdrop-blur-sm">
+                    <div className="absolute top-4 left-4 bg-neutral-900 text-white px-4 py-2 text-xs font-light tracking-wider uppercase shadow-sm">
                       Before
                     </div>
-                    <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-caption font-semibold backdrop-blur-sm">
+                    <div className="absolute top-4 right-4 bg-neutral-900 text-white px-4 py-2 text-xs font-light tracking-wider uppercase shadow-sm">
                       After
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* 기본 정보 카드 */}
-              <div className="card-base p-6">
-                <div className="section-header mb-4">
-                  <Sparkles className="w-5 h-5 text-[#C59C6C]" />
-                  <h2 className="text-title">프로젝트 정보</h2>
+              {/* Basic Information Card */}
+              <div className="bg-neutral-50 border border-neutral-200 p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <Minus className="w-5 h-5 text-neutral-900" strokeWidth={1.5} />
+                  <h2 className="text-lg font-light tracking-wider uppercase text-neutral-900">Project Information</h2>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <User className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4 pb-6 border-b border-neutral-200">
+                    <User className="w-5 h-5 text-neutral-700 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-caption text-gray-500 mb-1">고객명</p>
-                      <p className="text-body font-medium text-gray-900">{project.clientName || '-'}</p>
+                      <p className="text-xs font-light tracking-wider uppercase text-neutral-700 mb-2">Client Name</p>
+                      <p className="text-base font-light text-neutral-900">{project.clientName || '-'}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex items-start gap-4 pb-6 border-b border-neutral-200">
+                    <MapPin className="w-5 h-5 text-neutral-700 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-caption text-gray-500 mb-1">현장 주소</p>
-                      <p className="text-body font-medium text-gray-900">{project.siteAddress || '-'}</p>
+                      <p className="text-xs font-light tracking-wider uppercase text-neutral-700 mb-2">Site Address</p>
+                      <p className="text-base font-light text-neutral-900">{project.siteAddress || '-'}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <Sparkles className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex items-start gap-4 pb-6 border-b border-neutral-200">
+                    <Minus className="w-5 h-5 text-neutral-700 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-caption text-gray-500 mb-1">적용 자재</p>
-                      <p className="text-body font-medium text-gray-900">{project.materialName || '-'}</p>
+                      <p className="text-xs font-light tracking-wider uppercase text-neutral-700 mb-2">Material</p>
+                      <p className="text-base font-light text-neutral-900">{project.materialName || '-'}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <DollarSign className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex items-start gap-4 pb-6 border-b border-neutral-200">
+                    <DollarSign className="w-5 h-5 text-neutral-700 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-caption text-gray-500 mb-1">예상 견적</p>
-                      <p className="text-body font-medium text-gray-900">
+                      <p className="text-xs font-light tracking-wider uppercase text-neutral-700 mb-2">Estimated Cost</p>
+                      <p className="text-base font-light text-neutral-900">
                         {project.estimatedCost
                           ? `₩${project.estimatedCost.toLocaleString()}`
                           : '-'
@@ -260,11 +260,11 @@ export default function ProjectDetailPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <Calendar className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex items-start gap-4">
+                    <Calendar className="w-5 h-5 text-neutral-700 mt-1 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-caption text-gray-500 mb-1">생성일</p>
-                      <p className="text-body font-medium text-gray-900">
+                      <p className="text-xs font-light tracking-wider uppercase text-neutral-700 mb-2">Created Date</p>
+                      <p className="text-base font-light text-neutral-900">
                         {new Date(project.createdAt).toLocaleDateString('ko-KR', {
                           year: 'numeric',
                           month: 'long',
@@ -277,12 +277,12 @@ export default function ProjectDetailPage() {
               </div>
             </div>
 
-            {/* 오른쪽: 상태 관리 패널 */}
-            <div className="flex flex-col gap-4 overflow-y-auto scrollbar-gold">
+            {/* Right: Status Management Panel */}
+            <div className="flex flex-col gap-6 overflow-y-auto">
 
-              {/* 현재 상태 카드 */}
-              <div className="card-base p-6 flex-shrink-0">
-                <h2 className="text-title mb-4">프로젝트 상태</h2>
+              {/* Current Status Card */}
+              <div className="bg-neutral-50 border border-neutral-200 p-6 flex-shrink-0">
+                <h2 className="text-lg font-light tracking-wider uppercase text-neutral-900 mb-6">Project Status</h2>
 
                 <ProjectStatusBadge
                   status={project.status}
@@ -291,25 +291,25 @@ export default function ProjectDetailPage() {
                   size="lg"
                 />
 
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-caption text-gray-500 mb-3">진행 단계</p>
-                  <div className="space-y-2">
+                <div className="mt-8 pt-8 border-t border-neutral-200">
+                  <p className="text-xs font-light tracking-wider uppercase text-neutral-700 mb-4">Progress Steps</p>
+                  <div className="space-y-3">
                     {statusKeys.map((statusKey, index) => {
                       const config = PROJECT_STATUS_CONFIG[statusKey];
                       const isCompleted = index < currentStatusIndex;
                       const isCurrent = index === currentStatusIndex;
 
                       return (
-                        <div key={statusKey} className="flex items-center gap-3">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-                            isCompleted ? 'bg-emerald-500 text-white' :
-                            isCurrent ? 'bg-[#C59C6C] text-white' :
-                            'bg-gray-200 text-gray-400'
+                        <div key={statusKey} className="flex items-center gap-4">
+                          <div className={`w-6 h-6 border flex items-center justify-center text-xs font-light flex-shrink-0 transition-colors duration-300 ${
+                            isCompleted ? 'bg-neutral-900 border-neutral-900 text-white' :
+                            isCurrent ? 'bg-neutral-900 border-neutral-900 text-white' :
+                            'bg-transparent border-neutral-300 text-neutral-600'
                           }`}>
-                            {isCompleted ? '✓' : index + 1}
+                            {isCompleted ? '—' : index + 1}
                           </div>
-                          <span className={`text-body ${
-                            isCurrent ? 'font-bold text-gray-900' : 'text-gray-500'
+                          <span className={`text-sm font-light tracking-wider ${
+                            isCurrent ? 'text-neutral-900' : 'text-neutral-700'
                           }`}>
                             {config.label}
                           </span>
@@ -320,15 +320,15 @@ export default function ProjectDetailPage() {
                 </div>
               </div>
 
-              {/* 변경 이력 */}
-              <div className="card-base p-6 flex-shrink-0">
-                <h2 className="text-title mb-4">변경 이력</h2>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3 pb-3 border-b border-gray-100">
-                    <div className="w-2 h-2 bg-[#C59C6C] rounded-full mt-2 flex-shrink-0" />
+              {/* Change History */}
+              <div className="bg-neutral-50 border border-neutral-200 p-6 flex-shrink-0">
+                <h2 className="text-lg font-light tracking-wider uppercase text-neutral-900 mb-6">Change History</h2>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3 pb-4 border-b border-neutral-200">
+                    <div className="w-1.5 h-1.5 bg-neutral-900 mt-2 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-body font-medium text-gray-900">견적 단계로 전환</p>
-                      <p className="text-caption text-gray-500 mt-1">
+                      <p className="text-sm font-light text-neutral-900">견적 단계로 전환</p>
+                      <p className="text-xs font-light tracking-wider text-neutral-700 mt-1.5">
                         {new Date(project.updatedAt).toLocaleString('ko-KR', {
                           year: 'numeric',
                           month: '2-digit',
@@ -340,10 +340,10 @@ export default function ProjectDetailPage() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-gray-300 rounded-full mt-2 flex-shrink-0" />
+                    <div className="w-1.5 h-1.5 bg-neutral-600 mt-2 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-body font-medium text-gray-900">프로젝트 생성</p>
-                      <p className="text-caption text-gray-500 mt-1">
+                      <p className="text-sm font-light text-neutral-900">프로젝트 생성</p>
+                      <p className="text-xs font-light tracking-wider text-neutral-700 mt-1.5">
                         {new Date(project.createdAt).toLocaleString('ko-KR', {
                           year: 'numeric',
                           month: '2-digit',

@@ -257,7 +257,7 @@ export default function AIStylingPage() {
                 <div className="text-center p-16">
                   <Upload className="w-12 h-12 text-neutral-300 mx-auto mb-8" strokeWidth={1} />
                   <h3 className="text-xs font-light tracking-[0.25em] text-neutral-900 uppercase mb-4">Upload Image</h3>
-                  <p className="text-xs font-light text-neutral-400 leading-relaxed tracking-wide">
+                  <p className="text-xs font-light text-neutral-600 leading-relaxed tracking-wide">
                     우측 패널에서 건물 사진을 선택하면<br />
                     이곳에 미리보기가 표시됩니다
                   </p>
@@ -307,9 +307,9 @@ export default function AIStylingPage() {
               {/* Step 1: 이미지 업로드 */}
               <div className="bg-white border border-neutral-200 p-6 flex-shrink-0">
                 <div className="mb-6 pb-4 border-b border-neutral-100">
-                  <span className="text-[10px] font-light tracking-[0.3em] text-neutral-400 uppercase mb-3 block">Step 01</span>
+                  <span className="text-[10px] font-light tracking-[0.3em] text-neutral-600 uppercase mb-3 block">Step 01</span>
                   <h2 className="text-sm font-normal text-neutral-900 tracking-wide">이미지 업로드</h2>
-                  <p className="text-xs font-light text-neutral-400 mt-1 tracking-wide">건물 사진 선택</p>
+                  <p className="text-xs font-light text-neutral-600 mt-1 tracking-wide">건물 사진 선택</p>
                 </div>
 
                 {!uploadedImage ? (
@@ -317,7 +317,7 @@ export default function AIStylingPage() {
                     <div className="border border-neutral-200 p-10 hover:border-neutral-400 transition-colors duration-300 text-center">
                       <Upload className="w-10 h-10 text-neutral-300 mx-auto mb-4" strokeWidth={1} />
                       <p className="text-xs font-light text-neutral-900 mb-1 tracking-wide">이미지 선택</p>
-                      <p className="text-[10px] font-light text-neutral-400 tracking-wider">JPG, PNG (최대 20MB)</p>
+                      <p className="text-[10px] font-light text-neutral-600 tracking-wider">JPG, PNG (최대 20MB)</p>
                     </div>
                     <input
                       type="file"
@@ -331,7 +331,7 @@ export default function AIStylingPage() {
                     <CheckCircle2 className="w-5 h-5 text-neutral-900 flex-shrink-0" strokeWidth={1.5} />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-normal text-neutral-900 tracking-wide">업로드 완료</p>
-                      <p className="text-[10px] font-light text-neutral-500 tracking-wide mt-0.5">이미지가 준비되었습니다</p>
+                      <p className="text-[10px] font-light text-neutral-700 tracking-wide mt-0.5">이미지가 준비되었습니다</p>
                     </div>
                     <button
                       onClick={handleReset}
@@ -347,9 +347,9 @@ export default function AIStylingPage() {
               {uploadedImage && !resultImage && (
                 <div className="bg-white border border-neutral-200 flex flex-col flex-1 min-h-0 overflow-hidden">
                   <div className="p-6 flex-shrink-0 border-b border-neutral-100">
-                    <span className="text-[10px] font-light tracking-[0.3em] text-neutral-400 uppercase mb-3 block">Step 02</span>
+                    <span className="text-[10px] font-light tracking-[0.3em] text-neutral-600 uppercase mb-3 block">Step 02</span>
                     <h2 className="text-sm font-normal text-neutral-900 tracking-wide">자재 선택</h2>
-                    <p className="text-xs font-light text-neutral-400 mt-1 tracking-wide">포미스톤 자재 • {materials.length}개</p>
+                    <p className="text-xs font-light text-neutral-600 mt-1 tracking-wide">포미스톤 자재 • {materials.length}개</p>
                   </div>
 
                   {/* 세로 스크롤 자재 리스트 */}
@@ -398,11 +398,11 @@ export default function AIStylingPage() {
                             <p className="text-xs font-normal text-neutral-900 mb-1 truncate tracking-wide">
                               {material.name}
                             </p>
-                            <p className="text-[10px] font-light text-neutral-500 mb-2 line-clamp-2 tracking-wide">
+                            <p className="text-[10px] font-light text-neutral-700 mb-2 line-clamp-2 tracking-wide">
                               {material.series}
                             </p>
                             {material.price_per_sqm && (
-                              <p className="text-[10px] font-light text-neutral-400 tracking-wider">
+                              <p className="text-[10px] font-light text-neutral-600 tracking-wider">
                                 ₩{material.price_per_sqm.toLocaleString()}/㎡
                               </p>
                             )}
@@ -455,20 +455,20 @@ export default function AIStylingPage() {
                   {/* 적용된 자재 정보 */}
                   <div className="bg-white border border-neutral-200 p-6 flex-shrink-0">
                     <div className="mb-6 pb-4 border-b border-neutral-100">
-                      <span className="text-[10px] font-light tracking-[0.3em] text-neutral-400 uppercase mb-3 block">Step 03</span>
+                      <span className="text-[10px] font-light tracking-[0.3em] text-neutral-600 uppercase mb-3 block">Step 03</span>
                       <h2 className="text-sm font-normal text-neutral-900 tracking-wide">스타일링 완료</h2>
-                      <p className="text-xs font-light text-neutral-400 mt-1 tracking-wide">결과를 확인하세요</p>
+                      <p className="text-xs font-light text-neutral-600 mt-1 tracking-wide">결과를 확인하세요</p>
                     </div>
 
                     <div className="bg-neutral-50 p-5 border border-neutral-200">
                       <div className="flex items-start gap-4">
                         <Palette className="w-5 h-5 text-neutral-600 flex-shrink-0 mt-1" strokeWidth={1.5} />
                         <div className="flex-1 min-w-0">
-                          <p className="text-[10px] font-light tracking-wider text-neutral-400 uppercase mb-2">Applied Material</p>
+                          <p className="text-[10px] font-light tracking-wider text-neutral-600 uppercase mb-2">Applied Material</p>
                           <p className="text-xs font-normal text-neutral-900 truncate tracking-wide mb-1">
                             {materials.find(m => m.material_id === selectedMaterial)?.name}
                           </p>
-                          <p className="text-[10px] font-light text-neutral-500 line-clamp-2 tracking-wide">
+                          <p className="text-[10px] font-light text-neutral-700 line-clamp-2 tracking-wide">
                             {materials.find(m => m.material_id === selectedMaterial)?.series}
                           </p>
                         </div>
@@ -521,13 +521,13 @@ export default function AIStylingPage() {
               <div className="absolute inset-0 border border-transparent border-t-neutral-900 rounded-full animate-spin" />
             </div>
             <h3 className="text-sm font-light tracking-[0.2em] text-neutral-900 uppercase mb-4">Processing</h3>
-            <p className="text-xs font-light text-neutral-500 mb-6 leading-relaxed tracking-wide">
+            <p className="text-xs font-light text-neutral-700 mb-6 leading-relaxed tracking-wide">
               {statusMessage || 'AI가 포미스톤 자재를 적용하고 있습니다'}
             </p>
             <div className="flex items-center justify-center gap-2">
-              <Minus className="w-3 h-3 text-neutral-400" strokeWidth={1} />
-              <p className="text-[10px] font-light text-neutral-400 tracking-wider">예상 시간: 30초 ~ 1분</p>
-              <Minus className="w-3 h-3 text-neutral-400" strokeWidth={1} />
+              <Minus className="w-3 h-3 text-neutral-600" strokeWidth={1} />
+              <p className="text-[10px] font-light text-neutral-600 tracking-wider">예상 시간: 30초 ~ 1분</p>
+              <Minus className="w-3 h-3 text-neutral-600" strokeWidth={1} />
             </div>
           </div>
         </div>
@@ -543,7 +543,7 @@ export default function AIStylingPage() {
                 <h3 className="text-sm font-normal text-neutral-900 tracking-wide mb-1">
                   {materials.find(m => m.material_id === previewMaterial)?.name}
                 </h3>
-                <p className="text-xs font-light text-neutral-500 tracking-wide">
+                <p className="text-xs font-light text-neutral-700 tracking-wide">
                   {materials.find(m => m.material_id === previewMaterial)?.series}
                 </p>
               </div>
@@ -571,7 +571,7 @@ export default function AIStylingPage() {
                 <div className="space-y-6">
                   {/* 시리즈 */}
                   <div className="border-b border-neutral-100 pb-4">
-                    <p className="text-[10px] font-light tracking-wider text-neutral-400 uppercase mb-2">Series</p>
+                    <p className="text-[10px] font-light tracking-wider text-neutral-600 uppercase mb-2">Series</p>
                     <p className="text-sm font-normal text-neutral-900 tracking-wide">
                       {materials.find(m => m.material_id === previewMaterial)?.series}
                     </p>
@@ -580,7 +580,7 @@ export default function AIStylingPage() {
                   {/* 설명 */}
                   {materials.find(m => m.material_id === previewMaterial)?.description && (
                     <div className="border-b border-neutral-100 pb-4">
-                      <p className="text-[10px] font-light tracking-wider text-neutral-400 uppercase mb-2">Description</p>
+                      <p className="text-[10px] font-light tracking-wider text-neutral-600 uppercase mb-2">Description</p>
                       <p className="text-xs font-light text-neutral-600 leading-relaxed tracking-wide">
                         {materials.find(m => m.material_id === previewMaterial)?.description}
                       </p>
@@ -590,7 +590,7 @@ export default function AIStylingPage() {
                   {/* 용도 */}
                   {materials.find(m => m.material_id === previewMaterial)?.category && (
                     <div className="border-b border-neutral-100 pb-4">
-                      <p className="text-[10px] font-light tracking-wider text-neutral-400 uppercase mb-2">Application</p>
+                      <p className="text-[10px] font-light tracking-wider text-neutral-600 uppercase mb-2">Application</p>
                       <div className="flex flex-wrap gap-2">
                         {(() => {
                           const category = materials.find(m => m.material_id === previewMaterial)?.category;
@@ -613,10 +613,10 @@ export default function AIStylingPage() {
                   {/* 가격 */}
                   {materials.find(m => m.material_id === previewMaterial)?.price_per_sqm && (
                     <div className="border-b border-neutral-100 pb-4">
-                      <p className="text-[10px] font-light tracking-wider text-neutral-400 uppercase mb-2">Price</p>
+                      <p className="text-[10px] font-light tracking-wider text-neutral-600 uppercase mb-2">Price</p>
                       <p className="text-lg font-normal text-neutral-900 tracking-wide">
                         ₩{materials.find(m => m.material_id === previewMaterial)?.price_per_sqm?.toLocaleString()}
-                        <span className="text-xs font-light text-neutral-500 ml-2">/㎡</span>
+                        <span className="text-xs font-light text-neutral-700 ml-2">/㎡</span>
                       </p>
                     </div>
                   )}
