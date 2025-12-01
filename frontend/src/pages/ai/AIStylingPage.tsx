@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Upload, Download, Save, CheckCircle2,
@@ -81,6 +81,26 @@ export default function AIStylingPage() {
   const [statusMessage, setStatusMessage] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [previewMaterial, setPreviewMaterial] = useState<string | null>(null);
+
+  // 썸네일 경로 생성 함수 (목록용 300px)
+  const getThumbnailPath = (imagePath: string) => {
+    return imagePath.replace('/materials/', '/materials/thumbnails/').replace('.png', '.jpg');
+  };
+
+  // 미리보기 경로 생성 함수 (모달용 800px)
+  const getPreviewPath = (imagePath: string) => {
+    return imagePath.replace('/materials/', '/materials/preview/').replace('.png', '.jpg');
+  };
+
+  // 자재 이미지 프리로드 (페이지 진입 시 썸네일 + 미리보기 모두 로딩)
+  useEffect(() => {
+    materials.forEach((material) => {
+      const thumb = new Image();
+      thumb.src = getThumbnailPath(material.image_path);
+      const preview = new Image();
+      preview.src = getPreviewPath(material.image_path);
+    });
+  }, []);
 
   // 이미지 업로드
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -271,7 +291,7 @@ export default function AIStylingPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-[#FAFAFA]">
+    <div className="min-h-screen lg:h-screen flex flex-col bg-[#FAFAFA]">
       {/* ===== 헤더 ===== */}
       <div className="bg-black border-b border-neutral-800 flex-shrink-0">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 py-4 md:py-6">
@@ -294,12 +314,12 @@ export default function AIStylingPage() {
       </div>
 
       {/* ===== 메인 컨텐츠 (2단 레이아웃) ===== */}
-      <div className="flex-1 overflow-hidden">
-        <div className="h-full max-w-[1920px] mx-auto px-4 md:px-6 py-4 md:py-6">
-          <div className="h-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-4 md:gap-6">
+      <div className="flex-1 overflow-visible lg:overflow-hidden">
+        <div className="lg:h-full max-w-[1920px] mx-auto px-4 md:px-6 py-4 md:py-6">
+          <div className="lg:h-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-4 md:gap-6">
 
             {/* ===== 좌측: 이미지 뷰어 ===== */}
-            <div className="flex items-center justify-center bg-white border border-neutral-200 overflow-hidden">
+            <div className="flex items-center justify-center bg-white border border-neutral-200 overflow-hidden min-h-[250px] max-h-[400px] lg:min-h-0 lg:max-h-none">
               {!uploadedImage ? (
                 /* 초기 상태: 업로드 안내 */
                 <div className="text-center p-8 md:p-16">
@@ -350,7 +370,7 @@ export default function AIStylingPage() {
             </div>
 
             {/* ===== 우측: 컨트롤 패널 (400px 고정) ===== */}
-            <div className="flex flex-col gap-3 md:gap-4 h-full overflow-hidden">
+            <div className="flex flex-col gap-3 md:gap-4 lg:h-full lg:overflow-hidden">
 
               {/* Step 1: 이미지 업로드 */}
               <div className="bg-white border border-neutral-200 p-4 md:p-6 flex-shrink-0">
@@ -393,32 +413,34 @@ export default function AIStylingPage() {
 
               {/* Step 2: 자재 선택 (세로 스크롤) */}
               {uploadedImage && !resultImage && (
-                <div className="bg-white border border-neutral-200 flex flex-col flex-1 min-h-0 overflow-hidden">
+                <div className="bg-white border border-neutral-200 flex flex-col lg:flex-1 lg:min-h-0 lg:overflow-hidden">
                   <div className="p-4 md:p-6 flex-shrink-0 border-b border-neutral-100">
                     <span className="text-[10px] font-medium tracking-[0.3em] text-neutral-500 uppercase mb-2 md:mb-3 block">Step 02</span>
                     <h2 className="text-xs md:text-sm font-medium text-neutral-900 tracking-wide">자재 선택</h2>
                     <p className="text-xs text-neutral-600 mt-1 tracking-wide">포미스톤 자재 • {materials.length}개</p>
                   </div>
 
-                  {/* 세로 스크롤 자재 리스트 */}
-                  <div className="flex-1 overflow-y-auto scrollbar-gold p-3 md:p-4">
-                    <div className="space-y-2 md:space-y-3">
+                  {/* 자재 리스트 - 모바일: 2열 그리드, 데스크톱: 세로 스크롤 */}
+                  <div className="lg:flex-1 lg:overflow-y-auto scrollbar-gold p-3 md:p-4">
+                    <div className="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:space-y-3 lg:gap-0">
                       {materials.map((material) => (
                         <button
                           key={material.material_id}
                           onClick={() => setSelectedMaterial(material.material_id)}
-                          className={`w-full flex items-center gap-3 md:gap-4 p-3 md:p-4 border transition-colors duration-300 ${
+                          className={`w-full flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4 p-2 lg:p-4 border transition-colors duration-300 ${
                             selectedMaterial === material.material_id
                               ? 'border-neutral-900 bg-white'
                               : 'border-neutral-200 hover:border-neutral-400 bg-white'
                           }`}
                         >
                           {/* 썸네일 */}
-                          <div className="relative w-[80px] h-[80px] md:w-[100px] md:h-[100px] flex-shrink-0 overflow-hidden bg-neutral-100">
+                          <div className="relative w-full h-[100px] lg:w-[100px] lg:h-[100px] flex-shrink-0 overflow-hidden bg-neutral-100">
                             <img
-                              src={material.image_path}
+                              src={getThumbnailPath(material.image_path)}
                               alt={material.name}
                               className="w-full h-full object-cover"
+                              loading="eager"
+                              decoding="async"
                               onError={(e) => {
                                 const target = e.currentTarget as HTMLImageElement;
                                 target.style.display = 'none';
@@ -435,18 +457,18 @@ export default function AIStylingPage() {
 
                             {/* 선택 체크마크 */}
                             {selectedMaterial === material.material_id && (
-                              <div className="absolute top-1.5 right-1.5 md:top-2 md:right-2 w-4 h-4 md:w-5 md:h-5 bg-neutral-900 flex items-center justify-center">
-                                <Minus className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" strokeWidth={1} />
+                              <div className="absolute top-1.5 right-1.5 lg:top-2 lg:right-2 w-5 h-5 bg-neutral-900 flex items-center justify-center">
+                                <Minus className="w-3 h-3 text-white" strokeWidth={1} />
                               </div>
                             )}
                           </div>
 
                           {/* 텍스트 정보 */}
                           <div className="flex-1 text-left min-w-0">
-                            <p className="text-xs font-medium text-neutral-900 mb-1 truncate tracking-wide">
+                            <p className="text-[11px] lg:text-xs font-medium text-neutral-900 mb-0.5 lg:mb-1 truncate tracking-wide">
                               {material.name}
                             </p>
-                            <p className="text-[10px] text-neutral-700 mb-1 md:mb-2 line-clamp-2 tracking-wide">
+                            <p className="text-[10px] text-neutral-700 mb-1 lg:mb-2 line-clamp-1 lg:line-clamp-2 tracking-wide">
                               {material.series}
                             </p>
                             {material.price_per_sqm && (
@@ -456,15 +478,15 @@ export default function AIStylingPage() {
                             )}
                           </div>
 
-                          {/* 자세히 보기 버튼 */}
+                          {/* 자세히 보기 버튼 - 데스크톱만 표시 */}
                           <div
                             onClick={(e) => {
                               e.stopPropagation();
                               setPreviewMaterial(material.material_id);
                             }}
-                            className="flex-shrink-0 w-7 h-7 md:w-8 md:h-8 flex items-center justify-center border border-neutral-200 hover:border-neutral-900 text-neutral-600 hover:text-neutral-900 transition-colors duration-300 cursor-pointer"
+                            className="hidden lg:flex flex-shrink-0 w-8 h-8 items-center justify-center border border-neutral-200 hover:border-neutral-900 text-neutral-600 hover:text-neutral-900 transition-colors duration-300 cursor-pointer"
                           >
-                            <ZoomIn className="w-3 h-3 md:w-3.5 md:h-3.5" strokeWidth={1.5} />
+                            <ZoomIn className="w-3.5 h-3.5" strokeWidth={1.5} />
                           </div>
                         </button>
                       ))}
@@ -609,7 +631,7 @@ export default function AIStylingPage() {
                 {/* 큰 이미지 */}
                 <div className="aspect-square overflow-hidden bg-neutral-100 border border-neutral-200">
                   <img
-                    src={materials.find(m => m.material_id === previewMaterial)?.image_path}
+                    src={getPreviewPath(materials.find(m => m.material_id === previewMaterial)?.image_path || '')}
                     alt={materials.find(m => m.material_id === previewMaterial)?.name}
                     className="w-full h-full object-cover"
                   />
