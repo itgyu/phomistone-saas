@@ -7,13 +7,13 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "66528b17-0ff1-4fab-a2ac-7855cbfdccdb",
+      "id": "324efce4-c33b-4943-97f9-9d3cd20d6cde",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        416,
-        240
+        -64,
+        -16
       ],
       "webhookId": "2d65bf7d-1462-4929-90c8-bc0c5f985f21"
     },
@@ -26,95 +26,95 @@
         "jsonBody": "={{ \n  {\n    \"material_id\": $('Webhook').item.json.body.material_id \n  } \n}}",
         "options": {}
       },
-      "id": "6eabb4d0-afc1-4154-8e69-18ea80c1bc4e",
+      "id": "409b1297-1bf1-418c-8ddc-e347c379ab23",
       "name": "Get Material from MCP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        624,
-        240
+        144,
+        -16
       ]
     },
     {
       "parameters": {
-        "jsCode": "// 1. 이미지 데이터 가져오기 (Webhook 연결 확인)\nconst webhookData = $('Webhook').item.json.body;\nconst cleanImage = webhookData.image_base64.replace(/^data:image\\/\\w+;base64,/, \"\");\n\n// 1-1. 🚨 원본 이미지 크기 추출\nconst originalWidth = webhookData.original_width || 1024;\nconst originalHeight = webhookData.original_height || 1024;\n\n// 2. 자재 정보 가져오기\nconst mcp = $('Get Material from MCP').item.json;\n\n// 3. API 키 설정 (여기에 새 키를 넣으세요!)\nconst googleApiKey = \"AIzaSyBCaCH-PvGolVKDJYBANYJS9dUXrZI59sE\";\n\n// 4. Brain(분석가)에게 보낼 데이터 포장\nconst analystPayload = {\n  contents: [{\n    parts: [\n      { text: \"ROLE: Architectural Analyst.\\nTASK: Analyze building geometry, windows, lighting. Output description only.\" },\n      { inline_data: { mime_type: \"image/jpeg\", data: cleanImage } }\n    ]\n  }],\n  generationConfig: { temperature: 0.2 }\n};\n\n// 5. 다음 단계로 모든 재료 넘기기 (이미지 크기 포함)\nreturn [{\n  json: {\n    analystPayload: analystPayload,\n    cleanImage: cleanImage,\n    mcp: mcp,\n    googleApiKey: googleApiKey, // 키 전달\n    originalWidth: originalWidth,  // 👈 추가!\n    originalHeight: originalHeight  // 👈 추가!\n  }\n}];"
+        "jsCode": "// 1. 이미지 데이터 가져오기 (Webhook 연결 확인)\nconst webhookData = $('Webhook').item.json.body;\nconst cleanImage = webhookData.image_base64.replace(/^data:image\\/\\w+;base64,/, \"\");\n\n// 1-1. 🚨 원본 이미지 크기 추출\nconst originalWidth = webhookData.original_width || 1024;\nconst originalHeight = webhookData.original_height || 1024;\n\n// 2. 자재 정보 가져오기\nconst mcp = $('Get Material from MCP').item.json;\n\n// 3. API 키 설정 (여기에 새 키를 넣으세요!)\nconst googleApiKey = \"AIzaSyBqXRPKYFBFxNDPjOXbMjgz3Ndh85u41UY\";\n\n// 4. Brain(분석가)에게 보낼 데이터 포장\nconst analystPayload = {\n  contents: [{\n    parts: [\n      { text: \"ROLE: Architectural Analyst.\\nTASK: Analyze building geometry, windows, lighting. Output description only.\" },\n      { inline_data: { mime_type: \"image/jpeg\", data: cleanImage } }\n    ]\n  }],\n  generationConfig: { temperature: 0.2 }\n};\n\n// 5. 다음 단계로 모든 재료 넘기기 (이미지 크기 포함)\nreturn [{\n  json: {\n    analystPayload: analystPayload,\n    cleanImage: cleanImage,\n    mcp: mcp,\n    googleApiKey: googleApiKey, // 키 전달\n    originalWidth: originalWidth,  // 👈 추가!\n    originalHeight: originalHeight  // 👈 추가!\n  }\n}];"
       },
-      "id": "5fe81b7b-4ad9-4ff4-ab44-024f02883161",
+      "id": "7892afca-da4d-48fd-b741-e7d3115b8fe9",
       "name": "Prep for Brain",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        816,
-        240
+        336,
+        -16
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=AIzaSyBCaCH-PvGolVKDJYBANYJS9dUXrZI59sE",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=AIzaSyBqXRPKYFBFxNDPjOXbMjgz3Ndh85u41UY",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{\n{\n  \"contents\": [{\n    \"parts\": [\n      { \"text\": \"ROLE: Architectural Analyst.\\nTASK: Analyze building geometry, windows, lighting. Output description only.\" },\n      { \"inline_data\": { \"mime_type\": \"image/jpeg\", \"data\": $json.cleanImage } }\n    ]\n  }],\n  \"generationConfig\": { \"temperature\": 0.2 }\n}\n}}",
         "options": {}
       },
-      "id": "823d3620-ac61-4fe6-a914-08e7711cabdc",
+      "id": "904f1890-dd03-474a-8a6c-03cfb9a9dc60",
       "name": "1. The Brain (Analysis)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        1024,
-        240
+        544,
+        -16
       ]
     },
     {
       "parameters": {
         "jsCode": "// 1. 앞 단계(Analyst) 분석 결과 가져오기\nconst candidates = items[0].json.candidates;\nlet analysisText = \"Modern architectural structure with clear geometry.\";\n\nif (candidates && candidates[0]?.content?.parts?.[0]?.text) {\n  analysisText = candidates[0].content.parts[0].text;\n}\n\n// 2. 자재 정보 가져오기\nconst mcp = $('Get Material from MCP').item.json;\n\n// 3. 🚨 [핵심] 자재 이미지 가져오기 (Webhook에서 직접 꺼내옴)\nconst webhookBody = $('Webhook').item.json.body;\nconst materialImage = webhookBody.material_image_base64 || \"\";\n\n// 4. Prompter(설계자)에게 보낼 데이터 생성\nconst parts = [\n  { \n    text: `ROLE: Prompt Engineer.\n    \n    [INPUT ANALYSIS]:\n    ${analysisText}\n    \n    [TARGET MATERIAL]:\n    ${mcp.name} (${mcp.positive_prompt})\n    \n    [TASK]:\n    Write a concise image generation prompt to apply the target material to the analyzed structure.\n    \n    [OUTPUT]:\n    Raw prompt text only.` \n  }\n];\n\n// 자재 이미지가 있으면 Prompter에게도 보여줌 (더 정확한 묘사를 위해)\nif (materialImage) {\n  parts.push({ inline_data: { mime_type: \"image/png\", data: materialImage } });\n}\n\nconst googleBody = {\n  contents: [{ parts: parts }],\n  generationConfig: { temperature: 0.7 }\n};\n\n// 5. 🚨 [수정] Gemini payload를 JSON 문자열로 변환하여 분리\nreturn [{\n  json: {\n    payload: JSON.stringify(googleBody),\n    materialImage: materialImage,\n    mcp_name: mcp.name\n  }\n}];"
       },
-      "id": "e2d8af8f-2ea2-47bd-9d60-d43a687e0eb2",
+      "id": "2a7eaf74-300f-494c-aedc-6a7600ac99c4",
       "name": "Prep for Prompter",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1216,
-        240
+        736,
+        -16
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=AIzaSyBCaCH-PvGolVKDJYBANYJS9dUXrZI59sE",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=AIzaSyBqXRPKYFBFxNDPjOXbMjgz3Ndh85u41UY",
         "sendBody": true,
         "contentType": "raw",
         "rawContentType": "application/json",
         "body": "={{ $json.payload }}",
         "options": {}
       },
-      "id": "4d2ee4ae-0c0c-4200-b6aa-01cd63383699",
+      "id": "5b53b05c-4483-4b08-934b-7544c6850a3e",
       "name": "2. The Prompter",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        1424,
-        240
+        944,
+        -16
       ]
     },
     {
       "parameters": {
         "jsCode": "// 1. 데이터 모으기\nconst fileUri = items[0].json.file.uri; // 건물 이미지 (업로드된 파일 ID)\nconst prompt = $('2. The Prompter').item.json.candidates[0].content.parts[0].text;\nconst mcp_name = $('Get Material from MCP').item.json.name;\n\n// 2. 🚨 [핵심] 자재 이미지 가져오기\n// (Prep for Prompter에서 넘겨준 걸 2. The Prompter가 그대로 가지고 있습니다)\nconst materialImage = $('Prep for Prompter').item.json.materialImage || \"\";\n\n// 2-1. 🚨 원본 이미지 크기 가져오기 (Prep for Brain에서 전달받음)\nconst originalWidth = $('Prep for Brain').item.json.originalWidth || 1024;\nconst originalHeight = $('Prep for Brain').item.json.originalHeight || 1024;\n\n// 3. Master(나노바나나프로)에게 보낼 최종 데이터\nconst parts = [\n  { \n    text: `FINAL TASK: Material Replacement.\n    \n    [CRITICAL REQUIREMENT]:\n    ⚠️ OUTPUT IMAGE MUST BE EXACTLY ${originalWidth} x ${originalHeight} PIXELS.\n    ⚠️ DO NOT CROP, RESIZE, OR CHANGE ASPECT RATIO.\n    ⚠️ MAINTAIN EXACT DIMENSIONS OF INPUT IMAGE: ${originalWidth}px × ${originalHeight}px\n    \n    [INSTRUCTION]:\n    ${prompt}\n    \n    [INPUTS]:\n    1. Base Structure: Provided via File URI (Original size: ${originalWidth}x${originalHeight})\n    2. Style Reference: Provided Inline Image (Apply this texture)\n    \n    [RULES]:\n    - OUTPUT DIMENSIONS: ${originalWidth} × ${originalHeight} pixels (EXACT MATCH REQUIRED)\n    - Maintain Structure exactly (no cropping, no resizing, no aspect ratio changes).\n    - Apply Material Style from Reference.\n    - OUTPUT IMAGE ONLY with EXACT dimensions ${originalWidth}×${originalHeight}.` \n  },\n  // 건물 이미지 (구조용 - File API)\n  { file_data: { mime_type: \"image/jpeg\", file_uri: fileUri } }\n];\n\n// 자재 이미지 추가 (스타일용 - Inline Base64)\nif (materialImage) {\n  parts.push({ inline_data: { mime_type: \"image/png\", data: materialImage } });\n}\n\nconst masterPayload = {\n  contents: [{ parts: parts }],\n  safetySettings: [\n    { category: \"HARM_CATEGORY_HARASSMENT\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_HATE_SPEECH\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_SEXUALLY_EXPLICIT\", threshold: \"BLOCK_NONE\" },\n    { category: \"HARM_CATEGORY_DANGEROUS_CONTENT\", threshold: \"BLOCK_NONE\" }\n  ],\n  generationConfig: { \n    temperature: 0.4,\n    // 🚨 추가: 이미지 크기 힌트\n    candidateCount: 1\n  }\n};\n\nreturn [{ json: { payload: JSON.stringify(masterPayload), materialName: mcp_name } }];"
       },
-      "id": "8996b98a-f5b2-4b91-9c06-86f8b108a5e7",
+      "id": "97b1a516-2bc1-49d5-9d32-b37de38aed35",
       "name": "Prep for Master",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        816,
-        496
+        336,
+        240
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=AIzaSyBCaCH-PvGolVKDJYBANYJS9dUXrZI59sE",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=AIzaSyBqXRPKYFBFxNDPjOXbMjgz3Ndh85u41UY",
         "sendBody": true,
         "contentType": "raw",
         "rawContentType": "application/json",
@@ -123,13 +123,13 @@
           "timeout": 600000
         }
       },
-      "id": "cd4af0f3-cfc1-4c59-96b2-c2f14687c47c",
+      "id": "303da4d0-159c-461a-aba9-59bae5e3f4f9",
       "name": "4. The Master (NanoBanana Pro)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        1024,
-        496
+        544,
+        240
       ],
       "retryOnFail": true,
       "maxTries": 5,
@@ -141,32 +141,32 @@
         "responseBody": "={{ \n  (() => {\n    try {\n      // 1. 구글의 응답(이미지) 가져오기\n      const candidate = $json.candidates?.[0];\n      const part = candidate?.content?.parts?.[0];\n      \n      // 2. 자재 이름 가져오기 (실패 시 기본값 사용 -> 에러 방지)\n      let matName = \"Phomistone Material\";\n      try {\n        // 이름이 'The Formatter'일 수도, 'Prep for Master'일 수도 있음\n        if ($('The Formatter')) matName = $('The Formatter').item.json.materialName;\n        else if ($('Prep for Master')) matName = $('Prep for Master').item.json.materialName;\n      } catch (e) {\n        // 이름 못 찾으면 그냥 기본값 씀\n      }\n\n      // 3. 성공: 이미지가 있는 경우\n      if (part?.inlineData?.data) {\n        return JSON.stringify({\n          success: true,\n          result_image_url: \"data:image/jpeg;base64,\" + part.inlineData.data,\n          material_name: matName\n        });\n      } \n      // 3-1. 성공 (다른 변수명 대응): snake_case로 온 경우\n      else if (part?.inline_data?.data) {\n        return JSON.stringify({\n          success: true,\n          result_image_url: \"data:image/jpeg;base64,\" + part.inline_data.data,\n          material_name: matName\n        });\n      }\n      \n      // 4. 실패: 텍스트만 온 경우\n      return JSON.stringify({\n        success: false,\n        error: \"Model Response Text: \" + (part?.text || \"No content\"),\n        full_response: $json\n      });\n\n    } catch (e) {\n      return JSON.stringify({ success: false, error: \"Final Parsing Error: \" + e.message });\n    }\n  })()\n}}",
         "options": {}
       },
-      "id": "3ebbbfca-5016-41a3-871e-d5d826bd33ab",
+      "id": "220e6f21-4d3d-48b8-b1d2-4af30591a98b",
       "name": "Respond to Webhook",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
       "position": [
-        1216,
-        496
+        736,
+        240
       ]
     },
     {
       "parameters": {
         "jsCode": "// 1. Webhook에서 직접 이미지 가져오기 (이름 오류 방지)\nconst webhookData = $('Webhook').item.json.body;\nconst cleanImage = webhookData.image_base64.replace(/^data:image\\/\\w+;base64,/, \"\");\n\n// 2. n8n 전용 '바이너리 파일' 만들기\nreturn [{\n  json: {},\n  binary: {\n    data: {\n      data: cleanImage,\n      mimeType: 'image/jpeg',\n      fileName: 'upload.jpg'\n    }\n  }\n}];"
       },
-      "id": "05a1ca42-79b2-4bb8-ab38-f0257b9fd110",
+      "id": "9da3d565-2070-4606-8cec-29681a342bd5",
       "name": "Make Binary File",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        416,
-        496
+        -64,
+        240
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/upload/v1beta/files?uploadType=media&key=AIzaSyBCaCH-PvGolVKDJYBANYJS9dUXrZI59sE",
+        "url": "https://generativelanguage.googleapis.com/upload/v1beta/files?uploadType=media&key=AIzaSyBqXRPKYFBFxNDPjOXbMjgz3Ndh85u41UY",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -181,13 +181,13 @@
         "inputDataFieldName": "data",
         "options": {}
       },
-      "id": "860c853c-338d-4727-a1a5-cc8385e9b6da",
+      "id": "f298b6a5-6bfd-4eaa-a9c6-c9fd6b799f23",
       "name": "3. Google File Uploader",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        624,
-        496
+        144,
+        240
       ]
     }
   ],

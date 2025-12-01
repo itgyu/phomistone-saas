@@ -4,121 +4,54 @@ import { Plus, Calendar, DollarSign, Minus, FileText, Clock, CheckCircle2, Image
 import { projectService } from '@/services/ProjectService';
 import ProjectStatusBadge from '@/components/project/ProjectStatusBadge';
 import { Project, ProjectStatus, PROJECT_STATUS_CONFIG } from '@/types/project';
-import { LegacyProject } from '@/types';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<ProjectStatus | 'all'>('all');
 
   useEffect(() => {
     loadProjects();
   }, []);
 
-  // Load projects safely
+  // Load projects from backend API
   const loadProjects = async () => {
     setLoading(true);
+    setError(null);
 
     try {
-      // Load from unified localStorage key
-      const storedProjects = localStorage.getItem('phomistone_projects');
-
-      if (storedProjects) {
-        const parsedProjects: Project[] = JSON.parse(storedProjects);
-        // Ensure all projects have a status field with default value
-        const projectsWithStatus = (Array.isArray(parsedProjects) ? parsedProjects : []).map(p => ({
-          ...p,
-          status: p.status || 'draft' as ProjectStatus
-        }));
-        setProjects(projectsWithStatus);
-      } else {
-        // Fallback: Load legacy projects from service
-        const legacyData = await projectService.getAll() as LegacyProject[];
-
-        // Convert legacy projects to new format
-        const convertedProjects: Project[] = legacyData.map(legacy => ({
-          id: legacy.id,
-          name: legacy.clientName,
-          clientName: legacy.clientName,
-          status: convertLegacyStatus(legacy.status),
-          estimatedCost: legacy.estimatedCost,
-          materialName: legacy.materialName,
-          beforeImage: legacy.beforeImage,
-          afterImage: legacy.afterImage,
-          createdAt: legacy.createdAt,
-          updatedAt: legacy.updatedAt || legacy.createdAt
-        }));
-
-        setProjects(convertedProjects);
-      }
-    } catch (error) {
-      console.error('프로젝트 로드 실패:', error);
+      const data = await projectService.getAll();
+      setProjects(data);
+    } catch (err) {
+      console.error('프로젝트 로드 실패:', err);
+      setError('프로젝트를 불러오는데 실패했습니다. 로그인 상태를 확인해주세요.');
       setProjects([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Convert legacy status to new status
-  const convertLegacyStatus = (status: string): ProjectStatus => {
-    const statusMap: Record<string, ProjectStatus> = {
-      'Draft': 'draft',
-      'Proposal': 'proposal',
-      'Contract': 'contract',
-      'Construction': 'construction'
-    };
-    return statusMap[status] || 'draft';
-  };
-
-  // Delete project safely
-  const handleDeleteProject = (projectId: string, projectName: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent navigation to detail page
+  // Delete project via API
+  const handleDeleteProject = async (projectId: string, projectName: string, e: React.MouseEvent) => {
+    e.stopPropagation();
 
     if (!confirm(`"${projectName}" 프로젝트를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) {
       return;
     }
 
     try {
-      // Get from unified localStorage key
-      const storedProjects = localStorage.getItem('phomistone_projects');
-
-      if (!storedProjects) {
-        // If no localStorage, just remove from state
+      const success = await projectService.delete(projectId);
+      if (success) {
         setProjects(prev => prev.filter(p => p.id !== projectId));
         alert('프로젝트가 삭제되었습니다.');
-        return;
+      } else {
+        alert('프로젝트 삭제에 실패했습니다.');
       }
-
-      // Remove from localStorage
-      const projects = JSON.parse(storedProjects);
-      const updatedProjects = projects.filter((p: any) => p.id !== projectId);
-
-      // Save to localStorage
-      localStorage.setItem('phomistone_projects', JSON.stringify(updatedProjects));
-
-      // Update state
-      setProjects(updatedProjects);
-
-      alert('프로젝트가 삭제되었습니다.');
-    } catch (error) {
-      console.error('프로젝트 삭제 실패:', error);
-      alert('프로젝트 삭제에 실패했습니다. 새로고침 후 다시 시도해주세요.');
-    }
-  };
-
-  // Reset all projects
-  const handleResetAllProjects = () => {
-    if (confirm('모든 프로젝트를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.')) {
-      try {
-        localStorage.removeItem('phomistone_projects');
-        localStorage.removeItem('projects'); // Remove old key too
-        setProjects([]);
-        alert('모든 프로젝트가 삭제되었습니다.');
-      } catch (error) {
-        console.error('초기화 실패:', error);
-        alert('초기화에 실패했습니다.');
-      }
+    } catch (err) {
+      console.error('프로젝트 삭제 실패:', err);
+      alert('프로젝트 삭제에 실패했습니다.');
     }
   };
 
@@ -155,17 +88,6 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="flex items-center gap-2">
-              {/* Debug button (development only) */}
-              {import.meta.env.DEV && (
-                <button
-                  onClick={handleResetAllProjects}
-                  className="flex-1 sm:flex-none whitespace-nowrap px-3 py-2 md:px-4 md:py-2.5 bg-red-100 hover:bg-red-200 text-red-700 text-xs md:text-caption transition-all font-medium tracking-wider uppercase touch-target"
-                  title="모든 프로젝트 삭제"
-                >
-                  초기화
-                </button>
-              )}
-
               <button
                 onClick={() => navigate('/ai-styling')}
                 className="flex-1 sm:flex-none whitespace-nowrap bg-neutral-900 text-white px-3 py-2 md:px-6 md:py-3 hover:bg-neutral-800 transition-all duration-300 flex items-center justify-center gap-1.5 md:gap-2 group font-medium tracking-wider uppercase text-xs md:text-sm touch-target"
@@ -303,6 +225,25 @@ export default function DashboardPage() {
         {loading ? (
           <div className="flex items-center justify-center py-12 md:py-16 lg:py-20">
             <div className="w-10 h-10 md:w-12 md:h-12 border-4 border-neutral-900/30 border-t-neutral-900 animate-spin"></div>
+          </div>
+        ) : error ? (
+          /* Error State */
+          <div className="bg-red-50 border border-red-200 p-8 md:p-12 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-red-100 mb-4 md:mb-6">
+              <FileText className="w-8 h-8 md:w-10 md:h-10 text-red-600" />
+            </div>
+            <h3 className="text-lg md:text-title mb-2 font-medium tracking-wider text-red-900">
+              오류가 발생했습니다
+            </h3>
+            <p className="text-sm md:text-body mb-6 md:mb-8 max-w-md mx-auto font-normal tracking-wider text-red-700">
+              {error}
+            </p>
+            <button
+              onClick={loadProjects}
+              className="inline-flex items-center gap-2 bg-red-600 text-white text-button px-6 py-3 hover:bg-red-700 transition-all duration-300 font-medium tracking-wider uppercase"
+            >
+              다시 시도
+            </button>
           </div>
         ) : projects.length === 0 ? (
           /* Empty State */

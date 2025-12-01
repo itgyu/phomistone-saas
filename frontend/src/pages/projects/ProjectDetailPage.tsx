@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Edit2, Trash2, Download, Share2,
-  Calendar, MapPin, User, DollarSign, Minus, Image as ImageIcon
+  Calendar, MapPin, User, DollarSign, Minus
 } from 'lucide-react';
 import {
   ReactCompareSlider,
@@ -187,7 +187,7 @@ export default function ProjectDetailPage() {
                     <h2 className="text-base md:text-lg font-medium tracking-wider uppercase text-neutral-900">Styling Result</h2>
                   </div>
 
-                  <div className="overflow-hidden border border-neutral-300 relative" style={{ height: '300px', md: '400px', lg: '500px' }}>
+                  <div className="overflow-hidden border border-neutral-300 relative h-[300px] md:h-[400px] lg:h-[500px]">
                     <ReactCompareSlider
                       itemOne={
                         <ReactCompareSliderImage

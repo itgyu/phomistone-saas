@@ -26,8 +26,8 @@ export default function ProfilePage() {
     }));
   };
 
-  const handleSave = () => {
-    const success = updateUser(formData);
+  const handleSave = async () => {
+    const success = await updateUser(formData);
     if (success) {
       setMessage('✅ 정보가 성공적으로 수정되었습니다.');
       setMessageType('success');

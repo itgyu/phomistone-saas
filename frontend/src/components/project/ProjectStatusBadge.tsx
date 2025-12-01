@@ -1,4 +1,3 @@
-import React from 'react';
 import { PROJECT_STATUS_CONFIG, ProjectStatus } from '@/types/project';
 import { ArrowRight, Clock, CheckCircle2 } from 'lucide-react';
 

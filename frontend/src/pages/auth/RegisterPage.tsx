@@ -18,14 +18,18 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
+  // 이메일 인증 플로우
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationCode, setConfirmationCode] = useState('');
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
 
     if (name === 'password') {
       let strength = 0;
-      if (value.length >= 6) strength++;
-      if (value.length >= 10) strength++;
+      if (value.length >= 8) strength++;
+      if (value.length >= 12) strength++;
       if (/[A-Z]/.test(value)) strength++;
       if (/[0-9]/.test(value)) strength++;
       if (/[^A-Za-z0-9]/.test(value)) strength++;
@@ -42,15 +46,30 @@ export default function RegisterPage() {
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('비밀번호는 최소 6자 이상이어야 합니다.');
+    if (formData.password.length < 8) {
+      setError('비밀번호는 최소 8자 이상이어야 합니다.');
+      return;
+    }
+
+    if (!/[A-Z]/.test(formData.password)) {
+      setError('비밀번호에 대문자가 포함되어야 합니다.');
+      return;
+    }
+
+    if (!/[a-z]/.test(formData.password)) {
+      setError('비밀번호에 소문자가 포함되어야 합니다.');
+      return;
+    }
+
+    if (!/[0-9]/.test(formData.password)) {
+      setError('비밀번호에 숫자가 포함되어야 합니다.');
       return;
     }
 
     setLoading(true);
 
     try {
-      AuthService.register({
+      const result = await AuthService.signUp({
         email: formData.email,
         password: formData.password,
         name: formData.name,
@@ -58,12 +77,47 @@ export default function RegisterPage() {
         phone: formData.phone,
       });
 
-      alert('회원가입이 완료되었습니다!');
-      navigate('/login');
-    } catch (err: any) {
-      setError(err.message || '회원가입 중 오류가 발생했습니다.');
+      if (result.isConfirmed) {
+        // 자동 인증 완료 (보통 발생하지 않음)
+        alert('회원가입이 완료되었습니다!');
+        navigate('/login');
+      } else {
+        // 이메일 인증 필요
+        setShowConfirmation(true);
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || '회원가입 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleConfirmation = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      await AuthService.confirmSignUp(formData.email, confirmationCode);
+      alert('이메일 인증이 완료되었습니다! 로그인해주세요.');
+      navigate('/login');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || '인증에 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    try {
+      await AuthService.resendConfirmationCode(formData.email);
+      setError('');
+      alert('인증 코드가 재전송되었습니다.');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || '인증 코드 재전송에 실패했습니다.');
     }
   };
 
@@ -80,6 +134,80 @@ export default function RegisterPage() {
     if (passwordStrength <= 3) return 'MEDIUM';
     return 'STRONG';
   };
+
+  // 이메일 인증 화면
+  if (showConfirmation) {
+    return (
+      <div className="h-screen flex overflow-hidden bg-white">
+        <div className="flex-1 flex justify-center items-center">
+          <div className="w-full max-w-sm md:max-w-[420px] px-4 py-8 md:px-6 md:py-12">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-2 mb-6">
+                <Minus className="w-8 h-8 text-neutral-900" strokeWidth={1} />
+                <h1 className="text-xl md:text-2xl font-light tracking-wider text-neutral-900 uppercase">
+                  PHOMISTONE
+                </h1>
+              </div>
+              <h2 className="text-2xl font-medium tracking-wider text-neutral-900 mb-3 uppercase">
+                VERIFY EMAIL
+              </h2>
+              <p className="text-sm text-neutral-600">
+                {formData.email}로 전송된<br />
+                인증 코드를 입력해주세요.
+              </p>
+            </div>
+
+            <form onSubmit={handleConfirmation} className="space-y-6">
+              <div>
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
+                  VERIFICATION CODE
+                </label>
+                <input
+                  type="text"
+                  value={confirmationCode}
+                  onChange={(e) => setConfirmationCode(e.target.value)}
+                  className="w-full px-0 py-3 border-b border-neutral-300 bg-transparent focus:outline-none focus:border-neutral-900 text-base text-center tracking-[0.5em]"
+                  placeholder="000000"
+                  maxLength={6}
+                  required
+                />
+              </div>
+
+              {error && (
+                <div className="p-3 border border-red-900 text-red-900 text-xs font-medium tracking-wide">
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-neutral-900 text-white text-xs font-medium tracking-wider py-3.5 hover:bg-neutral-800 transition-all duration-300 disabled:opacity-50 uppercase"
+              >
+                {loading ? 'VERIFYING...' : 'VERIFY EMAIL'}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleResendCode}
+                className="w-full text-xs font-medium tracking-wider text-neutral-600 hover:text-neutral-900 uppercase"
+              >
+                RESEND CODE
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowConfirmation(false)}
+                className="w-full text-xs font-medium tracking-wider text-neutral-500 hover:text-neutral-700 uppercase"
+              >
+                ← BACK TO REGISTRATION
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex overflow-hidden bg-white">
@@ -195,7 +323,7 @@ export default function RegisterPage() {
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
                   }`}
-                  placeholder="MINIMUM 6 CHARACTERS"
+                  placeholder="MIN 8 CHARS, UPPER, LOWER, NUMBER"
                   required
                 />
 
@@ -307,7 +435,7 @@ export default function RegisterPage() {
                       ? 'border-neutral-900'
                       : 'border-neutral-300'
                   }`}
-                  placeholder="010-1234-5678"
+                  placeholder="+82-10-1234-5678"
                 />
               </div>
 

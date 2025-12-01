@@ -12,19 +12,58 @@ import { projectService } from '@/services/ProjectService';
 import { materials } from '@/data/materials';
 import SaveProjectModal, { ProjectFormData } from '@/components/project/SaveProjectModal';
 
-// 자재 이미지 URL → Base64 변환 함수
-const urlToBase64 = async (url: string): Promise<string> => {
+// 이미지 리사이즈 및 압축 함수
+const resizeAndCompressImage = (
+  base64: string,
+  maxWidth: number,
+  maxHeight: number,
+  quality: number = 0.8
+): Promise<string> => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      let { width, height } = img;
+
+      // 비율 유지하며 리사이즈
+      if (width > maxWidth || height > maxHeight) {
+        const ratio = Math.min(maxWidth / width, maxHeight / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      ctx?.drawImage(img, 0, 0, width, height);
+
+      // JPEG로 압축
+      const compressed = canvas.toDataURL('image/jpeg', quality);
+      resolve(compressed.split(',')[1]);
+    };
+    img.src = base64.startsWith('data:') ? base64 : `data:image/png;base64,${base64}`;
+  });
+};
+
+// 자재 이미지 URL → Base64 변환 (압축 포함)
+const urlToBase64 = async (url: string, compress: boolean = true): Promise<string> => {
   try {
     const response = await fetch(url);
     const blob = await response.blob();
-    return new Promise((resolve) => {
+
+    const base64Full = await new Promise<string>((resolve) => {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        resolve(base64.split(',')[1]); // 헤더 제거
-      };
+      reader.onloadend = () => resolve(reader.result as string);
       reader.readAsDataURL(blob);
     });
+
+    if (compress) {
+      // 자재 이미지는 512x512로 압축 (충분한 품질)
+      return await resizeAndCompressImage(base64Full, 512, 512, 0.85);
+    }
+
+    return base64Full.split(',')[1];
   } catch (e) {
     console.error("자재 이미지 변환 실패:", e);
     return "";
@@ -71,18 +110,25 @@ export default function AIStylingPage() {
     setStatusMessage('AI가 자재의 질감을 분석하여 시공 중입니다...');
 
     try {
-      // (A) 건물 이미지 준비
-      const cleanImage = uploadedImage.includes(',')
-        ? uploadedImage.split(',')[1]
-        : uploadedImage;
-
-      // (A-1) 🚨 원본 이미지 크기 추출
+      // (A) 원본 이미지 크기 추출
       const img = new Image();
       img.src = uploadedImage;
       await new Promise((resolve) => { img.onload = resolve; });
       const originalWidth = img.naturalWidth;
       const originalHeight = img.naturalHeight;
       console.log('📐 Original image dimensions:', originalWidth, 'x', originalHeight);
+
+      // (A-1) 건물 이미지 압축 (최대 1920px, API 제한 고려)
+      let cleanImage: string;
+      if (originalWidth > 1920 || originalHeight > 1920) {
+        console.log('🗜️ Compressing building image...');
+        cleanImage = await resizeAndCompressImage(uploadedImage, 1920, 1920, 0.85);
+        console.log('✅ Building image compressed');
+      } else {
+        cleanImage = uploadedImage.includes(',')
+          ? uploadedImage.split(',')[1]
+          : uploadedImage;
+      }
 
       // (B) 🚨 핵심 추가: 선택된 자재의 실물 이미지 준비
       const selectedMatData = materials.find(m => m.material_id === selectedMaterial);
@@ -94,7 +140,7 @@ export default function AIStylingPage() {
         console.log('✅ 자재 이미지 변환 완료');
       }
 
-      console.log('🚀 Sending request to n8n...');
+      console.log('🚀 Sending request to AWS Lambda...');
       console.log('📦 Payload:', {
         material_id: selectedMaterial,
         building_image_size: cleanImage.length,
@@ -103,7 +149,9 @@ export default function AIStylingPage() {
         original_height: originalHeight
       });
 
-      const response = await fetch('/webhook/style-building', {
+      // Lambda Function URL - no API Gateway timeout (supports 5min+ requests)
+      const STYLE_BUILDING_URL = 'https://bryt3elfgtzaupi6qe5hlszjti0dkhaf.lambda-url.ap-northeast-2.on.aws/';
+      const response = await fetch(STYLE_BUILDING_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -112,8 +160,8 @@ export default function AIStylingPage() {
           image_base64: cleanImage,
           material_id: selectedMaterial,
           material_image_base64: materialImageBase64,
-          original_width: originalWidth,  // 👈 추가!
-          original_height: originalHeight  // 👈 추가!
+          original_width: originalWidth,
+          original_height: originalHeight
         })
       });
 

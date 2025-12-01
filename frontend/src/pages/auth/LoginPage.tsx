@@ -2,34 +2,159 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Minus } from 'lucide-react';
+import AuthService from '@/services/AuthService';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, error: authError, clearError } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
+  // 이메일 인증 플로우
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationCode, setConfirmationCode] = useState('');
+  const [confirmationEmail, setConfirmationEmail] = useState('');
+
   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    clearError();
+    setLoading(true);
+
+    try {
+      const result = await login(email, password);
+      if (result.success) {
+        navigate('/dashboard');
+      } else if (result.confirmRequired) {
+        // 이메일 인증 필요
+        setConfirmationEmail(email);
+        setShowConfirmation(true);
+        setError('');
+      } else if (authError) {
+        setError(authError);
+      } else {
+        setError('이메일 또는 비밀번호가 일치하지 않습니다.');
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || '로그인 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirmation = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const success = await login(email, password);
-      if (success) {
+      await AuthService.confirmSignUp(confirmationEmail, confirmationCode);
+      // 인증 성공 후 자동 로그인 시도
+      const result = await login(confirmationEmail, password);
+      if (result.success) {
         navigate('/dashboard');
       } else {
-        setError('이메일 또는 비밀번호가 일치하지 않습니다.');
+        setShowConfirmation(false);
+        setError('인증이 완료되었습니다. 다시 로그인해주세요.');
       }
-    } catch (err) {
-      setError('로그인 중 오류가 발생했습니다.');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || '인증에 실패했습니다.');
     } finally {
       setLoading(false);
     }
   };
+
+  const handleResendCode = async () => {
+    try {
+      await AuthService.resendConfirmationCode(confirmationEmail);
+      setError('');
+      alert('인증 코드가 재전송되었습니다.');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || '인증 코드 재전송에 실패했습니다.');
+    }
+  };
+
+  // 이메일 인증 화면
+  if (showConfirmation) {
+    return (
+      <div className="h-screen flex overflow-hidden bg-white">
+        <div className="flex-1 flex justify-center items-center">
+          <div className="w-full max-w-sm md:max-w-[420px] px-4 py-8 md:px-6 md:py-12">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-2 mb-6">
+                <Minus className="w-8 h-8 text-neutral-900" strokeWidth={1} />
+                <h1 className="text-xl md:text-2xl font-light tracking-wider text-neutral-900 uppercase">
+                  PHOMISTONE
+                </h1>
+              </div>
+              <h2 className="text-2xl font-medium tracking-wider text-neutral-900 mb-3 uppercase">
+                EMAIL VERIFICATION
+              </h2>
+              <p className="text-sm text-neutral-600">
+                이메일로 전송된 인증 코드를 입력해주세요.
+              </p>
+              <p className="text-xs text-neutral-500 mt-2">
+                {confirmationEmail}
+              </p>
+            </div>
+
+            <form onSubmit={handleConfirmation} className="space-y-6">
+              <div>
+                <label className="block text-xs font-medium tracking-wider text-neutral-500 mb-3 uppercase">
+                  VERIFICATION CODE
+                </label>
+                <input
+                  type="text"
+                  value={confirmationCode}
+                  onChange={(e) => setConfirmationCode(e.target.value)}
+                  className="w-full px-0 py-3 border-b border-neutral-300 bg-transparent focus:outline-none focus:border-neutral-900 text-base text-center tracking-[0.5em]"
+                  placeholder="000000"
+                  maxLength={6}
+                  required
+                />
+              </div>
+
+              {error && (
+                <div className="p-3 border border-red-900 text-red-900 text-xs font-medium tracking-wide">
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-neutral-900 text-white text-xs font-medium tracking-wider py-3.5 hover:bg-neutral-800 transition-all duration-300 disabled:opacity-50 uppercase"
+              >
+                {loading ? 'VERIFYING...' : 'VERIFY'}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleResendCode}
+                className="w-full text-xs font-medium tracking-wider text-neutral-600 hover:text-neutral-900 uppercase"
+              >
+                RESEND CODE
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowConfirmation(false)}
+                className="w-full text-xs font-medium tracking-wider text-neutral-500 hover:text-neutral-700 uppercase"
+              >
+                ← BACK TO LOGIN
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex overflow-hidden bg-white">
@@ -150,9 +275,9 @@ export default function LoginPage() {
               </div>
 
               {/* 에러 메시지 */}
-              {error && (
+              {(error || authError) && (
                 <div className="p-3 md:p-4 border border-red-900 text-red-900 text-xs font-medium tracking-wide">
-                  {error}
+                  {error || authError}
                 </div>
               )}
 
